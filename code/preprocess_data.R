@@ -37,8 +37,6 @@ pacman::p_load(
 
 ## ---------------------------
 
-## set working directory
-
 setwd(here()) # Project working directory
 
 ## ---------------------------
