@@ -9,3 +9,5 @@ editor_options:
 ---
 
 Welcome to my research website.
+
+- [Exploratory Data Analysis](exploratory-data-analysis.html).
