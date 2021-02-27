@@ -13,25 +13,18 @@
 
 <title>License</title>
 
-<script src="site_libs/header-attrs-2.7/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.6/header-attrs.js"></script>
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<style>h1 {font-size: 34px;}
-       h1.title {font-size: 38px;}
-       h2 {font-size: 30px;}
-       h3 {font-size: 24px;}
-       h4 {font-size: 18px;}
-       h5 {font-size: 16px;}
-       h6 {font-size: 12px;}
-       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
-       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
 <!-- Add a small amount of space between sections. -->
@@ -53,6 +46,11 @@ div.section {
     </style>
 
 <style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -65,6 +63,32 @@ if (window.hljs) {
 
 
 
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
 
 
 
@@ -75,6 +99,10 @@ if (window.hljs) {
   max-width: 940px;
   margin-left: auto;
   margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
 }
 img {
   max-width:100%;
@@ -91,13 +119,40 @@ button.code-folding-btn:focus {
 summary {
   display: list-item;
 }
-pre code {
-  padding: 0;
-}
 </style>
 
 
 <style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
 .dropdown-submenu {
   position: relative;
 }
@@ -125,7 +180,7 @@ pre code {
   margin-right: -10px;
 }
 .dropdown-submenu:hover>a:after {
-  border-left-color: #adb5bd;
+  border-left-color: #ffffff;
 }
 .dropdown-submenu.pull-left {
   float: none;
@@ -137,7 +192,7 @@ pre code {
 }
 </style>
 
-<script type="text/javascript">
+<script>
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -148,23 +203,10 @@ $(document).ready(function () {
   var menuAnchor = $('a[href="' + href + '"]');
 
   // mark it active
-  menuAnchor.tab('show');
+  menuAnchor.parent().addClass('active');
 
   // if it's got a parent navbar menu mark it active as well
   menuAnchor.closest('li.dropdown').addClass('active');
-
-  // Navbar adjustments
-  var navHeight = $(".navbar").first().height() + 15;
-  var style = document.createElement('style');
-  var pt = "padding-top: " + navHeight + "px; ";
-  var mt = "margin-top: -" + navHeight + "px; ";
-  var css = "";
-  // offset scroll position for anchor links (for fixed navbar)
-  for (var i = 1; i <= 6; i++) {
-    css += ".section h" + i + "{ " + pt + mt + "}\n";
-  }
-  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
-  document.head.appendChild(style);
 });
 </script>
 
@@ -176,6 +218,7 @@ $(document).ready(function () {
   max-height: 500px;
   min-height: 44px;
   overflow-y: auto;
+  background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
 }
@@ -247,12 +290,15 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">1_over_MAC.workflowr</a>
+      <a class="navbar-brand" href="index.html">1 over MAC</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="exploratory-data-analysis.html">Exploratory Data Analysis</a>
 </li>
 <li>
   <a href="about.html">About</a>
@@ -262,13 +308,19 @@ $(document).ready(function () {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/PhoenixB/1_over_MAC.workflowr">
+    <span class="fas fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div id="header">
+<div class="fluid-row" id="header">
 
 
 
@@ -297,7 +349,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-02-26
+<strong>Last updated:</strong> 2021-02-27
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -328,16 +380,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongd1a3a5f"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> d1a3a5f </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree20ac888301aebb3435655ef745b735c4779ffd0dtargetblank20ac888a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/20ac888301aebb3435655ef745b735c4779ffd0d" target="_blank">20ac888</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongd1a3a5f" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree20ac888301aebb3435655ef745b735c4779ffd0dtargetblank20ac888a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version d1a3a5f. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/20ac888301aebb3435655ef745b735c4779ffd0d" target="_blank">20ac888</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -345,6 +397,1093 @@ Note that you need to be careful to ensure that all relevant files for the analy
 <pre><code>
 Ignored files:
     Ignored:    .Rproj.user/
+    Ignored:    data/alpha_freq_Sept2020_1.csv
+    Ignored:    data/alpha_freq_Sept2020_10.csv
+    Ignored:    data/alpha_freq_Sept2020_100.csv
+    Ignored:    data/alpha_freq_Sept2020_1000.csv
+    Ignored:    data/alpha_freq_Sept2020_1001.csv
+    Ignored:    data/alpha_freq_Sept2020_1002.csv
+    Ignored:    data/alpha_freq_Sept2020_1003.csv
+    Ignored:    data/alpha_freq_Sept2020_1004.csv
+    Ignored:    data/alpha_freq_Sept2020_1005.csv
+    Ignored:    data/alpha_freq_Sept2020_1006.csv
+    Ignored:    data/alpha_freq_Sept2020_1007.csv
+    Ignored:    data/alpha_freq_Sept2020_1008.csv
+    Ignored:    data/alpha_freq_Sept2020_1009.csv
+    Ignored:    data/alpha_freq_Sept2020_101.csv
+    Ignored:    data/alpha_freq_Sept2020_1010.csv
+    Ignored:    data/alpha_freq_Sept2020_1011.csv
+    Ignored:    data/alpha_freq_Sept2020_1012.csv
+    Ignored:    data/alpha_freq_Sept2020_1013.csv
+    Ignored:    data/alpha_freq_Sept2020_1014.csv
+    Ignored:    data/alpha_freq_Sept2020_1015.csv
+    Ignored:    data/alpha_freq_Sept2020_1016.csv
+    Ignored:    data/alpha_freq_Sept2020_1017.csv
+    Ignored:    data/alpha_freq_Sept2020_1018.csv
+    Ignored:    data/alpha_freq_Sept2020_1019.csv
+    Ignored:    data/alpha_freq_Sept2020_102.csv
+    Ignored:    data/alpha_freq_Sept2020_1020.csv
+    Ignored:    data/alpha_freq_Sept2020_1021.csv
+    Ignored:    data/alpha_freq_Sept2020_1022.csv
+    Ignored:    data/alpha_freq_Sept2020_1023.csv
+    Ignored:    data/alpha_freq_Sept2020_1024.csv
+    Ignored:    data/alpha_freq_Sept2020_1025.csv
+    Ignored:    data/alpha_freq_Sept2020_1026.csv
+    Ignored:    data/alpha_freq_Sept2020_1027.csv
+    Ignored:    data/alpha_freq_Sept2020_1028.csv
+    Ignored:    data/alpha_freq_Sept2020_1029.csv
+    Ignored:    data/alpha_freq_Sept2020_103.csv
+    Ignored:    data/alpha_freq_Sept2020_1030.csv
+    Ignored:    data/alpha_freq_Sept2020_1031.csv
+    Ignored:    data/alpha_freq_Sept2020_1032.csv
+    Ignored:    data/alpha_freq_Sept2020_1033.csv
+    Ignored:    data/alpha_freq_Sept2020_1034.csv
+    Ignored:    data/alpha_freq_Sept2020_1035.csv
+    Ignored:    data/alpha_freq_Sept2020_1036.csv
+    Ignored:    data/alpha_freq_Sept2020_1037.csv
+    Ignored:    data/alpha_freq_Sept2020_1038.csv
+    Ignored:    data/alpha_freq_Sept2020_1039.csv
+    Ignored:    data/alpha_freq_Sept2020_104.csv
+    Ignored:    data/alpha_freq_Sept2020_1040.csv
+    Ignored:    data/alpha_freq_Sept2020_1041.csv
+    Ignored:    data/alpha_freq_Sept2020_1042.csv
+    Ignored:    data/alpha_freq_Sept2020_1043.csv
+    Ignored:    data/alpha_freq_Sept2020_1044.csv
+    Ignored:    data/alpha_freq_Sept2020_1045.csv
+    Ignored:    data/alpha_freq_Sept2020_1046.csv
+    Ignored:    data/alpha_freq_Sept2020_1047.csv
+    Ignored:    data/alpha_freq_Sept2020_1048.csv
+    Ignored:    data/alpha_freq_Sept2020_1049.csv
+    Ignored:    data/alpha_freq_Sept2020_105.csv
+    Ignored:    data/alpha_freq_Sept2020_1050.csv
+    Ignored:    data/alpha_freq_Sept2020_1051.csv
+    Ignored:    data/alpha_freq_Sept2020_1052.csv
+    Ignored:    data/alpha_freq_Sept2020_1053.csv
+    Ignored:    data/alpha_freq_Sept2020_1054.csv
+    Ignored:    data/alpha_freq_Sept2020_1055.csv
+    Ignored:    data/alpha_freq_Sept2020_1056.csv
+    Ignored:    data/alpha_freq_Sept2020_1057.csv
+    Ignored:    data/alpha_freq_Sept2020_1058.csv
+    Ignored:    data/alpha_freq_Sept2020_1059.csv
+    Ignored:    data/alpha_freq_Sept2020_106.csv
+    Ignored:    data/alpha_freq_Sept2020_1060.csv
+    Ignored:    data/alpha_freq_Sept2020_1061.csv
+    Ignored:    data/alpha_freq_Sept2020_1062.csv
+    Ignored:    data/alpha_freq_Sept2020_1063.csv
+    Ignored:    data/alpha_freq_Sept2020_1064.csv
+    Ignored:    data/alpha_freq_Sept2020_1065.csv
+    Ignored:    data/alpha_freq_Sept2020_1066.csv
+    Ignored:    data/alpha_freq_Sept2020_1067.csv
+    Ignored:    data/alpha_freq_Sept2020_1068.csv
+    Ignored:    data/alpha_freq_Sept2020_1069.csv
+    Ignored:    data/alpha_freq_Sept2020_107.csv
+    Ignored:    data/alpha_freq_Sept2020_1070.csv
+    Ignored:    data/alpha_freq_Sept2020_1071.csv
+    Ignored:    data/alpha_freq_Sept2020_1072.csv
+    Ignored:    data/alpha_freq_Sept2020_108.csv
+    Ignored:    data/alpha_freq_Sept2020_109.csv
+    Ignored:    data/alpha_freq_Sept2020_11.csv
+    Ignored:    data/alpha_freq_Sept2020_110.csv
+    Ignored:    data/alpha_freq_Sept2020_111.csv
+    Ignored:    data/alpha_freq_Sept2020_112.csv
+    Ignored:    data/alpha_freq_Sept2020_113.csv
+    Ignored:    data/alpha_freq_Sept2020_114.csv
+    Ignored:    data/alpha_freq_Sept2020_115.csv
+    Ignored:    data/alpha_freq_Sept2020_116.csv
+    Ignored:    data/alpha_freq_Sept2020_117.csv
+    Ignored:    data/alpha_freq_Sept2020_118.csv
+    Ignored:    data/alpha_freq_Sept2020_119.csv
+    Ignored:    data/alpha_freq_Sept2020_12.csv
+    Ignored:    data/alpha_freq_Sept2020_120.csv
+    Ignored:    data/alpha_freq_Sept2020_121.csv
+    Ignored:    data/alpha_freq_Sept2020_122.csv
+    Ignored:    data/alpha_freq_Sept2020_123.csv
+    Ignored:    data/alpha_freq_Sept2020_124.csv
+    Ignored:    data/alpha_freq_Sept2020_125.csv
+    Ignored:    data/alpha_freq_Sept2020_126.csv
+    Ignored:    data/alpha_freq_Sept2020_127.csv
+    Ignored:    data/alpha_freq_Sept2020_128.csv
+    Ignored:    data/alpha_freq_Sept2020_129.csv
+    Ignored:    data/alpha_freq_Sept2020_13.csv
+    Ignored:    data/alpha_freq_Sept2020_130.csv
+    Ignored:    data/alpha_freq_Sept2020_131.csv
+    Ignored:    data/alpha_freq_Sept2020_132.csv
+    Ignored:    data/alpha_freq_Sept2020_133.csv
+    Ignored:    data/alpha_freq_Sept2020_134.csv
+    Ignored:    data/alpha_freq_Sept2020_135.csv
+    Ignored:    data/alpha_freq_Sept2020_136.csv
+    Ignored:    data/alpha_freq_Sept2020_137.csv
+    Ignored:    data/alpha_freq_Sept2020_138.csv
+    Ignored:    data/alpha_freq_Sept2020_139.csv
+    Ignored:    data/alpha_freq_Sept2020_14.csv
+    Ignored:    data/alpha_freq_Sept2020_140.csv
+    Ignored:    data/alpha_freq_Sept2020_141.csv
+    Ignored:    data/alpha_freq_Sept2020_142.csv
+    Ignored:    data/alpha_freq_Sept2020_143.csv
+    Ignored:    data/alpha_freq_Sept2020_144.csv
+    Ignored:    data/alpha_freq_Sept2020_145.csv
+    Ignored:    data/alpha_freq_Sept2020_146.csv
+    Ignored:    data/alpha_freq_Sept2020_147.csv
+    Ignored:    data/alpha_freq_Sept2020_148.csv
+    Ignored:    data/alpha_freq_Sept2020_149.csv
+    Ignored:    data/alpha_freq_Sept2020_15.csv
+    Ignored:    data/alpha_freq_Sept2020_150.csv
+    Ignored:    data/alpha_freq_Sept2020_151.csv
+    Ignored:    data/alpha_freq_Sept2020_152.csv
+    Ignored:    data/alpha_freq_Sept2020_153.csv
+    Ignored:    data/alpha_freq_Sept2020_154.csv
+    Ignored:    data/alpha_freq_Sept2020_155.csv
+    Ignored:    data/alpha_freq_Sept2020_156.csv
+    Ignored:    data/alpha_freq_Sept2020_157.csv
+    Ignored:    data/alpha_freq_Sept2020_158.csv
+    Ignored:    data/alpha_freq_Sept2020_159.csv
+    Ignored:    data/alpha_freq_Sept2020_16.csv
+    Ignored:    data/alpha_freq_Sept2020_160.csv
+    Ignored:    data/alpha_freq_Sept2020_161.csv
+    Ignored:    data/alpha_freq_Sept2020_162.csv
+    Ignored:    data/alpha_freq_Sept2020_163.csv
+    Ignored:    data/alpha_freq_Sept2020_164.csv
+    Ignored:    data/alpha_freq_Sept2020_165.csv
+    Ignored:    data/alpha_freq_Sept2020_166.csv
+    Ignored:    data/alpha_freq_Sept2020_167.csv
+    Ignored:    data/alpha_freq_Sept2020_168.csv
+    Ignored:    data/alpha_freq_Sept2020_169.csv
+    Ignored:    data/alpha_freq_Sept2020_17.csv
+    Ignored:    data/alpha_freq_Sept2020_170.csv
+    Ignored:    data/alpha_freq_Sept2020_171.csv
+    Ignored:    data/alpha_freq_Sept2020_172.csv
+    Ignored:    data/alpha_freq_Sept2020_173.csv
+    Ignored:    data/alpha_freq_Sept2020_174.csv
+    Ignored:    data/alpha_freq_Sept2020_175.csv
+    Ignored:    data/alpha_freq_Sept2020_176.csv
+    Ignored:    data/alpha_freq_Sept2020_177.csv
+    Ignored:    data/alpha_freq_Sept2020_178.csv
+    Ignored:    data/alpha_freq_Sept2020_179.csv
+    Ignored:    data/alpha_freq_Sept2020_18.csv
+    Ignored:    data/alpha_freq_Sept2020_180.csv
+    Ignored:    data/alpha_freq_Sept2020_181.csv
+    Ignored:    data/alpha_freq_Sept2020_182.csv
+    Ignored:    data/alpha_freq_Sept2020_183.csv
+    Ignored:    data/alpha_freq_Sept2020_184.csv
+    Ignored:    data/alpha_freq_Sept2020_185.csv
+    Ignored:    data/alpha_freq_Sept2020_186.csv
+    Ignored:    data/alpha_freq_Sept2020_187.csv
+    Ignored:    data/alpha_freq_Sept2020_188.csv
+    Ignored:    data/alpha_freq_Sept2020_189.csv
+    Ignored:    data/alpha_freq_Sept2020_19.csv
+    Ignored:    data/alpha_freq_Sept2020_190.csv
+    Ignored:    data/alpha_freq_Sept2020_191.csv
+    Ignored:    data/alpha_freq_Sept2020_192.csv
+    Ignored:    data/alpha_freq_Sept2020_193.csv
+    Ignored:    data/alpha_freq_Sept2020_194.csv
+    Ignored:    data/alpha_freq_Sept2020_195.csv
+    Ignored:    data/alpha_freq_Sept2020_196.csv
+    Ignored:    data/alpha_freq_Sept2020_197.csv
+    Ignored:    data/alpha_freq_Sept2020_198.csv
+    Ignored:    data/alpha_freq_Sept2020_199.csv
+    Ignored:    data/alpha_freq_Sept2020_2.csv
+    Ignored:    data/alpha_freq_Sept2020_20.csv
+    Ignored:    data/alpha_freq_Sept2020_200.csv
+    Ignored:    data/alpha_freq_Sept2020_201.csv
+    Ignored:    data/alpha_freq_Sept2020_202.csv
+    Ignored:    data/alpha_freq_Sept2020_203.csv
+    Ignored:    data/alpha_freq_Sept2020_204.csv
+    Ignored:    data/alpha_freq_Sept2020_205.csv
+    Ignored:    data/alpha_freq_Sept2020_206.csv
+    Ignored:    data/alpha_freq_Sept2020_207.csv
+    Ignored:    data/alpha_freq_Sept2020_208.csv
+    Ignored:    data/alpha_freq_Sept2020_209.csv
+    Ignored:    data/alpha_freq_Sept2020_21.csv
+    Ignored:    data/alpha_freq_Sept2020_210.csv
+    Ignored:    data/alpha_freq_Sept2020_211.csv
+    Ignored:    data/alpha_freq_Sept2020_212.csv
+    Ignored:    data/alpha_freq_Sept2020_213.csv
+    Ignored:    data/alpha_freq_Sept2020_214.csv
+    Ignored:    data/alpha_freq_Sept2020_215.csv
+    Ignored:    data/alpha_freq_Sept2020_216.csv
+    Ignored:    data/alpha_freq_Sept2020_217.csv
+    Ignored:    data/alpha_freq_Sept2020_218.csv
+    Ignored:    data/alpha_freq_Sept2020_219.csv
+    Ignored:    data/alpha_freq_Sept2020_22.csv
+    Ignored:    data/alpha_freq_Sept2020_220.csv
+    Ignored:    data/alpha_freq_Sept2020_221.csv
+    Ignored:    data/alpha_freq_Sept2020_222.csv
+    Ignored:    data/alpha_freq_Sept2020_223.csv
+    Ignored:    data/alpha_freq_Sept2020_224.csv
+    Ignored:    data/alpha_freq_Sept2020_225.csv
+    Ignored:    data/alpha_freq_Sept2020_226.csv
+    Ignored:    data/alpha_freq_Sept2020_227.csv
+    Ignored:    data/alpha_freq_Sept2020_228.csv
+    Ignored:    data/alpha_freq_Sept2020_229.csv
+    Ignored:    data/alpha_freq_Sept2020_23.csv
+    Ignored:    data/alpha_freq_Sept2020_230.csv
+    Ignored:    data/alpha_freq_Sept2020_231.csv
+    Ignored:    data/alpha_freq_Sept2020_232.csv
+    Ignored:    data/alpha_freq_Sept2020_233.csv
+    Ignored:    data/alpha_freq_Sept2020_234.csv
+    Ignored:    data/alpha_freq_Sept2020_235.csv
+    Ignored:    data/alpha_freq_Sept2020_236.csv
+    Ignored:    data/alpha_freq_Sept2020_237.csv
+    Ignored:    data/alpha_freq_Sept2020_238.csv
+    Ignored:    data/alpha_freq_Sept2020_239.csv
+    Ignored:    data/alpha_freq_Sept2020_24.csv
+    Ignored:    data/alpha_freq_Sept2020_240.csv
+    Ignored:    data/alpha_freq_Sept2020_241.csv
+    Ignored:    data/alpha_freq_Sept2020_242.csv
+    Ignored:    data/alpha_freq_Sept2020_243.csv
+    Ignored:    data/alpha_freq_Sept2020_244.csv
+    Ignored:    data/alpha_freq_Sept2020_245.csv
+    Ignored:    data/alpha_freq_Sept2020_246.csv
+    Ignored:    data/alpha_freq_Sept2020_247.csv
+    Ignored:    data/alpha_freq_Sept2020_248.csv
+    Ignored:    data/alpha_freq_Sept2020_249.csv
+    Ignored:    data/alpha_freq_Sept2020_25.csv
+    Ignored:    data/alpha_freq_Sept2020_250.csv
+    Ignored:    data/alpha_freq_Sept2020_251.csv
+    Ignored:    data/alpha_freq_Sept2020_252.csv
+    Ignored:    data/alpha_freq_Sept2020_253.csv
+    Ignored:    data/alpha_freq_Sept2020_254.csv
+    Ignored:    data/alpha_freq_Sept2020_255.csv
+    Ignored:    data/alpha_freq_Sept2020_256.csv
+    Ignored:    data/alpha_freq_Sept2020_257.csv
+    Ignored:    data/alpha_freq_Sept2020_258.csv
+    Ignored:    data/alpha_freq_Sept2020_259.csv
+    Ignored:    data/alpha_freq_Sept2020_26.csv
+    Ignored:    data/alpha_freq_Sept2020_260.csv
+    Ignored:    data/alpha_freq_Sept2020_261.csv
+    Ignored:    data/alpha_freq_Sept2020_262.csv
+    Ignored:    data/alpha_freq_Sept2020_263.csv
+    Ignored:    data/alpha_freq_Sept2020_264.csv
+    Ignored:    data/alpha_freq_Sept2020_265.csv
+    Ignored:    data/alpha_freq_Sept2020_266.csv
+    Ignored:    data/alpha_freq_Sept2020_267.csv
+    Ignored:    data/alpha_freq_Sept2020_268.csv
+    Ignored:    data/alpha_freq_Sept2020_269.csv
+    Ignored:    data/alpha_freq_Sept2020_27.csv
+    Ignored:    data/alpha_freq_Sept2020_270.csv
+    Ignored:    data/alpha_freq_Sept2020_271.csv
+    Ignored:    data/alpha_freq_Sept2020_272.csv
+    Ignored:    data/alpha_freq_Sept2020_273.csv
+    Ignored:    data/alpha_freq_Sept2020_274.csv
+    Ignored:    data/alpha_freq_Sept2020_275.csv
+    Ignored:    data/alpha_freq_Sept2020_276.csv
+    Ignored:    data/alpha_freq_Sept2020_277.csv
+    Ignored:    data/alpha_freq_Sept2020_278.csv
+    Ignored:    data/alpha_freq_Sept2020_279.csv
+    Ignored:    data/alpha_freq_Sept2020_28.csv
+    Ignored:    data/alpha_freq_Sept2020_280.csv
+    Ignored:    data/alpha_freq_Sept2020_281.csv
+    Ignored:    data/alpha_freq_Sept2020_282.csv
+    Ignored:    data/alpha_freq_Sept2020_283.csv
+    Ignored:    data/alpha_freq_Sept2020_284.csv
+    Ignored:    data/alpha_freq_Sept2020_285.csv
+    Ignored:    data/alpha_freq_Sept2020_286.csv
+    Ignored:    data/alpha_freq_Sept2020_287.csv
+    Ignored:    data/alpha_freq_Sept2020_288.csv
+    Ignored:    data/alpha_freq_Sept2020_289.csv
+    Ignored:    data/alpha_freq_Sept2020_29.csv
+    Ignored:    data/alpha_freq_Sept2020_290.csv
+    Ignored:    data/alpha_freq_Sept2020_291.csv
+    Ignored:    data/alpha_freq_Sept2020_292.csv
+    Ignored:    data/alpha_freq_Sept2020_293.csv
+    Ignored:    data/alpha_freq_Sept2020_294.csv
+    Ignored:    data/alpha_freq_Sept2020_295.csv
+    Ignored:    data/alpha_freq_Sept2020_296.csv
+    Ignored:    data/alpha_freq_Sept2020_297.csv
+    Ignored:    data/alpha_freq_Sept2020_298.csv
+    Ignored:    data/alpha_freq_Sept2020_299.csv
+    Ignored:    data/alpha_freq_Sept2020_3.csv
+    Ignored:    data/alpha_freq_Sept2020_30.csv
+    Ignored:    data/alpha_freq_Sept2020_300.csv
+    Ignored:    data/alpha_freq_Sept2020_301.csv
+    Ignored:    data/alpha_freq_Sept2020_302.csv
+    Ignored:    data/alpha_freq_Sept2020_303.csv
+    Ignored:    data/alpha_freq_Sept2020_304.csv
+    Ignored:    data/alpha_freq_Sept2020_305.csv
+    Ignored:    data/alpha_freq_Sept2020_306.csv
+    Ignored:    data/alpha_freq_Sept2020_307.csv
+    Ignored:    data/alpha_freq_Sept2020_308.csv
+    Ignored:    data/alpha_freq_Sept2020_309.csv
+    Ignored:    data/alpha_freq_Sept2020_31.csv
+    Ignored:    data/alpha_freq_Sept2020_310.csv
+    Ignored:    data/alpha_freq_Sept2020_311.csv
+    Ignored:    data/alpha_freq_Sept2020_312.csv
+    Ignored:    data/alpha_freq_Sept2020_313.csv
+    Ignored:    data/alpha_freq_Sept2020_314.csv
+    Ignored:    data/alpha_freq_Sept2020_315.csv
+    Ignored:    data/alpha_freq_Sept2020_316.csv
+    Ignored:    data/alpha_freq_Sept2020_317.csv
+    Ignored:    data/alpha_freq_Sept2020_318.csv
+    Ignored:    data/alpha_freq_Sept2020_319.csv
+    Ignored:    data/alpha_freq_Sept2020_32.csv
+    Ignored:    data/alpha_freq_Sept2020_320.csv
+    Ignored:    data/alpha_freq_Sept2020_321.csv
+    Ignored:    data/alpha_freq_Sept2020_322.csv
+    Ignored:    data/alpha_freq_Sept2020_323.csv
+    Ignored:    data/alpha_freq_Sept2020_324.csv
+    Ignored:    data/alpha_freq_Sept2020_325.csv
+    Ignored:    data/alpha_freq_Sept2020_326.csv
+    Ignored:    data/alpha_freq_Sept2020_327.csv
+    Ignored:    data/alpha_freq_Sept2020_328.csv
+    Ignored:    data/alpha_freq_Sept2020_329.csv
+    Ignored:    data/alpha_freq_Sept2020_33.csv
+    Ignored:    data/alpha_freq_Sept2020_330.csv
+    Ignored:    data/alpha_freq_Sept2020_331.csv
+    Ignored:    data/alpha_freq_Sept2020_332.csv
+    Ignored:    data/alpha_freq_Sept2020_333.csv
+    Ignored:    data/alpha_freq_Sept2020_334.csv
+    Ignored:    data/alpha_freq_Sept2020_335.csv
+    Ignored:    data/alpha_freq_Sept2020_336.csv
+    Ignored:    data/alpha_freq_Sept2020_337.csv
+    Ignored:    data/alpha_freq_Sept2020_338.csv
+    Ignored:    data/alpha_freq_Sept2020_339.csv
+    Ignored:    data/alpha_freq_Sept2020_34.csv
+    Ignored:    data/alpha_freq_Sept2020_340.csv
+    Ignored:    data/alpha_freq_Sept2020_341.csv
+    Ignored:    data/alpha_freq_Sept2020_342.csv
+    Ignored:    data/alpha_freq_Sept2020_343.csv
+    Ignored:    data/alpha_freq_Sept2020_344.csv
+    Ignored:    data/alpha_freq_Sept2020_345.csv
+    Ignored:    data/alpha_freq_Sept2020_346.csv
+    Ignored:    data/alpha_freq_Sept2020_347.csv
+    Ignored:    data/alpha_freq_Sept2020_348.csv
+    Ignored:    data/alpha_freq_Sept2020_349.csv
+    Ignored:    data/alpha_freq_Sept2020_35.csv
+    Ignored:    data/alpha_freq_Sept2020_350.csv
+    Ignored:    data/alpha_freq_Sept2020_351.csv
+    Ignored:    data/alpha_freq_Sept2020_352.csv
+    Ignored:    data/alpha_freq_Sept2020_353.csv
+    Ignored:    data/alpha_freq_Sept2020_354.csv
+    Ignored:    data/alpha_freq_Sept2020_355.csv
+    Ignored:    data/alpha_freq_Sept2020_356.csv
+    Ignored:    data/alpha_freq_Sept2020_357.csv
+    Ignored:    data/alpha_freq_Sept2020_358.csv
+    Ignored:    data/alpha_freq_Sept2020_359.csv
+    Ignored:    data/alpha_freq_Sept2020_36.csv
+    Ignored:    data/alpha_freq_Sept2020_360.csv
+    Ignored:    data/alpha_freq_Sept2020_361.csv
+    Ignored:    data/alpha_freq_Sept2020_362.csv
+    Ignored:    data/alpha_freq_Sept2020_363.csv
+    Ignored:    data/alpha_freq_Sept2020_364.csv
+    Ignored:    data/alpha_freq_Sept2020_365.csv
+    Ignored:    data/alpha_freq_Sept2020_366.csv
+    Ignored:    data/alpha_freq_Sept2020_367.csv
+    Ignored:    data/alpha_freq_Sept2020_368.csv
+    Ignored:    data/alpha_freq_Sept2020_369.csv
+    Ignored:    data/alpha_freq_Sept2020_37.csv
+    Ignored:    data/alpha_freq_Sept2020_370.csv
+    Ignored:    data/alpha_freq_Sept2020_371.csv
+    Ignored:    data/alpha_freq_Sept2020_372.csv
+    Ignored:    data/alpha_freq_Sept2020_373.csv
+    Ignored:    data/alpha_freq_Sept2020_374.csv
+    Ignored:    data/alpha_freq_Sept2020_375.csv
+    Ignored:    data/alpha_freq_Sept2020_376.csv
+    Ignored:    data/alpha_freq_Sept2020_377.csv
+    Ignored:    data/alpha_freq_Sept2020_378.csv
+    Ignored:    data/alpha_freq_Sept2020_379.csv
+    Ignored:    data/alpha_freq_Sept2020_38.csv
+    Ignored:    data/alpha_freq_Sept2020_380.csv
+    Ignored:    data/alpha_freq_Sept2020_381.csv
+    Ignored:    data/alpha_freq_Sept2020_382.csv
+    Ignored:    data/alpha_freq_Sept2020_383.csv
+    Ignored:    data/alpha_freq_Sept2020_384.csv
+    Ignored:    data/alpha_freq_Sept2020_385.csv
+    Ignored:    data/alpha_freq_Sept2020_386.csv
+    Ignored:    data/alpha_freq_Sept2020_387.csv
+    Ignored:    data/alpha_freq_Sept2020_388.csv
+    Ignored:    data/alpha_freq_Sept2020_389.csv
+    Ignored:    data/alpha_freq_Sept2020_39.csv
+    Ignored:    data/alpha_freq_Sept2020_390.csv
+    Ignored:    data/alpha_freq_Sept2020_391.csv
+    Ignored:    data/alpha_freq_Sept2020_392.csv
+    Ignored:    data/alpha_freq_Sept2020_393.csv
+    Ignored:    data/alpha_freq_Sept2020_394.csv
+    Ignored:    data/alpha_freq_Sept2020_395.csv
+    Ignored:    data/alpha_freq_Sept2020_396.csv
+    Ignored:    data/alpha_freq_Sept2020_397.csv
+    Ignored:    data/alpha_freq_Sept2020_398.csv
+    Ignored:    data/alpha_freq_Sept2020_399.csv
+    Ignored:    data/alpha_freq_Sept2020_4.csv
+    Ignored:    data/alpha_freq_Sept2020_40.csv
+    Ignored:    data/alpha_freq_Sept2020_400.csv
+    Ignored:    data/alpha_freq_Sept2020_401.csv
+    Ignored:    data/alpha_freq_Sept2020_402.csv
+    Ignored:    data/alpha_freq_Sept2020_403.csv
+    Ignored:    data/alpha_freq_Sept2020_404.csv
+    Ignored:    data/alpha_freq_Sept2020_405.csv
+    Ignored:    data/alpha_freq_Sept2020_406.csv
+    Ignored:    data/alpha_freq_Sept2020_407.csv
+    Ignored:    data/alpha_freq_Sept2020_408.csv
+    Ignored:    data/alpha_freq_Sept2020_409.csv
+    Ignored:    data/alpha_freq_Sept2020_41.csv
+    Ignored:    data/alpha_freq_Sept2020_410.csv
+    Ignored:    data/alpha_freq_Sept2020_411.csv
+    Ignored:    data/alpha_freq_Sept2020_412.csv
+    Ignored:    data/alpha_freq_Sept2020_413.csv
+    Ignored:    data/alpha_freq_Sept2020_414.csv
+    Ignored:    data/alpha_freq_Sept2020_415.csv
+    Ignored:    data/alpha_freq_Sept2020_416.csv
+    Ignored:    data/alpha_freq_Sept2020_417.csv
+    Ignored:    data/alpha_freq_Sept2020_418.csv
+    Ignored:    data/alpha_freq_Sept2020_419.csv
+    Ignored:    data/alpha_freq_Sept2020_42.csv
+    Ignored:    data/alpha_freq_Sept2020_420.csv
+    Ignored:    data/alpha_freq_Sept2020_421.csv
+    Ignored:    data/alpha_freq_Sept2020_422.csv
+    Ignored:    data/alpha_freq_Sept2020_423.csv
+    Ignored:    data/alpha_freq_Sept2020_424.csv
+    Ignored:    data/alpha_freq_Sept2020_425.csv
+    Ignored:    data/alpha_freq_Sept2020_426.csv
+    Ignored:    data/alpha_freq_Sept2020_427.csv
+    Ignored:    data/alpha_freq_Sept2020_428.csv
+    Ignored:    data/alpha_freq_Sept2020_429.csv
+    Ignored:    data/alpha_freq_Sept2020_43.csv
+    Ignored:    data/alpha_freq_Sept2020_430.csv
+    Ignored:    data/alpha_freq_Sept2020_431.csv
+    Ignored:    data/alpha_freq_Sept2020_432.csv
+    Ignored:    data/alpha_freq_Sept2020_433.csv
+    Ignored:    data/alpha_freq_Sept2020_434.csv
+    Ignored:    data/alpha_freq_Sept2020_435.csv
+    Ignored:    data/alpha_freq_Sept2020_436.csv
+    Ignored:    data/alpha_freq_Sept2020_437.csv
+    Ignored:    data/alpha_freq_Sept2020_438.csv
+    Ignored:    data/alpha_freq_Sept2020_439.csv
+    Ignored:    data/alpha_freq_Sept2020_44.csv
+    Ignored:    data/alpha_freq_Sept2020_440.csv
+    Ignored:    data/alpha_freq_Sept2020_441.csv
+    Ignored:    data/alpha_freq_Sept2020_442.csv
+    Ignored:    data/alpha_freq_Sept2020_443.csv
+    Ignored:    data/alpha_freq_Sept2020_444.csv
+    Ignored:    data/alpha_freq_Sept2020_445.csv
+    Ignored:    data/alpha_freq_Sept2020_446.csv
+    Ignored:    data/alpha_freq_Sept2020_447.csv
+    Ignored:    data/alpha_freq_Sept2020_448.csv
+    Ignored:    data/alpha_freq_Sept2020_449.csv
+    Ignored:    data/alpha_freq_Sept2020_45.csv
+    Ignored:    data/alpha_freq_Sept2020_450.csv
+    Ignored:    data/alpha_freq_Sept2020_451.csv
+    Ignored:    data/alpha_freq_Sept2020_452.csv
+    Ignored:    data/alpha_freq_Sept2020_453.csv
+    Ignored:    data/alpha_freq_Sept2020_454.csv
+    Ignored:    data/alpha_freq_Sept2020_455.csv
+    Ignored:    data/alpha_freq_Sept2020_456.csv
+    Ignored:    data/alpha_freq_Sept2020_457.csv
+    Ignored:    data/alpha_freq_Sept2020_458.csv
+    Ignored:    data/alpha_freq_Sept2020_459.csv
+    Ignored:    data/alpha_freq_Sept2020_46.csv
+    Ignored:    data/alpha_freq_Sept2020_460.csv
+    Ignored:    data/alpha_freq_Sept2020_461.csv
+    Ignored:    data/alpha_freq_Sept2020_462.csv
+    Ignored:    data/alpha_freq_Sept2020_463.csv
+    Ignored:    data/alpha_freq_Sept2020_464.csv
+    Ignored:    data/alpha_freq_Sept2020_465.csv
+    Ignored:    data/alpha_freq_Sept2020_466.csv
+    Ignored:    data/alpha_freq_Sept2020_467.csv
+    Ignored:    data/alpha_freq_Sept2020_468.csv
+    Ignored:    data/alpha_freq_Sept2020_469.csv
+    Ignored:    data/alpha_freq_Sept2020_47.csv
+    Ignored:    data/alpha_freq_Sept2020_470.csv
+    Ignored:    data/alpha_freq_Sept2020_471.csv
+    Ignored:    data/alpha_freq_Sept2020_472.csv
+    Ignored:    data/alpha_freq_Sept2020_473.csv
+    Ignored:    data/alpha_freq_Sept2020_474.csv
+    Ignored:    data/alpha_freq_Sept2020_475.csv
+    Ignored:    data/alpha_freq_Sept2020_476.csv
+    Ignored:    data/alpha_freq_Sept2020_477.csv
+    Ignored:    data/alpha_freq_Sept2020_478.csv
+    Ignored:    data/alpha_freq_Sept2020_479.csv
+    Ignored:    data/alpha_freq_Sept2020_48.csv
+    Ignored:    data/alpha_freq_Sept2020_480.csv
+    Ignored:    data/alpha_freq_Sept2020_481.csv
+    Ignored:    data/alpha_freq_Sept2020_482.csv
+    Ignored:    data/alpha_freq_Sept2020_483.csv
+    Ignored:    data/alpha_freq_Sept2020_484.csv
+    Ignored:    data/alpha_freq_Sept2020_485.csv
+    Ignored:    data/alpha_freq_Sept2020_486.csv
+    Ignored:    data/alpha_freq_Sept2020_487.csv
+    Ignored:    data/alpha_freq_Sept2020_488.csv
+    Ignored:    data/alpha_freq_Sept2020_489.csv
+    Ignored:    data/alpha_freq_Sept2020_49.csv
+    Ignored:    data/alpha_freq_Sept2020_490.csv
+    Ignored:    data/alpha_freq_Sept2020_491.csv
+    Ignored:    data/alpha_freq_Sept2020_492.csv
+    Ignored:    data/alpha_freq_Sept2020_493.csv
+    Ignored:    data/alpha_freq_Sept2020_494.csv
+    Ignored:    data/alpha_freq_Sept2020_495.csv
+    Ignored:    data/alpha_freq_Sept2020_496.csv
+    Ignored:    data/alpha_freq_Sept2020_497.csv
+    Ignored:    data/alpha_freq_Sept2020_498.csv
+    Ignored:    data/alpha_freq_Sept2020_499.csv
+    Ignored:    data/alpha_freq_Sept2020_5.csv
+    Ignored:    data/alpha_freq_Sept2020_50.csv
+    Ignored:    data/alpha_freq_Sept2020_500.csv
+    Ignored:    data/alpha_freq_Sept2020_501.csv
+    Ignored:    data/alpha_freq_Sept2020_502.csv
+    Ignored:    data/alpha_freq_Sept2020_503.csv
+    Ignored:    data/alpha_freq_Sept2020_504.csv
+    Ignored:    data/alpha_freq_Sept2020_505.csv
+    Ignored:    data/alpha_freq_Sept2020_506.csv
+    Ignored:    data/alpha_freq_Sept2020_507.csv
+    Ignored:    data/alpha_freq_Sept2020_508.csv
+    Ignored:    data/alpha_freq_Sept2020_509.csv
+    Ignored:    data/alpha_freq_Sept2020_51.csv
+    Ignored:    data/alpha_freq_Sept2020_510.csv
+    Ignored:    data/alpha_freq_Sept2020_511.csv
+    Ignored:    data/alpha_freq_Sept2020_512.csv
+    Ignored:    data/alpha_freq_Sept2020_513.csv
+    Ignored:    data/alpha_freq_Sept2020_514.csv
+    Ignored:    data/alpha_freq_Sept2020_515.csv
+    Ignored:    data/alpha_freq_Sept2020_516.csv
+    Ignored:    data/alpha_freq_Sept2020_517.csv
+    Ignored:    data/alpha_freq_Sept2020_518.csv
+    Ignored:    data/alpha_freq_Sept2020_519.csv
+    Ignored:    data/alpha_freq_Sept2020_52.csv
+    Ignored:    data/alpha_freq_Sept2020_520.csv
+    Ignored:    data/alpha_freq_Sept2020_521.csv
+    Ignored:    data/alpha_freq_Sept2020_522.csv
+    Ignored:    data/alpha_freq_Sept2020_523.csv
+    Ignored:    data/alpha_freq_Sept2020_524.csv
+    Ignored:    data/alpha_freq_Sept2020_525.csv
+    Ignored:    data/alpha_freq_Sept2020_526.csv
+    Ignored:    data/alpha_freq_Sept2020_527.csv
+    Ignored:    data/alpha_freq_Sept2020_528.csv
+    Ignored:    data/alpha_freq_Sept2020_529.csv
+    Ignored:    data/alpha_freq_Sept2020_53.csv
+    Ignored:    data/alpha_freq_Sept2020_530.csv
+    Ignored:    data/alpha_freq_Sept2020_531.csv
+    Ignored:    data/alpha_freq_Sept2020_532.csv
+    Ignored:    data/alpha_freq_Sept2020_533.csv
+    Ignored:    data/alpha_freq_Sept2020_534.csv
+    Ignored:    data/alpha_freq_Sept2020_535.csv
+    Ignored:    data/alpha_freq_Sept2020_536.csv
+    Ignored:    data/alpha_freq_Sept2020_537.csv
+    Ignored:    data/alpha_freq_Sept2020_538.csv
+    Ignored:    data/alpha_freq_Sept2020_539.csv
+    Ignored:    data/alpha_freq_Sept2020_54.csv
+    Ignored:    data/alpha_freq_Sept2020_540.csv
+    Ignored:    data/alpha_freq_Sept2020_541.csv
+    Ignored:    data/alpha_freq_Sept2020_542.csv
+    Ignored:    data/alpha_freq_Sept2020_543.csv
+    Ignored:    data/alpha_freq_Sept2020_544.csv
+    Ignored:    data/alpha_freq_Sept2020_545.csv
+    Ignored:    data/alpha_freq_Sept2020_546.csv
+    Ignored:    data/alpha_freq_Sept2020_547.csv
+    Ignored:    data/alpha_freq_Sept2020_548.csv
+    Ignored:    data/alpha_freq_Sept2020_549.csv
+    Ignored:    data/alpha_freq_Sept2020_55.csv
+    Ignored:    data/alpha_freq_Sept2020_550.csv
+    Ignored:    data/alpha_freq_Sept2020_551.csv
+    Ignored:    data/alpha_freq_Sept2020_552.csv
+    Ignored:    data/alpha_freq_Sept2020_553.csv
+    Ignored:    data/alpha_freq_Sept2020_554.csv
+    Ignored:    data/alpha_freq_Sept2020_555.csv
+    Ignored:    data/alpha_freq_Sept2020_556.csv
+    Ignored:    data/alpha_freq_Sept2020_557.csv
+    Ignored:    data/alpha_freq_Sept2020_558.csv
+    Ignored:    data/alpha_freq_Sept2020_559.csv
+    Ignored:    data/alpha_freq_Sept2020_56.csv
+    Ignored:    data/alpha_freq_Sept2020_560.csv
+    Ignored:    data/alpha_freq_Sept2020_561.csv
+    Ignored:    data/alpha_freq_Sept2020_562.csv
+    Ignored:    data/alpha_freq_Sept2020_563.csv
+    Ignored:    data/alpha_freq_Sept2020_564.csv
+    Ignored:    data/alpha_freq_Sept2020_565.csv
+    Ignored:    data/alpha_freq_Sept2020_566.csv
+    Ignored:    data/alpha_freq_Sept2020_567.csv
+    Ignored:    data/alpha_freq_Sept2020_568.csv
+    Ignored:    data/alpha_freq_Sept2020_569.csv
+    Ignored:    data/alpha_freq_Sept2020_57.csv
+    Ignored:    data/alpha_freq_Sept2020_570.csv
+    Ignored:    data/alpha_freq_Sept2020_571.csv
+    Ignored:    data/alpha_freq_Sept2020_572.csv
+    Ignored:    data/alpha_freq_Sept2020_573.csv
+    Ignored:    data/alpha_freq_Sept2020_574.csv
+    Ignored:    data/alpha_freq_Sept2020_575.csv
+    Ignored:    data/alpha_freq_Sept2020_576.csv
+    Ignored:    data/alpha_freq_Sept2020_577.csv
+    Ignored:    data/alpha_freq_Sept2020_578.csv
+    Ignored:    data/alpha_freq_Sept2020_579.csv
+    Ignored:    data/alpha_freq_Sept2020_58.csv
+    Ignored:    data/alpha_freq_Sept2020_580.csv
+    Ignored:    data/alpha_freq_Sept2020_581.csv
+    Ignored:    data/alpha_freq_Sept2020_582.csv
+    Ignored:    data/alpha_freq_Sept2020_583.csv
+    Ignored:    data/alpha_freq_Sept2020_584.csv
+    Ignored:    data/alpha_freq_Sept2020_585.csv
+    Ignored:    data/alpha_freq_Sept2020_586.csv
+    Ignored:    data/alpha_freq_Sept2020_587.csv
+    Ignored:    data/alpha_freq_Sept2020_588.csv
+    Ignored:    data/alpha_freq_Sept2020_589.csv
+    Ignored:    data/alpha_freq_Sept2020_59.csv
+    Ignored:    data/alpha_freq_Sept2020_590.csv
+    Ignored:    data/alpha_freq_Sept2020_591.csv
+    Ignored:    data/alpha_freq_Sept2020_592.csv
+    Ignored:    data/alpha_freq_Sept2020_593.csv
+    Ignored:    data/alpha_freq_Sept2020_594.csv
+    Ignored:    data/alpha_freq_Sept2020_595.csv
+    Ignored:    data/alpha_freq_Sept2020_596.csv
+    Ignored:    data/alpha_freq_Sept2020_597.csv
+    Ignored:    data/alpha_freq_Sept2020_598.csv
+    Ignored:    data/alpha_freq_Sept2020_599.csv
+    Ignored:    data/alpha_freq_Sept2020_6.csv
+    Ignored:    data/alpha_freq_Sept2020_60.csv
+    Ignored:    data/alpha_freq_Sept2020_600.csv
+    Ignored:    data/alpha_freq_Sept2020_601.csv
+    Ignored:    data/alpha_freq_Sept2020_602.csv
+    Ignored:    data/alpha_freq_Sept2020_603.csv
+    Ignored:    data/alpha_freq_Sept2020_604.csv
+    Ignored:    data/alpha_freq_Sept2020_605.csv
+    Ignored:    data/alpha_freq_Sept2020_606.csv
+    Ignored:    data/alpha_freq_Sept2020_607.csv
+    Ignored:    data/alpha_freq_Sept2020_608.csv
+    Ignored:    data/alpha_freq_Sept2020_609.csv
+    Ignored:    data/alpha_freq_Sept2020_61.csv
+    Ignored:    data/alpha_freq_Sept2020_610.csv
+    Ignored:    data/alpha_freq_Sept2020_611.csv
+    Ignored:    data/alpha_freq_Sept2020_612.csv
+    Ignored:    data/alpha_freq_Sept2020_613.csv
+    Ignored:    data/alpha_freq_Sept2020_614.csv
+    Ignored:    data/alpha_freq_Sept2020_615.csv
+    Ignored:    data/alpha_freq_Sept2020_616.csv
+    Ignored:    data/alpha_freq_Sept2020_617.csv
+    Ignored:    data/alpha_freq_Sept2020_618.csv
+    Ignored:    data/alpha_freq_Sept2020_619.csv
+    Ignored:    data/alpha_freq_Sept2020_62.csv
+    Ignored:    data/alpha_freq_Sept2020_620.csv
+    Ignored:    data/alpha_freq_Sept2020_621.csv
+    Ignored:    data/alpha_freq_Sept2020_622.csv
+    Ignored:    data/alpha_freq_Sept2020_623.csv
+    Ignored:    data/alpha_freq_Sept2020_624.csv
+    Ignored:    data/alpha_freq_Sept2020_625.csv
+    Ignored:    data/alpha_freq_Sept2020_626.csv
+    Ignored:    data/alpha_freq_Sept2020_627.csv
+    Ignored:    data/alpha_freq_Sept2020_628.csv
+    Ignored:    data/alpha_freq_Sept2020_629.csv
+    Ignored:    data/alpha_freq_Sept2020_63.csv
+    Ignored:    data/alpha_freq_Sept2020_630.csv
+    Ignored:    data/alpha_freq_Sept2020_631.csv
+    Ignored:    data/alpha_freq_Sept2020_632.csv
+    Ignored:    data/alpha_freq_Sept2020_633.csv
+    Ignored:    data/alpha_freq_Sept2020_634.csv
+    Ignored:    data/alpha_freq_Sept2020_635.csv
+    Ignored:    data/alpha_freq_Sept2020_636.csv
+    Ignored:    data/alpha_freq_Sept2020_637.csv
+    Ignored:    data/alpha_freq_Sept2020_638.csv
+    Ignored:    data/alpha_freq_Sept2020_639.csv
+    Ignored:    data/alpha_freq_Sept2020_64.csv
+    Ignored:    data/alpha_freq_Sept2020_640.csv
+    Ignored:    data/alpha_freq_Sept2020_641.csv
+    Ignored:    data/alpha_freq_Sept2020_642.csv
+    Ignored:    data/alpha_freq_Sept2020_643.csv
+    Ignored:    data/alpha_freq_Sept2020_644.csv
+    Ignored:    data/alpha_freq_Sept2020_645.csv
+    Ignored:    data/alpha_freq_Sept2020_646.csv
+    Ignored:    data/alpha_freq_Sept2020_647.csv
+    Ignored:    data/alpha_freq_Sept2020_648.csv
+    Ignored:    data/alpha_freq_Sept2020_649.csv
+    Ignored:    data/alpha_freq_Sept2020_65.csv
+    Ignored:    data/alpha_freq_Sept2020_650.csv
+    Ignored:    data/alpha_freq_Sept2020_651.csv
+    Ignored:    data/alpha_freq_Sept2020_652.csv
+    Ignored:    data/alpha_freq_Sept2020_653.csv
+    Ignored:    data/alpha_freq_Sept2020_654.csv
+    Ignored:    data/alpha_freq_Sept2020_655.csv
+    Ignored:    data/alpha_freq_Sept2020_656.csv
+    Ignored:    data/alpha_freq_Sept2020_657.csv
+    Ignored:    data/alpha_freq_Sept2020_658.csv
+    Ignored:    data/alpha_freq_Sept2020_659.csv
+    Ignored:    data/alpha_freq_Sept2020_66.csv
+    Ignored:    data/alpha_freq_Sept2020_660.csv
+    Ignored:    data/alpha_freq_Sept2020_661.csv
+    Ignored:    data/alpha_freq_Sept2020_662.csv
+    Ignored:    data/alpha_freq_Sept2020_663.csv
+    Ignored:    data/alpha_freq_Sept2020_664.csv
+    Ignored:    data/alpha_freq_Sept2020_665.csv
+    Ignored:    data/alpha_freq_Sept2020_666.csv
+    Ignored:    data/alpha_freq_Sept2020_667.csv
+    Ignored:    data/alpha_freq_Sept2020_668.csv
+    Ignored:    data/alpha_freq_Sept2020_669.csv
+    Ignored:    data/alpha_freq_Sept2020_67.csv
+    Ignored:    data/alpha_freq_Sept2020_670.csv
+    Ignored:    data/alpha_freq_Sept2020_671.csv
+    Ignored:    data/alpha_freq_Sept2020_672.csv
+    Ignored:    data/alpha_freq_Sept2020_673.csv
+    Ignored:    data/alpha_freq_Sept2020_674.csv
+    Ignored:    data/alpha_freq_Sept2020_675.csv
+    Ignored:    data/alpha_freq_Sept2020_676.csv
+    Ignored:    data/alpha_freq_Sept2020_677.csv
+    Ignored:    data/alpha_freq_Sept2020_678.csv
+    Ignored:    data/alpha_freq_Sept2020_679.csv
+    Ignored:    data/alpha_freq_Sept2020_68.csv
+    Ignored:    data/alpha_freq_Sept2020_680.csv
+    Ignored:    data/alpha_freq_Sept2020_681.csv
+    Ignored:    data/alpha_freq_Sept2020_682.csv
+    Ignored:    data/alpha_freq_Sept2020_683.csv
+    Ignored:    data/alpha_freq_Sept2020_684.csv
+    Ignored:    data/alpha_freq_Sept2020_685.csv
+    Ignored:    data/alpha_freq_Sept2020_686.csv
+    Ignored:    data/alpha_freq_Sept2020_687.csv
+    Ignored:    data/alpha_freq_Sept2020_688.csv
+    Ignored:    data/alpha_freq_Sept2020_689.csv
+    Ignored:    data/alpha_freq_Sept2020_69.csv
+    Ignored:    data/alpha_freq_Sept2020_690.csv
+    Ignored:    data/alpha_freq_Sept2020_691.csv
+    Ignored:    data/alpha_freq_Sept2020_692.csv
+    Ignored:    data/alpha_freq_Sept2020_693.csv
+    Ignored:    data/alpha_freq_Sept2020_694.csv
+    Ignored:    data/alpha_freq_Sept2020_695.csv
+    Ignored:    data/alpha_freq_Sept2020_696.csv
+    Ignored:    data/alpha_freq_Sept2020_697.csv
+    Ignored:    data/alpha_freq_Sept2020_698.csv
+    Ignored:    data/alpha_freq_Sept2020_699.csv
+    Ignored:    data/alpha_freq_Sept2020_7.csv
+    Ignored:    data/alpha_freq_Sept2020_70.csv
+    Ignored:    data/alpha_freq_Sept2020_700.csv
+    Ignored:    data/alpha_freq_Sept2020_701.csv
+    Ignored:    data/alpha_freq_Sept2020_702.csv
+    Ignored:    data/alpha_freq_Sept2020_703.csv
+    Ignored:    data/alpha_freq_Sept2020_704.csv
+    Ignored:    data/alpha_freq_Sept2020_705.csv
+    Ignored:    data/alpha_freq_Sept2020_706.csv
+    Ignored:    data/alpha_freq_Sept2020_707.csv
+    Ignored:    data/alpha_freq_Sept2020_708.csv
+    Ignored:    data/alpha_freq_Sept2020_709.csv
+    Ignored:    data/alpha_freq_Sept2020_71.csv
+    Ignored:    data/alpha_freq_Sept2020_710.csv
+    Ignored:    data/alpha_freq_Sept2020_711.csv
+    Ignored:    data/alpha_freq_Sept2020_712.csv
+    Ignored:    data/alpha_freq_Sept2020_713.csv
+    Ignored:    data/alpha_freq_Sept2020_714.csv
+    Ignored:    data/alpha_freq_Sept2020_715.csv
+    Ignored:    data/alpha_freq_Sept2020_716.csv
+    Ignored:    data/alpha_freq_Sept2020_717.csv
+    Ignored:    data/alpha_freq_Sept2020_718.csv
+    Ignored:    data/alpha_freq_Sept2020_719.csv
+    Ignored:    data/alpha_freq_Sept2020_72.csv
+    Ignored:    data/alpha_freq_Sept2020_720.csv
+    Ignored:    data/alpha_freq_Sept2020_721.csv
+    Ignored:    data/alpha_freq_Sept2020_722.csv
+    Ignored:    data/alpha_freq_Sept2020_723.csv
+    Ignored:    data/alpha_freq_Sept2020_724.csv
+    Ignored:    data/alpha_freq_Sept2020_725.csv
+    Ignored:    data/alpha_freq_Sept2020_726.csv
+    Ignored:    data/alpha_freq_Sept2020_727.csv
+    Ignored:    data/alpha_freq_Sept2020_728.csv
+    Ignored:    data/alpha_freq_Sept2020_729.csv
+    Ignored:    data/alpha_freq_Sept2020_73.csv
+    Ignored:    data/alpha_freq_Sept2020_730.csv
+    Ignored:    data/alpha_freq_Sept2020_731.csv
+    Ignored:    data/alpha_freq_Sept2020_732.csv
+    Ignored:    data/alpha_freq_Sept2020_733.csv
+    Ignored:    data/alpha_freq_Sept2020_734.csv
+    Ignored:    data/alpha_freq_Sept2020_735.csv
+    Ignored:    data/alpha_freq_Sept2020_736.csv
+    Ignored:    data/alpha_freq_Sept2020_737.csv
+    Ignored:    data/alpha_freq_Sept2020_738.csv
+    Ignored:    data/alpha_freq_Sept2020_739.csv
+    Ignored:    data/alpha_freq_Sept2020_74.csv
+    Ignored:    data/alpha_freq_Sept2020_740.csv
+    Ignored:    data/alpha_freq_Sept2020_741.csv
+    Ignored:    data/alpha_freq_Sept2020_742.csv
+    Ignored:    data/alpha_freq_Sept2020_743.csv
+    Ignored:    data/alpha_freq_Sept2020_744.csv
+    Ignored:    data/alpha_freq_Sept2020_745.csv
+    Ignored:    data/alpha_freq_Sept2020_746.csv
+    Ignored:    data/alpha_freq_Sept2020_747.csv
+    Ignored:    data/alpha_freq_Sept2020_748.csv
+    Ignored:    data/alpha_freq_Sept2020_749.csv
+    Ignored:    data/alpha_freq_Sept2020_75.csv
+    Ignored:    data/alpha_freq_Sept2020_750.csv
+    Ignored:    data/alpha_freq_Sept2020_751.csv
+    Ignored:    data/alpha_freq_Sept2020_752.csv
+    Ignored:    data/alpha_freq_Sept2020_753.csv
+    Ignored:    data/alpha_freq_Sept2020_754.csv
+    Ignored:    data/alpha_freq_Sept2020_755.csv
+    Ignored:    data/alpha_freq_Sept2020_756.csv
+    Ignored:    data/alpha_freq_Sept2020_757.csv
+    Ignored:    data/alpha_freq_Sept2020_758.csv
+    Ignored:    data/alpha_freq_Sept2020_759.csv
+    Ignored:    data/alpha_freq_Sept2020_76.csv
+    Ignored:    data/alpha_freq_Sept2020_760.csv
+    Ignored:    data/alpha_freq_Sept2020_761.csv
+    Ignored:    data/alpha_freq_Sept2020_762.csv
+    Ignored:    data/alpha_freq_Sept2020_763.csv
+    Ignored:    data/alpha_freq_Sept2020_764.csv
+    Ignored:    data/alpha_freq_Sept2020_765.csv
+    Ignored:    data/alpha_freq_Sept2020_766.csv
+    Ignored:    data/alpha_freq_Sept2020_767.csv
+    Ignored:    data/alpha_freq_Sept2020_768.csv
+    Ignored:    data/alpha_freq_Sept2020_769.csv
+    Ignored:    data/alpha_freq_Sept2020_77.csv
+    Ignored:    data/alpha_freq_Sept2020_770.csv
+    Ignored:    data/alpha_freq_Sept2020_771.csv
+    Ignored:    data/alpha_freq_Sept2020_772.csv
+    Ignored:    data/alpha_freq_Sept2020_773.csv
+    Ignored:    data/alpha_freq_Sept2020_774.csv
+    Ignored:    data/alpha_freq_Sept2020_775.csv
+    Ignored:    data/alpha_freq_Sept2020_776.csv
+    Ignored:    data/alpha_freq_Sept2020_777.csv
+    Ignored:    data/alpha_freq_Sept2020_778.csv
+    Ignored:    data/alpha_freq_Sept2020_779.csv
+    Ignored:    data/alpha_freq_Sept2020_78.csv
+    Ignored:    data/alpha_freq_Sept2020_780.csv
+    Ignored:    data/alpha_freq_Sept2020_781.csv
+    Ignored:    data/alpha_freq_Sept2020_782.csv
+    Ignored:    data/alpha_freq_Sept2020_783.csv
+    Ignored:    data/alpha_freq_Sept2020_784.csv
+    Ignored:    data/alpha_freq_Sept2020_785.csv
+    Ignored:    data/alpha_freq_Sept2020_786.csv
+    Ignored:    data/alpha_freq_Sept2020_787.csv
+    Ignored:    data/alpha_freq_Sept2020_788.csv
+    Ignored:    data/alpha_freq_Sept2020_789.csv
+    Ignored:    data/alpha_freq_Sept2020_79.csv
+    Ignored:    data/alpha_freq_Sept2020_790.csv
+    Ignored:    data/alpha_freq_Sept2020_791.csv
+    Ignored:    data/alpha_freq_Sept2020_792.csv
+    Ignored:    data/alpha_freq_Sept2020_793.csv
+    Ignored:    data/alpha_freq_Sept2020_794.csv
+    Ignored:    data/alpha_freq_Sept2020_795.csv
+    Ignored:    data/alpha_freq_Sept2020_796.csv
+    Ignored:    data/alpha_freq_Sept2020_797.csv
+    Ignored:    data/alpha_freq_Sept2020_798.csv
+    Ignored:    data/alpha_freq_Sept2020_799.csv
+    Ignored:    data/alpha_freq_Sept2020_8.csv
+    Ignored:    data/alpha_freq_Sept2020_80.csv
+    Ignored:    data/alpha_freq_Sept2020_800.csv
+    Ignored:    data/alpha_freq_Sept2020_801.csv
+    Ignored:    data/alpha_freq_Sept2020_802.csv
+    Ignored:    data/alpha_freq_Sept2020_803.csv
+    Ignored:    data/alpha_freq_Sept2020_804.csv
+    Ignored:    data/alpha_freq_Sept2020_805.csv
+    Ignored:    data/alpha_freq_Sept2020_806.csv
+    Ignored:    data/alpha_freq_Sept2020_807.csv
+    Ignored:    data/alpha_freq_Sept2020_808.csv
+    Ignored:    data/alpha_freq_Sept2020_809.csv
+    Ignored:    data/alpha_freq_Sept2020_81.csv
+    Ignored:    data/alpha_freq_Sept2020_810.csv
+    Ignored:    data/alpha_freq_Sept2020_811.csv
+    Ignored:    data/alpha_freq_Sept2020_812.csv
+    Ignored:    data/alpha_freq_Sept2020_813.csv
+    Ignored:    data/alpha_freq_Sept2020_814.csv
+    Ignored:    data/alpha_freq_Sept2020_815.csv
+    Ignored:    data/alpha_freq_Sept2020_816.csv
+    Ignored:    data/alpha_freq_Sept2020_817.csv
+    Ignored:    data/alpha_freq_Sept2020_818.csv
+    Ignored:    data/alpha_freq_Sept2020_819.csv
+    Ignored:    data/alpha_freq_Sept2020_82.csv
+    Ignored:    data/alpha_freq_Sept2020_820.csv
+    Ignored:    data/alpha_freq_Sept2020_821.csv
+    Ignored:    data/alpha_freq_Sept2020_822.csv
+    Ignored:    data/alpha_freq_Sept2020_823.csv
+    Ignored:    data/alpha_freq_Sept2020_824.csv
+    Ignored:    data/alpha_freq_Sept2020_825.csv
+    Ignored:    data/alpha_freq_Sept2020_826.csv
+    Ignored:    data/alpha_freq_Sept2020_827.csv
+    Ignored:    data/alpha_freq_Sept2020_828.csv
+    Ignored:    data/alpha_freq_Sept2020_829.csv
+    Ignored:    data/alpha_freq_Sept2020_83.csv
+    Ignored:    data/alpha_freq_Sept2020_830.csv
+    Ignored:    data/alpha_freq_Sept2020_831.csv
+    Ignored:    data/alpha_freq_Sept2020_832.csv
+    Ignored:    data/alpha_freq_Sept2020_833.csv
+    Ignored:    data/alpha_freq_Sept2020_834.csv
+    Ignored:    data/alpha_freq_Sept2020_835.csv
+    Ignored:    data/alpha_freq_Sept2020_836.csv
+    Ignored:    data/alpha_freq_Sept2020_837.csv
+    Ignored:    data/alpha_freq_Sept2020_838.csv
+    Ignored:    data/alpha_freq_Sept2020_839.csv
+    Ignored:    data/alpha_freq_Sept2020_84.csv
+    Ignored:    data/alpha_freq_Sept2020_840.csv
+    Ignored:    data/alpha_freq_Sept2020_841.csv
+    Ignored:    data/alpha_freq_Sept2020_842.csv
+    Ignored:    data/alpha_freq_Sept2020_843.csv
+    Ignored:    data/alpha_freq_Sept2020_844.csv
+    Ignored:    data/alpha_freq_Sept2020_845.csv
+    Ignored:    data/alpha_freq_Sept2020_846.csv
+    Ignored:    data/alpha_freq_Sept2020_847.csv
+    Ignored:    data/alpha_freq_Sept2020_848.csv
+    Ignored:    data/alpha_freq_Sept2020_849.csv
+    Ignored:    data/alpha_freq_Sept2020_85.csv
+    Ignored:    data/alpha_freq_Sept2020_850.csv
+    Ignored:    data/alpha_freq_Sept2020_851.csv
+    Ignored:    data/alpha_freq_Sept2020_852.csv
+    Ignored:    data/alpha_freq_Sept2020_853.csv
+    Ignored:    data/alpha_freq_Sept2020_854.csv
+    Ignored:    data/alpha_freq_Sept2020_855.csv
+    Ignored:    data/alpha_freq_Sept2020_856.csv
+    Ignored:    data/alpha_freq_Sept2020_857.csv
+    Ignored:    data/alpha_freq_Sept2020_858.csv
+    Ignored:    data/alpha_freq_Sept2020_859.csv
+    Ignored:    data/alpha_freq_Sept2020_86.csv
+    Ignored:    data/alpha_freq_Sept2020_860.csv
+    Ignored:    data/alpha_freq_Sept2020_861.csv
+    Ignored:    data/alpha_freq_Sept2020_862.csv
+    Ignored:    data/alpha_freq_Sept2020_863.csv
+    Ignored:    data/alpha_freq_Sept2020_864.csv
+    Ignored:    data/alpha_freq_Sept2020_865.csv
+    Ignored:    data/alpha_freq_Sept2020_866.csv
+    Ignored:    data/alpha_freq_Sept2020_867.csv
+    Ignored:    data/alpha_freq_Sept2020_868.csv
+    Ignored:    data/alpha_freq_Sept2020_869.csv
+    Ignored:    data/alpha_freq_Sept2020_87.csv
+    Ignored:    data/alpha_freq_Sept2020_870.csv
+    Ignored:    data/alpha_freq_Sept2020_871.csv
+    Ignored:    data/alpha_freq_Sept2020_872.csv
+    Ignored:    data/alpha_freq_Sept2020_873.csv
+    Ignored:    data/alpha_freq_Sept2020_874.csv
+    Ignored:    data/alpha_freq_Sept2020_875.csv
+    Ignored:    data/alpha_freq_Sept2020_876.csv
+    Ignored:    data/alpha_freq_Sept2020_877.csv
+    Ignored:    data/alpha_freq_Sept2020_878.csv
+    Ignored:    data/alpha_freq_Sept2020_879.csv
+    Ignored:    data/alpha_freq_Sept2020_88.csv
+    Ignored:    data/alpha_freq_Sept2020_880.csv
+    Ignored:    data/alpha_freq_Sept2020_881.csv
+    Ignored:    data/alpha_freq_Sept2020_882.csv
+    Ignored:    data/alpha_freq_Sept2020_883.csv
+    Ignored:    data/alpha_freq_Sept2020_884.csv
+    Ignored:    data/alpha_freq_Sept2020_885.csv
+    Ignored:    data/alpha_freq_Sept2020_886.csv
+    Ignored:    data/alpha_freq_Sept2020_887.csv
+    Ignored:    data/alpha_freq_Sept2020_888.csv
+    Ignored:    data/alpha_freq_Sept2020_889.csv
+    Ignored:    data/alpha_freq_Sept2020_89.csv
+    Ignored:    data/alpha_freq_Sept2020_890.csv
+    Ignored:    data/alpha_freq_Sept2020_891.csv
+    Ignored:    data/alpha_freq_Sept2020_892.csv
+    Ignored:    data/alpha_freq_Sept2020_893.csv
+    Ignored:    data/alpha_freq_Sept2020_894.csv
+    Ignored:    data/alpha_freq_Sept2020_895.csv
+    Ignored:    data/alpha_freq_Sept2020_896.csv
+    Ignored:    data/alpha_freq_Sept2020_897.csv
+    Ignored:    data/alpha_freq_Sept2020_898.csv
+    Ignored:    data/alpha_freq_Sept2020_899.csv
+    Ignored:    data/alpha_freq_Sept2020_9.csv
+    Ignored:    data/alpha_freq_Sept2020_90.csv
+    Ignored:    data/alpha_freq_Sept2020_900.csv
+    Ignored:    data/alpha_freq_Sept2020_901.csv
+    Ignored:    data/alpha_freq_Sept2020_902.csv
+    Ignored:    data/alpha_freq_Sept2020_903.csv
+    Ignored:    data/alpha_freq_Sept2020_904.csv
+    Ignored:    data/alpha_freq_Sept2020_905.csv
+    Ignored:    data/alpha_freq_Sept2020_906.csv
+    Ignored:    data/alpha_freq_Sept2020_907.csv
+    Ignored:    data/alpha_freq_Sept2020_908.csv
+    Ignored:    data/alpha_freq_Sept2020_909.csv
+    Ignored:    data/alpha_freq_Sept2020_91.csv
+    Ignored:    data/alpha_freq_Sept2020_910.csv
+    Ignored:    data/alpha_freq_Sept2020_911.csv
+    Ignored:    data/alpha_freq_Sept2020_912.csv
+    Ignored:    data/alpha_freq_Sept2020_913.csv
+    Ignored:    data/alpha_freq_Sept2020_914.csv
+    Ignored:    data/alpha_freq_Sept2020_915.csv
+    Ignored:    data/alpha_freq_Sept2020_916.csv
+    Ignored:    data/alpha_freq_Sept2020_917.csv
+    Ignored:    data/alpha_freq_Sept2020_918.csv
+    Ignored:    data/alpha_freq_Sept2020_919.csv
+    Ignored:    data/alpha_freq_Sept2020_92.csv
+    Ignored:    data/alpha_freq_Sept2020_920.csv
+    Ignored:    data/alpha_freq_Sept2020_921.csv
+    Ignored:    data/alpha_freq_Sept2020_922.csv
+    Ignored:    data/alpha_freq_Sept2020_923.csv
+    Ignored:    data/alpha_freq_Sept2020_924.csv
+    Ignored:    data/alpha_freq_Sept2020_925.csv
+    Ignored:    data/alpha_freq_Sept2020_926.csv
+    Ignored:    data/alpha_freq_Sept2020_927.csv
+    Ignored:    data/alpha_freq_Sept2020_928.csv
+    Ignored:    data/alpha_freq_Sept2020_929.csv
+    Ignored:    data/alpha_freq_Sept2020_93.csv
+    Ignored:    data/alpha_freq_Sept2020_930.csv
+    Ignored:    data/alpha_freq_Sept2020_931.csv
+    Ignored:    data/alpha_freq_Sept2020_932.csv
+    Ignored:    data/alpha_freq_Sept2020_933.csv
+    Ignored:    data/alpha_freq_Sept2020_934.csv
+    Ignored:    data/alpha_freq_Sept2020_935.csv
+    Ignored:    data/alpha_freq_Sept2020_936.csv
+    Ignored:    data/alpha_freq_Sept2020_937.csv
+    Ignored:    data/alpha_freq_Sept2020_938.csv
+    Ignored:    data/alpha_freq_Sept2020_939.csv
+    Ignored:    data/alpha_freq_Sept2020_94.csv
+    Ignored:    data/alpha_freq_Sept2020_940.csv
+    Ignored:    data/alpha_freq_Sept2020_941.csv
+    Ignored:    data/alpha_freq_Sept2020_942.csv
+    Ignored:    data/alpha_freq_Sept2020_943.csv
+    Ignored:    data/alpha_freq_Sept2020_944.csv
+    Ignored:    data/alpha_freq_Sept2020_945.csv
+    Ignored:    data/alpha_freq_Sept2020_946.csv
+    Ignored:    data/alpha_freq_Sept2020_947.csv
+    Ignored:    data/alpha_freq_Sept2020_948.csv
+    Ignored:    data/alpha_freq_Sept2020_949.csv
+    Ignored:    data/alpha_freq_Sept2020_95.csv
+    Ignored:    data/alpha_freq_Sept2020_950.csv
+    Ignored:    data/alpha_freq_Sept2020_951.csv
+    Ignored:    data/alpha_freq_Sept2020_952.csv
+    Ignored:    data/alpha_freq_Sept2020_953.csv
+    Ignored:    data/alpha_freq_Sept2020_954.csv
+    Ignored:    data/alpha_freq_Sept2020_955.csv
+    Ignored:    data/alpha_freq_Sept2020_956.csv
+    Ignored:    data/alpha_freq_Sept2020_957.csv
+    Ignored:    data/alpha_freq_Sept2020_958.csv
+    Ignored:    data/alpha_freq_Sept2020_959.csv
+    Ignored:    data/alpha_freq_Sept2020_96.csv
+    Ignored:    data/alpha_freq_Sept2020_960.csv
+    Ignored:    data/alpha_freq_Sept2020_961.csv
+    Ignored:    data/alpha_freq_Sept2020_962.csv
+    Ignored:    data/alpha_freq_Sept2020_963.csv
+    Ignored:    data/alpha_freq_Sept2020_964.csv
+    Ignored:    data/alpha_freq_Sept2020_965.csv
+    Ignored:    data/alpha_freq_Sept2020_966.csv
+    Ignored:    data/alpha_freq_Sept2020_967.csv
+    Ignored:    data/alpha_freq_Sept2020_968.csv
+    Ignored:    data/alpha_freq_Sept2020_969.csv
+    Ignored:    data/alpha_freq_Sept2020_97.csv
+    Ignored:    data/alpha_freq_Sept2020_970.csv
+    Ignored:    data/alpha_freq_Sept2020_971.csv
+    Ignored:    data/alpha_freq_Sept2020_972.csv
+    Ignored:    data/alpha_freq_Sept2020_973.csv
+    Ignored:    data/alpha_freq_Sept2020_974.csv
+    Ignored:    data/alpha_freq_Sept2020_975.csv
+    Ignored:    data/alpha_freq_Sept2020_976.csv
+    Ignored:    data/alpha_freq_Sept2020_977.csv
+    Ignored:    data/alpha_freq_Sept2020_978.csv
+    Ignored:    data/alpha_freq_Sept2020_979.csv
+    Ignored:    data/alpha_freq_Sept2020_98.csv
+    Ignored:    data/alpha_freq_Sept2020_980.csv
+    Ignored:    data/alpha_freq_Sept2020_981.csv
+    Ignored:    data/alpha_freq_Sept2020_982.csv
+    Ignored:    data/alpha_freq_Sept2020_983.csv
+    Ignored:    data/alpha_freq_Sept2020_984.csv
+    Ignored:    data/alpha_freq_Sept2020_985.csv
+    Ignored:    data/alpha_freq_Sept2020_986.csv
+    Ignored:    data/alpha_freq_Sept2020_987.csv
+    Ignored:    data/alpha_freq_Sept2020_988.csv
+    Ignored:    data/alpha_freq_Sept2020_989.csv
+    Ignored:    data/alpha_freq_Sept2020_99.csv
+    Ignored:    data/alpha_freq_Sept2020_990.csv
+    Ignored:    data/alpha_freq_Sept2020_991.csv
+    Ignored:    data/alpha_freq_Sept2020_992.csv
+    Ignored:    data/alpha_freq_Sept2020_993.csv
+    Ignored:    data/alpha_freq_Sept2020_994.csv
+    Ignored:    data/alpha_freq_Sept2020_995.csv
+    Ignored:    data/alpha_freq_Sept2020_996.csv
+    Ignored:    data/alpha_freq_Sept2020_997.csv
+    Ignored:    data/alpha_freq_Sept2020_998.csv
+    Ignored:    data/alpha_freq_Sept2020_999.csv
+    Ignored:    data/to_reject_from_analysis_02.10.2020.xlsx
+    Ignored:    data/to_reject_from_analysis_17.09.2020.xlsx
+    Ignored:    data/to_reject_from_analysis_28.09.2020.xlsx
+    Ignored:    output/1overmac_filtered.rds
+    Ignored:    output/1overmac_test.rds
+    Ignored:    output/1overmac_train.rds
+    Ignored:    output/1overmac_train_thinned_15.rds
+    Ignored:    output/1overmac_train_thinned_5.rds
+
+Untracked files:
+    Untracked:  analysis/exploratory-data-analysis.Rmd
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -385,10 +1524,27 @@ Message
 <tbody>
 <tr>
 <td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/290c52f5d56ff65d5daa5e9fc13f3b169ee25795/docs/license.html" target="_blank">290c52f</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-02-26
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
 Rmd
 </td>
 <td>
-d1a3a5f
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/d1a3a5fe996e33a660c8d0747fe6da7672ff7d2d/analysis/license.Rmd" target="_blank">d1a3a5f</a>
 </td>
 <td>
 PhoenixB
@@ -452,7 +1608,7 @@ $(document).ready(function () {
 
 $(document).ready(function () {
   $('.tabset-dropdown > .nav-tabs > li').click(function () {
-    $(this).parent().toggleClass('nav-tabs-open');
+    $(this).parent().toggleClass('nav-tabs-open')
   });
 });
 </script>
