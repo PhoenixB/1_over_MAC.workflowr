@@ -1,10 +1,12 @@
 name: 1_over_MAC.workflowr
 output_dir: ../docs
 navbar:
-  title: 1_over_MAC.workflowr
+  title: 1 over MAC
   left:
   - text: Home
     href: index.html
+  - text: Exploratory Data Analysis
+    href: exploratory-data-analysis.html
   - text: About
     href: about.html
   - text: License
