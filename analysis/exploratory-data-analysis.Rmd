@@ -19,6 +19,7 @@ pacman::p_load(
 )
 
 conflict_prefer("select", "dplyr", quiet = TRUE)
+conflict_prefer("filter", "dplyr", quiet = TRUE)
 
 oneovermac <-
   read_rds(file = path_wd("output", "1overmac_filtered", ext = "rds")) %>%
@@ -31,7 +32,7 @@ oneovermac <-
 
 ## Data structure
 
-```{r}
+```{r data_structure}
 
 print(oneovermac, n = 20)
 
@@ -39,7 +40,7 @@ print(oneovermac, n = 20)
 
 ## Univariate plots
 
-```{r}
+```{r univariate_plots}
 
 oneovermac %>%
   ggplot(aes(x = peak_alpha)) +
@@ -71,7 +72,7 @@ oneovermac %>%
 
 ## Bivariate plots
 
-```{r}
+```{r bivariate_plots}
 
 oneovermac %>%
   ggplot(aes(y = log(peak_alpha), x = ce_mac)) +
@@ -87,5 +88,22 @@ oneovermac %>%
   ggplot(aes(y = log(peak_alpha), x = ce_mac)) +
   geom_boxplot(aes(group = cut_interval(ce_mac, n = 25))) +
   labs(y = "Natural logarithm of peak alpha frequency", x = "MAC at effect site", title = "Peak alpha frequency by ceMAC [25 bins]", subtitle = "Equal range [25 bins]")
+
+```
+
+## Miscellaneous plots
+
+```{r misc_plots}
+
+oneovermac %>%
+  mutate(ce_mac_oor = if_else(ce_mac > 1.5 | ce_mac < 0.5, "fail", "pass")) %>%
+  group_by(pid, ce_mac_oor) %>%
+  tally() %>%
+  pivot_wider(id_cols = pid, names_from = ce_mac_oor, values_from = n, values_fill = 0) %>%
+  mutate(fraction = fail/(pass+fail)) %>%
+  filter(fraction > 0) %>%
+  ggplot(aes(x = fraction, y = ..density..)) +
+  geom_freqpoly() +
+  labs(x = "Fraction", y = "Density", title = "Fraction of extreme ceMAC values per patient")
 
 ```
