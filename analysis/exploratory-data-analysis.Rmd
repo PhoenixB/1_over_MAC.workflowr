@@ -1,0 +1,91 @@
+---
+title: "Exploratory Data Analysis"
+author: "Pascal Jerney"
+date: "2021-02-27"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, echo=FALSE}
+
+if (!require("pacman", quietly = TRUE)) {
+  install.packages("pacman")
+}
+pacman::p_load(
+  "tidyverse",
+  "conflicted",
+  "fs"
+)
+
+conflict_prefer("select", "dplyr", quiet = TRUE)
+
+oneovermac <-
+  read_rds(file = path_wd("output", "1overmac_filtered", ext = "rds")) %>%
+  select(-starts_with(c("ce_mac_", "peak_alpha_")))
+
+```
+
+## Introduction
+
+
+## Data structure
+
+```{r}
+
+print(oneovermac, n = 20)
+
+```
+
+## Univariate plots
+
+```{r}
+
+oneovermac %>%
+  ggplot(aes(x = peak_alpha)) +
+  geom_density() +
+  labs(x = "Peak alpha frequency", title = "Density of peak_alpha")
+
+oneovermac %>%
+  ggplot(aes(x = log(peak_alpha))) +
+  geom_density() +
+  labs(x = "Natural logarithm of peak alpha frequency", title = "Density of log(peak_alpha)")
+
+oneovermac %>%
+  ggplot(aes(x = 1/peak_alpha)) +
+  geom_density() +
+  labs(x = "Inverse of peak alpha frequency", title = "Density of 1/peak_alpha")
+
+oneovermac %>%
+  ggplot(aes(x = ce_mac)) +
+  geom_density() +
+  labs(x = "MAC at effect site", title = "Density of ce_mac")
+
+oneovermac %>%
+  ggplot(aes(x = 1/ce_mac)) +
+  geom_density() +
+  labs(x = "Inverse of MAC at effect site", title = "Density of 1/ce_mac") +
+  scale_x_continuous(limits = c(0, 3))
+
+```
+
+## Bivariate plots
+
+```{r}
+
+oneovermac %>%
+  ggplot(aes(y = log(peak_alpha), x = ce_mac)) +
+  geom_boxplot(aes(group = cut_width(ce_mac, width = 0.1))) +
+  labs(y = "Natural logarithm of peak alpha frequency", x = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Fixed bin width [0.1]")
+
+oneovermac %>%
+  ggplot(aes(y = log(peak_alpha), x = ce_mac)) +
+  geom_boxplot(aes(group = cut_number(ce_mac, n = 25))) +
+  labs(y = "Natural logarithm of peak alpha frequency", x = "MAC at effect site", title = "Peak alpha frequency by ceMAC [25 bins]", subtitle = "Equal number of observations per bin [25 bins]")
+
+oneovermac %>%
+  ggplot(aes(y = log(peak_alpha), x = ce_mac)) +
+  geom_boxplot(aes(group = cut_interval(ce_mac, n = 25))) +
+  labs(y = "Natural logarithm of peak alpha frequency", x = "MAC at effect site", title = "Peak alpha frequency by ceMAC [25 bins]", subtitle = "Equal range [25 bins]")
+
+```
