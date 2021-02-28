@@ -15,7 +15,8 @@ if (!require("pacman", quietly = TRUE)) {
 pacman::p_load(
   "tidyverse",
   "conflicted",
-  "fs"
+  "fs",
+  "glue"
 )
 
 conflict_prefer("select", "dplyr", quiet = TRUE)
@@ -24,6 +25,8 @@ conflict_prefer("filter", "dplyr", quiet = TRUE)
 oneovermac <-
   read_rds(file = path_wd("output", "1overmac_filtered", ext = "rds")) %>%
   select(-starts_with(c("ce_mac_", "peak_alpha_")))
+
+`%!in%` <- Negate(`%in%`)
 
 ```
 
@@ -95,15 +98,50 @@ oneovermac %>%
 
 ```{r misc_plots}
 
+upper_boundary <- 1.5
+lower_boundary <- 0.5
+
 oneovermac %>%
-  mutate(ce_mac_oor = if_else(ce_mac > 1.5 | ce_mac < 0.5, "fail", "pass")) %>%
+  mutate(ce_mac_oor = if_else(ce_mac > upper_boundary | ce_mac < lower_boundary, "fail", "pass")) %>%
   group_by(pid, ce_mac_oor) %>%
   tally() %>%
   pivot_wider(id_cols = pid, names_from = ce_mac_oor, values_from = n, values_fill = 0) %>%
   mutate(fraction = fail/(pass+fail)) %>%
   filter(fraction > 0) %>%
-  ggplot(aes(x = fraction, y = ..density..)) +
-  geom_freqpoly() +
-  labs(x = "Fraction", y = "Density", title = "Fraction of extreme ceMAC values per patient")
+  ggplot(aes(x = fraction, y = ..count..)) +
+  geom_freqpoly(binwidth = 0.025) +
+  labs(x = "Fraction of extreme values", y = "Patient count", title = "Fraction of extreme ceMAC values per patient (patients with 0 extreme values excluded)", subtitle = glue("Upper boundary: ", upper_boundary, ", lower boundary: ", lower_boundary))
+
+```
+
+## Autocorrelation plots
+
+```{r autocorrelation}
+
+oneovermac %>%
+  select(-time) %>%
+  nest() %>%
+  mutate(data = map(data, ~acf(., lag.max = 1, type = "correlation", plot = FALSE))) %>%
+  # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %>%
+  mutate(data = map(data, ~bind_cols(ce_mac__lag_1 = .x$acf[2,1,1], peak_alpha__lag_1 = .x$acf[2,2,2]))) %>%
+  unnest(data) %>%
+  pivot_longer(cols = -pid, names_to = c("variable", "lag"), names_pattern = "(.*)__lag_(.*)") %>%
+  ggplot(aes(x = as.integer(pid), y = value)) +
+  facet_wrap(vars(variable), scales = "free_y", labeller = labeller(variable = c("ce_mac" = "ceMAC", "peak_alpha" = "Peak alpha frequency"))) +
+  geom_point() +
+  labs(x = "Patient", y = "Lag 1 Autocorrelation", title = "Lag 1 Autocorrelation by variable")
+
+oneovermac %>%
+  select(-time) %>%
+  nest() %>%
+  mutate(data = map(data, ~acf(., lag.max = 2, type = "correlation", plot = FALSE))) %>%
+  # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %>%
+  mutate(data = map(data, ~bind_cols(ce_mac__lag_2 = .x$acf[3,1,1], peak_alpha__lag_2 = .x$acf[3,2,2]))) %>%
+  unnest(data) %>%
+  pivot_longer(cols = -pid, names_to = c("variable", "lag"), names_pattern = "(.*)__lag_(.*)") %>%
+  ggplot(aes(x = as.integer(pid), y = value)) +
+  facet_wrap(vars(variable), scales = "free_y", labeller = labeller(variable = c("ce_mac" = "ceMAC", "peak_alpha" = "Peak alpha frequency"))) +
+  geom_point() +
+  labs(x = "Patient", y = "Lag 2 Autocorrelation", title = "Lag 2 Autocorrelation by variable")
 
 ```
