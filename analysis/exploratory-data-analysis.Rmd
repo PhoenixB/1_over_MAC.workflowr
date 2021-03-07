@@ -48,7 +48,9 @@ one_over_mac %>%
 
 ## Univariate plots
 
-```{r univariate_plots}
+### Original dataset
+
+```{r univariate_plots_original}
 
 one_over_mac %>%
   ggplot(aes(x = peak_alpha)) +
@@ -78,9 +80,43 @@ one_over_mac %>%
 
 ```
 
+### Filtered dataset
+
+```{r univariate_plots_filtered}
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = peak_alpha)) +
+  geom_density() +
+  labs(x = "Peak alpha frequency", title = "Density of peak_alpha")
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = log(peak_alpha))) +
+  geom_density() +
+  labs(x = "Natural logarithm of peak alpha frequency", title = "Density of log(peak_alpha)")
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = 1/peak_alpha)) +
+  geom_density() +
+  labs(x = "Inverse of peak alpha frequency", title = "Density of 1/peak_alpha")
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = ce_mac)) +
+  geom_density() +
+  labs(x = "MAC at effect site", title = "Density of ce_mac")
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = 1/ce_mac)) +
+  geom_density() +
+  labs(x = "Inverse of MAC at effect site", title = "Density of 1/ce_mac") +
+  scale_x_continuous(limits = c(0, 3))
+
+```
+
 ## Bivariate plots
 
-```{r bivariate_plots}
+### Original dataset
+
+```{r bivariate_plots_original}
 
 one_over_mac %>%
   drop_na(peak_alpha) %>%
@@ -99,6 +135,12 @@ one_over_mac %>%
   ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 25), fill = factor(stat(quantile)))) +
   stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
   labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Equal range [25 bins]") + scale_fill_viridis_d(name = "Quartiles")
+
+```
+
+### Filtered dataset
+
+```{r bivariate_plots_filtered}
 
 one_over_mac_filtered %>%
   ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
