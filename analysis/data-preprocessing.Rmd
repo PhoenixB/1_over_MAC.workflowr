@@ -1,0 +1,20 @@
+---
+title: "Data Preprocessing"
+author: "Pascal Jerney"
+date: "2021-03-07"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Introduction
+
+## Data preprocessing steps
+
+1. Load data as separate csv files
+2. Combine separate datasets into `one_over_mac` data.table object
+3. Load Excel files with rejected patients
+4. Mark rejected patients in `one_over_mac`
+5. Calculate modified z-score from `peak_alpha` per patient and mark scores above 3.5
+6. Mark `ce_mac` values above 1.5 and below 0.5, which is clinically sensible
+7. Calculate range differences of `ce_mac` per patient and mark those below the median
