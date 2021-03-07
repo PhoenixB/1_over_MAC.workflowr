@@ -23,9 +23,11 @@ pacman::p_load(
 conflict_prefer("select", "dplyr", quiet = TRUE)
 conflict_prefer("filter", "dplyr", quiet = TRUE)
 
-oneovermac <-
-  read_rds(file = path_wd("output", "1overmac_filtered", ext = "rds")) %>%
-  select(-starts_with(c("ce_mac_", "peak_alpha_")))
+one_over_mac <-
+  read_rds(file = path_wd("output", "one_over_mac", ext = "rds"))
+
+one_over_mac_filtered <-
+  read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
 
 `%!in%` <- Negate(`%in%`)
 
@@ -38,7 +40,9 @@ oneovermac <-
 
 ```{r data_structure}
 
-print(oneovermac, n = 20)
+one_over_mac %>%
+  select(pid, time, ce_mac, peak_alpha) %>%
+  print(n = 20)
 
 ```
 
@@ -46,27 +50,27 @@ print(oneovermac, n = 20)
 
 ```{r univariate_plots}
 
-oneovermac %>%
+one_over_mac %>%
   ggplot(aes(x = peak_alpha)) +
   geom_density() +
   labs(x = "Peak alpha frequency", title = "Density of peak_alpha")
 
-oneovermac %>%
+one_over_mac %>%
   ggplot(aes(x = log(peak_alpha))) +
   geom_density() +
   labs(x = "Natural logarithm of peak alpha frequency", title = "Density of log(peak_alpha)")
 
-oneovermac %>%
+one_over_mac %>%
   ggplot(aes(x = 1/peak_alpha)) +
   geom_density() +
   labs(x = "Inverse of peak alpha frequency", title = "Density of 1/peak_alpha")
 
-oneovermac %>%
+one_over_mac %>%
   ggplot(aes(x = ce_mac)) +
   geom_density() +
   labs(x = "MAC at effect site", title = "Density of ce_mac")
 
-oneovermac %>%
+one_over_mac %>%
   ggplot(aes(x = 1/ce_mac)) +
   geom_density() +
   labs(x = "Inverse of MAC at effect site", title = "Density of 1/ce_mac") +
@@ -78,20 +82,38 @@ oneovermac %>%
 
 ```{r bivariate_plots}
 
-oneovermac %>%
-    ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
-    stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-    labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Fixed bin width [0.1]") + scale_fill_viridis_d(name = "Quartiles")
+one_over_mac %>%
+  drop_na(peak_alpha) %>%
+  ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Fixed bin width [0.1]") + scale_fill_viridis_d(name = "Quartiles")
 
-oneovermac %>%
-    ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 25), fill = factor(stat(quantile)))) +
-    stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-    labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Equal number of observations per bin [25 bins]") + scale_fill_viridis_d(name = "Quartiles")
+one_over_mac %>%
+  drop_na(peak_alpha) %>%
+  ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 25), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Equal number of observations per bin [25 bins]") + scale_fill_viridis_d(name = "Quartiles")
 
-oneovermac %>%
-    ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 25), fill = factor(stat(quantile)))) +
-    stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-    labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Equal range [25 bins]") + scale_fill_viridis_d(name = "Quartiles")
+one_over_mac %>%
+  drop_na(peak_alpha) %>%
+  ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 25), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Equal range [25 bins]") + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Fixed bin width [0.1], filtered dataset") + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 10), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Equal number of observations per bin [10 bins], filtered dataset") + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 10), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = "density_ridges_gradient", calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = "Natural logarithm of peak alpha frequency", y = "MAC at effect site", title = "Peak alpha frequency by ceMAC", subtitle = "Equal range [10 bins], filtered dataset") + scale_fill_viridis_d(name = "Quartiles")
 
 ```
 
@@ -99,19 +121,6 @@ oneovermac %>%
 
 ```{r misc_plots}
 
-upper_boundary <- 1.5
-lower_boundary <- 0.5
-
-oneovermac %>%
-  mutate(ce_mac_oor = if_else(ce_mac > upper_boundary | ce_mac < lower_boundary, "fail", "pass")) %>%
-  group_by(pid, ce_mac_oor) %>%
-  tally() %>%
-  pivot_wider(id_cols = pid, names_from = ce_mac_oor, values_from = n, values_fill = 0) %>%
-  mutate(fraction = fail/(pass+fail)) %>%
-  filter(fraction > 0) %>%
-  ggplot(aes(x = fraction, y = ..count..)) +
-  geom_freqpoly(binwidth = 0.025) +
-  labs(x = "Fraction of extreme values", y = "Patient count", title = "Fraction of extreme ceMAC values per patient (patients with 0 extreme values excluded)", subtitle = glue("Upper boundary: ", upper_boundary, ", lower boundary: ", lower_boundary))
 
 ```
 
@@ -119,8 +128,9 @@ oneovermac %>%
 
 ```{r autocorrelation}
 
-oneovermac %>%
-  select(-time) %>%
+one_over_mac_filtered %>%
+  select(pid, ce_mac, peak_alpha) %>%
+  group_by(pid) %>%
   nest() %>%
   mutate(data = map(data, ~acf(., lag.max = 1, type = "correlation", plot = FALSE))) %>%
   # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %>%
@@ -132,8 +142,9 @@ oneovermac %>%
   geom_point() +
   labs(x = "Patient", y = "Lag 1 Autocorrelation", title = "Lag 1 Autocorrelation by variable")
 
-oneovermac %>%
-  select(-time) %>%
+one_over_mac_filtered %>%
+  select(pid, ce_mac, peak_alpha) %>%
+  group_by(pid) %>%
   nest() %>%
   mutate(data = map(data, ~acf(., lag.max = 2, type = "correlation", plot = FALSE))) %>%
   # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %>%
