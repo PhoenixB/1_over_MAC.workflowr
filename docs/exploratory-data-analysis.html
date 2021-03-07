@@ -376,6 +376,9 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
+  <a href="data-preprocessing.html">Data Preprocessing</a>
+</li>
+<li>
   <a href="exploratory-data-analysis.html">Exploratory Data Analysis</a>
 </li>
 <li>
@@ -429,7 +432,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-03-03
+<strong>Last updated:</strong> 2021-03-07
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -520,16 +523,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree37027b8a19582c00acf8570be4a4adaf0af4752ctargetblank37027b8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/37027b8a19582c00acf8570be4a4adaf0af4752c" target="_blank">37027b8</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree07fc7179272df414c79100e281c2db9295c3a5fbtargetblank07fc717a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/07fc7179272df414c79100e281c2db9295c3a5fb" target="_blank">07fc717</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree37027b8a19582c00acf8570be4a4adaf0af4752ctargetblank37027b8a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree07fc7179272df414c79100e281c2db9295c3a5fbtargetblank07fc717a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/37027b8a19582c00acf8570be4a4adaf0af4752c" target="_blank">37027b8</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/07fc7179272df414c79100e281c2db9295c3a5fb" target="_blank">07fc717</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -1613,11 +1616,8 @@ Ignored files:
     Ignored:    data/to_reject_from_analysis_02.10.2020.xlsx
     Ignored:    data/to_reject_from_analysis_17.09.2020.xlsx
     Ignored:    data/to_reject_from_analysis_28.09.2020.xlsx
-    Ignored:    output/1overmac_filtered.rds
-    Ignored:    output/1overmac_test.rds
-    Ignored:    output/1overmac_train.rds
-    Ignored:    output/1overmac_train_thinned_15.rds
-    Ignored:    output/1overmac_train_thinned_5.rds
+    Ignored:    output/one_over_mac.rds
+    Ignored:    output/one_over_mac_filtered.rds
 
 </code></pre>
 <p>
@@ -1656,6 +1656,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/07fc7179272df414c79100e281c2db9295c3a5fb/analysis/exploratory-data-analysis.Rmd" target="_blank">07fc717</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-07
+</td>
+<td>
+Use new data object names, remove ce_mac extreme values fraction plot
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/cbf80de789bebf080343b5d0c0a735fad52f6f8b/docs/exploratory-data-analysis.html" target="_blank">cbf80de</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-03
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1804,39 +1838,41 @@ Add exploratory data analysis
 </div>
 <div id="data-structure" class="section level2">
 <h2>Data structure</h2>
-<pre class="r"><code>print(oneovermac, n = 20)</code></pre>
-<pre><code># A tibble: 1,132,611 x 4
-# Groups:   pid [385]
+<pre class="r"><code>one_over_mac %&gt;%
+  select(pid, time, ce_mac, peak_alpha) %&gt;%
+  print(n = 20)</code></pre>
+<pre><code># A data frame: 4,378,740 x 4
    pid    time ce_mac peak_alpha
    &lt;fct&gt; &lt;int&gt;  &lt;dbl&gt;      &lt;dbl&gt;
- 1 6        19    0.9        7.2
- 2 6        20    0.9        7.2
- 3 6        21    0.9        7.2
- 4 6        22    0.9        7.2
- 5 6        23    0.9        7.2
- 6 6        24    0.9        7.2
- 7 6        25    0.9        6.8
- 8 6        26    0.9        6.8
- 9 6        27    0.9        6.8
-10 6        28    0.9        6.8
-11 6        29    0.9        6.8
-12 6        30    0.9        7.4
-13 6        31    0.9        7.4
-14 6        32    0.9        7.4
-15 6        33    0.9        7.4
-16 6        34    0.9        7.4
-17 6        35    0.9        7.3
-18 6        36    0.9        7.3
-19 6        37    0.9        7.3
-20 6        38    0.9        7.3
-# … with 1,132,591 more rows</code></pre>
+ 1 1        26    0.5        7.9
+ 2 1        27    0.5        7.9
+ 3 1        28    0.5        7.9
+ 4 1        29    0.5        7.9
+ 5 1        30    0.5        7.9
+ 6 1        31    0.5        7.9
+ 7 1        32    0.5        7.9
+ 8 1        33    0.5        7.9
+ 9 1        34    0.5        7.9
+10 1        35    0.5        8.8
+11 1        36    0.5        8.8
+12 1        37    0.5        8.8
+13 1        38    0.5        8.8
+14 1        39    0.5        8.8
+15 1        40    0.5        8.8
+16 1        41    0.5        9.2
+17 1        42    0.5        9.2
+18 1        43    0.5        9.2
+19 1        44    0.5        9.2
+20 1        45    0.5        8.7
+# … with 4,378,720 more rows</code></pre>
 </div>
 <div id="univariate-plots" class="section level2">
 <h2>Univariate plots</h2>
-<pre class="r"><code>oneovermac %&gt;%
+<pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = peak_alpha)) +
   geom_density() +
   labs(x = &quot;Peak alpha frequency&quot;, title = &quot;Density of peak_alpha&quot;)</code></pre>
+<pre><code>Warning: Removed 1701987 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots-1">
@@ -1875,10 +1911,11 @@ PhoenixB
 </table>
 </div>
 </div>
-<pre class="r"><code>oneovermac %&gt;%
+<pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = log(peak_alpha))) +
   geom_density() +
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, title = &quot;Density of log(peak_alpha)&quot;)</code></pre>
+<pre><code>Warning: Removed 1701987 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots-2">
@@ -1917,10 +1954,11 @@ PhoenixB
 </table>
 </div>
 </div>
-<pre class="r"><code>oneovermac %&gt;%
+<pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = 1/peak_alpha)) +
   geom_density() +
   labs(x = &quot;Inverse of peak alpha frequency&quot;, title = &quot;Density of 1/peak_alpha&quot;)</code></pre>
+<pre><code>Warning: Removed 1701987 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots-3">
@@ -1959,7 +1997,7 @@ PhoenixB
 </table>
 </div>
 </div>
-<pre class="r"><code>oneovermac %&gt;%
+<pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = ce_mac)) +
   geom_density() +
   labs(x = &quot;MAC at effect site&quot;, title = &quot;Density of ce_mac&quot;)</code></pre>
@@ -2001,12 +2039,12 @@ PhoenixB
 </table>
 </div>
 </div>
-<pre class="r"><code>oneovermac %&gt;%
+<pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = 1/ce_mac)) +
   geom_density() +
   labs(x = &quot;Inverse of MAC at effect site&quot;, title = &quot;Density of 1/ce_mac&quot;) +
   scale_x_continuous(limits = c(0, 3))</code></pre>
-<pre><code>Warning: Removed 8169 rows containing non-finite values (stat_density).</code></pre>
+<pre><code>Warning: Removed 221893 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots-5.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots-5">
@@ -2048,11 +2086,12 @@ PhoenixB
 </div>
 <div id="bivariate-plots" class="section level2">
 <h2>Bivariate plots</h2>
-<pre class="r"><code>oneovermac %&gt;%
-    ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
-    stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-    labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Fixed bin width [0.1]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
-<pre><code>Picking joint bandwidth of 0.0176</code></pre>
+<pre class="r"><code>one_over_mac %&gt;%
+  drop_na(peak_alpha) %&gt;%
+  ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Fixed bin width [0.1]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0193</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots-1">
@@ -2078,6 +2117,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/cbf80de789bebf080343b5d0c0a735fad52f6f8b/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots-1.png" target="_blank">cbf80de</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-03
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/5288959f015829d9b8d2a4fc3e0372a7e9b1117f/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots-1.png" target="_blank">5288959</a>
 </td>
 <td>
@@ -2091,11 +2141,12 @@ PhoenixB
 </table>
 </div>
 </div>
-<pre class="r"><code>oneovermac %&gt;%
-    ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 25), fill = factor(stat(quantile)))) +
-    stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-    labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal number of observations per bin [25 bins]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
-<pre><code>Picking joint bandwidth of 0.0168</code></pre>
+<pre class="r"><code>one_over_mac %&gt;%
+  drop_na(peak_alpha) %&gt;%
+  ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 25), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal number of observations per bin [25 bins]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0154</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots-2">
@@ -2121,6 +2172,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/cbf80de789bebf080343b5d0c0a735fad52f6f8b/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots-2.png" target="_blank">cbf80de</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-03
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/5288959f015829d9b8d2a4fc3e0372a7e9b1117f/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots-2.png" target="_blank">5288959</a>
 </td>
 <td>
@@ -2134,11 +2196,12 @@ PhoenixB
 </table>
 </div>
 </div>
-<pre class="r"><code>oneovermac %&gt;%
-    ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 25), fill = factor(stat(quantile)))) +
-    stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-    labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal range [25 bins]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
-<pre><code>Picking joint bandwidth of 0.0189</code></pre>
+<pre class="r"><code>one_over_mac %&gt;%
+  drop_na(peak_alpha) %&gt;%
+  ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 25), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal range [25 bins]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0204</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots-3">
@@ -2164,6 +2227,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/cbf80de789bebf080343b5d0c0a735fad52f6f8b/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots-3.png" target="_blank">cbf80de</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-03
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/5288959f015829d9b8d2a4fc3e0372a7e9b1117f/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots-3.png" target="_blank">5288959</a>
 </td>
 <td>
@@ -2177,76 +2251,33 @@ PhoenixB
 </table>
 </div>
 </div>
+<pre class="r"><code>one_over_mac_filtered %&gt;%
+  ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Fixed bin width [0.1], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0163</code></pre>
+<p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>one_over_mac_filtered %&gt;%
+  ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 10), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal number of observations per bin [10 bins], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+<pre><code>Picking joint bandwidth of 0.014</code></pre>
+<p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>one_over_mac_filtered %&gt;%
+  ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 10), fill = factor(stat(quantile)))) +
+  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
+  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal range [10 bins], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+<pre><code>Picking joint bandwidth of 0.0153</code></pre>
+<p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots-6.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="miscellaneous-plots" class="section level2">
 <h2>Miscellaneous plots</h2>
-<pre class="r"><code>upper_boundary &lt;- 1.5
-lower_boundary &lt;- 0.5
-
-oneovermac %&gt;%
-  mutate(ce_mac_oor = if_else(ce_mac &gt; upper_boundary | ce_mac &lt; lower_boundary, &quot;fail&quot;, &quot;pass&quot;)) %&gt;%
-  group_by(pid, ce_mac_oor) %&gt;%
-  tally() %&gt;%
-  pivot_wider(id_cols = pid, names_from = ce_mac_oor, values_from = n, values_fill = 0) %&gt;%
-  mutate(fraction = fail/(pass+fail)) %&gt;%
-  filter(fraction &gt; 0) %&gt;%
-  ggplot(aes(x = fraction, y = ..count..)) +
-  geom_freqpoly(binwidth = 0.025) +
-  labs(x = &quot;Fraction of extreme values&quot;, y = &quot;Patient count&quot;, title = &quot;Fraction of extreme ceMAC values per patient (patients with 0 extreme values excluded)&quot;, subtitle = glue(&quot;Upper boundary: &quot;, upper_boundary, &quot;, lower boundary: &quot;, lower_boundary))</code></pre>
-<p><img src="figure/exploratory-data-analysis.Rmd/misc_plots-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-misc_plots-1">
-Past versions of misc_plots-1.png
-</button>
-</p>
-<div id="fig-misc_plots-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/90e3eb2b39b1aded8b034598957721f7b848b5a9/docs/figure/exploratory-data-analysis.Rmd/misc_plots-1.png" target="_blank">90e3eb2</a>
-</td>
-<td>
-PhoenixB
-</td>
-<td>
-2021-02-28
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/5288959f015829d9b8d2a4fc3e0372a7e9b1117f/docs/figure/exploratory-data-analysis.Rmd/misc_plots-1.png" target="_blank">5288959</a>
-</td>
-<td>
-PhoenixB
-</td>
-<td>
-2021-02-27
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
 </div>
 <div id="autocorrelation-plots" class="section level2">
 <h2>Autocorrelation plots</h2>
-<pre class="r"><code>oneovermac %&gt;%
-  select(-time) %&gt;%
+<pre class="r"><code>one_over_mac_filtered %&gt;%
+  select(pid, ce_mac, peak_alpha) %&gt;%
+  group_by(pid) %&gt;%
   nest() %&gt;%
   mutate(data = map(data, ~acf(., lag.max = 1, type = &quot;correlation&quot;, plot = FALSE))) %&gt;%
   # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %&gt;%
@@ -2295,8 +2326,9 @@ PhoenixB
 </table>
 </div>
 </div>
-<pre class="r"><code>oneovermac %&gt;%
-  select(-time) %&gt;%
+<pre class="r"><code>one_over_mac_filtered %&gt;%
+  select(pid, ce_mac, peak_alpha) %&gt;%
+  group_by(pid) %&gt;%
   nest() %&gt;%
   mutate(data = map(data, ~acf(., lag.max = 2, type = &quot;correlation&quot;, plot = FALSE))) %&gt;%
   # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %&gt;%
