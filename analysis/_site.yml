@@ -5,6 +5,8 @@ navbar:
   left:
   - text: Home
     href: index.html
+  - text: Data Preprocessing
+    href: data-preprocessing.html
   - text: Exploratory Data Analysis
     href: exploratory-data-analysis.html
   - text: About

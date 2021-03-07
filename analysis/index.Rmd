@@ -10,4 +10,5 @@ editor_options:
 
 Welcome to my research website.
 
-- [Exploratory Data Analysis](exploratory-data-analysis.html).
+* [Data Preprocessing](data-preprocessing.html)
+* [Exploratory Data Analysis](exploratory-data-analysis.html).
