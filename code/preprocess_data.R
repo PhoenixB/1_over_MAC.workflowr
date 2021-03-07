@@ -196,6 +196,6 @@ setattr(one_over_mac, "class", c("tbl", "tbl_df", "data.frame"))
 setattr(one_over_mac_filtered, "class", c("tbl", "tbl_df", "data.frame"))
 
 # Save processed data to disk
-write_rds(one_over_mac, file = path_wd("output", "oneovermac", ext = "rds"))
+write_rds(one_over_mac, file = path_wd("output", "one_over_mac", ext = "rds"))
 write_rds(one_over_mac_filtered,
-          file = path_wd("output", "oneovermac_filtered", ext = "rds"))
+          file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
