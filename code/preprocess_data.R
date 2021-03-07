@@ -32,16 +32,18 @@ pacman::p_load(
   "readr",
   "here",
   "lubridate",
-  "janitor"
+  "janitor",
+  "data.table",
+  "glue"
 )
 
 ## ---------------------------
 
-setwd(here()) # Project working directory
+setwd(here())                                        # Project working directory
 
 ## ---------------------------
 
-set.seed(12345) # Set pseudo-random number generator seed
+set.seed(12345)                        # Set pseudo-random number generator seed
 options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific notation
 suppressWarnings(memory.limit(30000000)) # this is needed on some PCs to increase memory allowance, but has no impact on macs.
 conflict_prefer("filter", "dplyr") # Set preferred functions of conflicting packages
@@ -61,8 +63,7 @@ rangediff <- function(x) {
 
 ## ---------------------------
 
-## Create helpers ----
-helper.colnames <- c(
+col_names <- c(                                 # Create helper for column names
   "time",
   "ce_mac",
   "peak_alpha",
@@ -70,167 +71,131 @@ helper.colnames <- c(
   "osc_alpha"
 )
 
-helper.colspec <- cols(
-  time = col_integer(),
-  ce_mac = col_double(),
-  peak_alpha = col_double(),
-  osc_alpha_power = col_double(),
-  osc_alpha = col_logical()
-)
-
-helper.data_path = path_wd(
+data_path = path_wd(      # Set path of data files relative to working directory
   "data"
 )
 
-helper.rejection_files <- dir_ls(path = helper.data_path, regexp = "to_reject_from_analysis_.*?\\.xlsx$")
+rejection_files <-                        # Directory listing of rejection files
+  dir_ls(path = data_path, regexp = "to_reject_from_analysis_.*?\\.xlsx$")
 
-tibble.rejection_list <-
-  helper.rejection_files %>%
-  map(function(file_path) {
-    read_excel(
-      file_path,
-      col_names = c("pid"),
-      # col_names = helper.colnames,
-      # col_types = helper.colspec,
-      na = c("", "NA", "NaN"),
-      skip = 1
+patients_to_reject <-
+  rejection_files %>%              # Read rejection files from directory listing
+  map(~ read_excel(
+    path = .x,
+    col_names = c("pid"),
+    na = c("", "NA", "NaN"),
+    skip = 1)
+  ) %>%
+  bind_rows(.id = "file_name") %>%                         # Bind lists together
+  mutate(file_date = dmy(                   # Set date column of rejection files
+    str_replace(
+      file_name,
+      glue(
+        ".*?_(((((0?[1-9])|(1\\d)|(2[0-8]))\\.((0?[1-9])|(1[0-2])))|((31\\.((0",
+        "[13578])|(1[02])))|((29|30)\\.((0?[1,3-9])|(1[0-2])))))\\.((20[0-9]",
+        "[0-9]))|(29\\.0?2\\.20(([02468][048])|([13579][26]))))\\.xlsx$"),
+      "\\1"
     )
-  }) %>%
-  bind_rows(.id = "filename") %>%
-  mutate(file_date = dmy(str_replace(filename, ".*?_(((((0?[1-9])|(1\\d)|(2[0-8]))\\.((0?[1-9])|(1[0-2])))|((31\\.((0[13578])|(1[02])))|((29|30)\\.((0?[1,3-9])|(1[0-2])))))\\.((20[0-9][0-9]))|(29\\.0?2\\.20(([02468][048])|([13579][26]))))\\.xlsx$", "\\1"))) %>%
-  # modify_at(vars(file_date), as_date) %>%
+  )) %>%
   select(file_date, pid) %>%
   modify_at(vars(pid), as_factor) %>%
-  filter(file_date == max(file_date))
+  filter(file_date == max(file_date))            # Filter only newest rejections
 
-helper.data_files <- dir_ls(path = helper.data_path, regexp = "\\.csv$")
+data_files <-                                  # Directory listing of data files
+  dir_ls(path = data_path, regexp = "\\.csv$")
 
-## Load patient data from csv files into tibble and save to temporary RDS file ----
-tibble.1overmac_list <-
-  helper.data_files %>%
-  map(function(file_path) {
-    read_csv(
-      file_path,
-      col_names = helper.colnames,
-      col_types = helper.colspec,
-      na = c("", "NA", "NaN")
-    )
-  }) %>%
-  discard(~ nrow(.x) == 0)
+one_over_mac <-
+  data_files %>%
+  map(~ fread(                            # Read data files into data.table list
+    file = .x,
+    col.names = col_names,
+    na.strings = c("", "NA", "NaN")
+  )) %>%
+  discard( ~ nrow(.x) == 0) %>%         # Reject data.tables with 0 observations
+  rbindlist(idcol = "file_name")                            # Bind list together
 
-## Create recipe for data tidying ----
-recipe.peakalpha_base <-
-  recipe(
-    tibble.1overmac_list[[1]]
+one_over_mac[,                                        # Set osc_alpha to logical
+                osc_alpha := lapply(.SD, as.logical), .SDcols = "osc_alpha"]
+
+one_over_mac[,                                     # Create pid column as factor
+  pid := fct_inseq(factor(str_replace(file_name, ".*?_([0-9]+)\\.csv$", "\\1")))
+  ]
+
+one_over_mac[,                                         # Remove file name column
+  file_name := NULL
+]
+
+setkey(one_over_mac, pid, time)              # Set keys and sort by pid and time
+
+# one_over_mac[,                  # Create rolling means for ce_mac and peak_alpha
+#                 paste0(c("ce_mac", "peak_alpha"), "_mean_5pt") :=
+#                   lapply(
+#                     .SD,
+#                     frollmean,
+#                     n = 5,
+#                     align = "center",
+#                     na.rm = FALSE,
+#                     hasNA = TRUE
+#                   ),
+#                 by = pid,
+#                 .SDcols = c("ce_mac", "peak_alpha")]
+
+one_over_mac[,                               # Mark patients from rejection list
+  rejected := pid %in% pluck(patients_to_reject, "pid")
+]
+
+one_over_mac[,               # Calculate modified z-score from peak_alpha by pid
+  peak_alpha_mz := (0.6745 *
+    (peak_alpha - median(peak_alpha, na.rm = TRUE))) /
+    (mad(peak_alpha, na.rm = TRUE)),
+  by = pid
+  ]
+
+one_over_mac[,                      # Mark absolute z-score above 3.5 as outlier
+  peak_alpha_outlier := as.logical(abs(peak_alpha_mz) > 3.5)
+  ]
+
+
+helper.upper_boundary <- 1.5
+helper.lower_boundary <- 0.5
+
+# Mark ce_mac values above 1.5 and below 0.5, which is clinically sensible
+one_over_mac[,
+  ce_mac_outlier := (ce_mac < helper.lower_boundary |
+                       ce_mac > helper.upper_boundary)
+  ]
+
+# Create helper for the median of the range of ce_mac
+helper.ce_mac_range_median <-
+  one_over_mac[,
+    .(range = rangediff(ce_mac)),
+    by = pid
+    ][,
+      median(range)
+      ]
+
+one_over_mac[,                       # Create range column for ce_mac by patient
+  ce_mac_range := rangediff(ce_mac),
+  by = pid
+  ]
+
+one_over_mac[,             # filter patients with lower-than-median ce_mac range
+  range_outlier := ce_mac_range <= helper.ce_mac_range_median
+  ]
+
+one_over_mac_filtered <-                               # Create filtered dataset
+  na.omit(
+    one_over_mac[
+      ce_mac_outlier != TRUE & rejected != TRUE &
+        peak_alpha_outlier != TRUE & range_outlier != TRUE
+    ]
   )
 
-recipe.peakalpha_movingmean <-
-  recipe.peakalpha_base %>%
-  step_window(peak_alpha, size = 3, statistic = "mean", names = "peak_alpha_mean_3pt") %>%
-  step_window(peak_alpha, size = 5, statistic = "mean", names = "peak_alpha_mean_5pt") %>%
-  step_window(peak_alpha, size = 7, statistic = "mean", names = "peak_alpha_mean_7pt") %>%
-  step_window(peak_alpha, size = 15, statistic = "mean", names = "peak_alpha_mean_15pt") %>%
-  step_window(ce_mac, size = 5, statistic = "mean", names = "ce_mac_mean_5pt") %>%
-  step_window(ce_mac, size = 15, statistic = "mean", names = "ce_mac_mean_15pt")
+# Set class to tibble
+setattr(one_over_mac, "class", c("tbl", "tbl_df", "data.frame"))
+setattr(one_over_mac_filtered, "class", c("tbl", "tbl_df", "data.frame"))
 
-recipe.peakalpha_prepped <-
-  recipe.peakalpha_movingmean %>%
-  prep(training = tibble.1overmac_list[[1]])
-
-tibble.1overmac_raw <-
-  tibble.1overmac_list %>%
-  map(~ bake(object = recipe.peakalpha_prepped, new_data = .x)) %>%
-  imap(~ mutate(.x, filename = as.character(.y))) %>%
-  bind_rows()
-
-tibble.1overmac_tidy <-
-  tibble.1overmac_raw %>%
-  mutate(pid = str_replace(filename, ".*?_([0-9]+)\\.csv$", "\\1")) %>%
-  modify_at(vars(pid), as_factor) %>%
-  modify_at(vars(pid), fct_inseq) %>%
-  select(pid, time, ce_mac, ce_mac_mean_5pt, ce_mac_mean_15pt, peak_alpha, peak_alpha_mean_3pt, peak_alpha_mean_5pt, peak_alpha_mean_7pt, peak_alpha_mean_15pt) %>%
-  group_by(pid) %>%
-  mutate(
-    peak_alpha_mz = (0.6745 * (peak_alpha - median(peak_alpha, na.rm = TRUE))) / (mad(peak_alpha, na.rm = TRUE)),
-    peak_alpha_outlier = as.logical(abs(peak_alpha_mz) > 3.5)
-  ) %>%
-  filter(ce_mac != 0) %>%
-  arrange(pid, time)
-
-# write_rds(tibble.1overmac_tidy, file = path_wd("output", "1overmac_tidy", ext = "rds"))
-
-## Exclude patients from exclusion list ----
-tibble.1overmac_excluded <-
-  tibble.1overmac_tidy %>%
-  anti_join(tibble.rejection_list, by = "pid")
-
-# write_rds(tibble.1overmac_excluded, file = path_wd("output", "1overmac_excluded", ext = "rds"))
-
-## Create helper for the median of ce_mac_range ----
-helper.cemac_range_median <-
-  tibble.1overmac_excluded %>%
-  group_by(pid) %>%
-  summarise(across(ce_mac, list(range = rangediff)), .groups = "drop_last") %>%
-  summarise(ce_mac_median = median(ce_mac_range)) %>%
-  pull(ce_mac_median)
-
-## Create helper for splitting data at the median of ce_mac_range ----
-helper.cemac_range_split <-
-  tibble.1overmac_excluded %>%
-  group_by(pid) %>%
-  summarise(across(ce_mac, list(range = rangediff)), .groups = "drop_last") %>%
-  filter(ce_mac_range >= helper.cemac_range_median) %>%
-  pull(pid)
-
-tibble.1overmac_filtered <-
-  tibble.1overmac_excluded %>%
-  filter(pid %in% helper.cemac_range_split) %>%
-  # filter(!peak_alpha_outlier) %>%
-  select(-peak_alpha_outlier, -peak_alpha_mz) %>%
-  drop_na(peak_alpha) %>%
-  modify_at(vars(pid), fct_drop)
-
-write_rds(tibble.1overmac_filtered, file = path_wd("output", "1overmac_filtered", ext = "rds"))
-
-## Create helper for training and test set ----
-helper.training_test <-
-  tibble.1overmac_filtered %>%
-  distinct(pid, .keep_all = FALSE) %>%
-  initial_split(prop = 1/2)
-
-# helper.training_test_pid <-
-#   tibble.1overmac_thinned_15 %>%
-#   distinct(pid, .keep_all = TRUE) %>%
-#   rownames_to_column() %>%
-#   filter(rowname %in% helper.training_test) %>%
-#   pull(pid)
-
-## Create training and test sets ----
-tibble.1overmac_train <-
-  tibble.1overmac_filtered %>%
-  filter(as.character(pid) %in% (training(helper.training_test) %>% pluck("pid"))) %>%
-  modify_at(vars(pid), fct_drop)
-
-write_rds(tibble.1overmac_train, file = path_wd("output", "1overmac_train", ext = "rds"))
-
-tibble.1overmac_test <-
-  tibble.1overmac_filtered %>%
-  filter(as.character(pid) %in% (testing(helper.training_test) %>% pluck("pid"))) %>%
-  modify_at(vars(pid), fct_drop)
-
-write_rds(tibble.1overmac_test, file = path_wd("output", "1overmac_test", ext = "rds"))
-
-## Thin training set ----
-tibble.1overmac_train_thinned_5 <-
-  tibble.1overmac_train %>%
-  filter(row_number() %% 5 == 1) %>%
-  modify_at(vars(pid), fct_drop)
-
-write_rds(tibble.1overmac_train_thinned_5, file = path_wd("output", "1overmac_train_thinned_5", ext = "rds"))
-
-tibble.1overmac_train_thinned_15 <-
-  tibble.1overmac_train %>%
-  filter(row_number() %% 15 == 1) %>%
-  modify_at(vars(pid), fct_drop)
-
-write_rds(tibble.1overmac_train_thinned_15, file = path_wd("output", "1overmac_train_thinned_15", ext = "rds"))
+# Save processed data to disk
+write_rds(one_over_mac, file = path_wd("output", "oneovermac", ext = "rds"))
+write_rds(one_over_mac_filtered,
+          file = path_wd("output", "oneovermac_filtered", ext = "rds"))
