@@ -9,6 +9,8 @@ navbar:
     href: data-preprocessing.html
   - text: Exploratory Data Analysis
     href: exploratory-data-analysis.html
+  - text: Modelling
+    href: modelling.html
   - text: About
     href: about.html
   - text: License
