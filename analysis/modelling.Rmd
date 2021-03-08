@@ -1,0 +1,136 @@
+---
+title: "Modelling"
+author: "Pascal Jerney"
+date: "2021-03-08"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, echo=FALSE}
+
+if (!require("pacman", quietly = TRUE)) {
+  install.packages("pacman")
+}
+pacman::p_load(
+  "tidyverse",
+  "conflicted",
+  "fs",
+  "glue",
+  "nlme",
+  "broom.mixed"
+)
+
+source(path_wd("code", "groupwise_resampling", ext = "R"))
+
+conflict_prefer("select", "dplyr", quiet = TRUE)
+conflict_prefer("filter", "dplyr", quiet = TRUE)
+conflict_prefer("collapse", "dplyr", quiet = TRUE)
+
+one_over_mac_filtered <-
+  read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
+
+# models <-
+#   resamples %>%
+#   mutate(model0 = map(data, function(df) gls(log(peak_alpha) ~ 1, data = df, method = "ML"))) %>%
+#   mutate(model1 = map(data, function(df) gls(log(peak_alpha) ~ ce_mac, data = df, method = "ML"))) %>%
+#   mutate(model2 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = df, random = ~ 1 | pid, method = "ML"))) %>%
+#   mutate(model3 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid, method = "ML")))
+#   mutate(model4 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = tibble.1overmac_train, random = ~ ce_mac | pid, correlation = corAR1(), method = "ML")))
+#   mutate(model5 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = tibble.1overmac_train, random = ~ ce_mac | pid, correlation = corAR1(form = ~ 1 | pid), method = "ML")))
+#   mutate(model6 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = tibble.1overmac_train, random = ~ ce_mac | pid, correlation = corAR1(form = ~ time | pid), method = "ML")))
+#   mutate(model7 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = tibble.1overmac_train, random = ~ ce_mac | pid, correlation = corARMA(form = ~ time | pid, p = 1, q = 1), method = "ML")))
+
+```
+
+## Introduction
+
+Data is resampled groupwise over `pid`, with 1% of the data each and repeated
+100 times. This will be increased in the future.
+
+```{r introduction}
+
+resamples <-
+  resample_groupwise(one_over_mac_filtered,
+                     pid,
+                     prop = 0.01,
+                     times = 100) %>%
+  mutate(data = map(data, ~ arrange(.x, pid, time)))
+
+```
+
+## Modelling
+
+### Null model
+
+Intercept-only model with `log(peak_alpha)` as outcome.
+
+```{r null_model}
+
+models <-
+  resamples %>%
+  mutate(model0 = map(data, function(df)
+    gls(
+      log(peak_alpha) ~ 1, data = df, method = "ML"
+    ))) %>%
+  mutate(model0 = map(model0, ~ broom.mixed::tidy(., exponentiate = TRUE)))
+
+models %>%
+  unnest(model0) %>%
+  group_by(term) %>%
+  mutate(across(estimate, list(mean = mean, median = median))) %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
+  geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
+  geom_density() +
+  geom_vline(aes(xintercept = estimate_mean),
+             colour = "red",
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = estimate_median),
+             colour = "blue",
+             linetype = "dashed") +
+  labs(
+    title = "Bootstrapped estimate plot",
+    subtitle = "Mean in red, median in blue",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+### Model with ce_mac as fixed effect
+
+Model with `ce_mac` as fixed effect and `log(peak_alpha)` as outcome.
+
+```{r ce_mac_fixed}
+
+models <-
+  models %>%
+  mutate(model1 = map(data, function(df)
+    gls(
+      log(peak_alpha) ~ ce_mac, data = df, method = "ML"
+    ))) %>%
+  mutate(model1 = map(model1, ~ broom.mixed::tidy(., exponentiate = TRUE)))
+
+models %>%
+  unnest(model1) %>%
+  group_by(term) %>%
+  mutate(across(estimate, list(mean = mean, median = median))) %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
+  geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
+  geom_density() +
+  geom_vline(aes(xintercept = estimate_mean),
+             colour = "red",
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = estimate_median),
+             colour = "blue",
+             linetype = "dashed") +
+  labs(
+    title = "Bootstrapped estimate plot",
+    subtitle = "Mean in red, median in blue",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
