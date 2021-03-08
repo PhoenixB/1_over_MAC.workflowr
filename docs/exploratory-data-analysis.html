@@ -382,6 +382,9 @@ div.tocify {
   <a href="exploratory-data-analysis.html">Exploratory Data Analysis</a>
 </li>
 <li>
+  <a href="modelling.html">Modelling</a>
+</li>
+<li>
   <a href="about.html">About</a>
 </li>
 <li>
@@ -523,16 +526,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree6712b1580776af0012559243c431e4e02d73a293targetblank6712b15a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/6712b1580776af0012559243c431e4e02d73a293" target="_blank">6712b15</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree83b1a2213b16fba72a885b9081b2f80edf55ecd2targetblank83b1a22a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/83b1a2213b16fba72a885b9081b2f80edf55ecd2" target="_blank">83b1a22</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree6712b1580776af0012559243c431e4e02d73a293targetblank6712b15a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree83b1a2213b16fba72a885b9081b2f80edf55ecd2targetblank83b1a22a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/6712b1580776af0012559243c431e4e02d73a293" target="_blank">6712b15</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/83b1a2213b16fba72a885b9081b2f80edf55ecd2" target="_blank">83b1a22</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -1619,6 +1622,13 @@ Ignored files:
     Ignored:    output/one_over_mac.rds
     Ignored:    output/one_over_mac_filtered.rds
 
+Untracked files:
+    Untracked:  analysis/modelling.Rmd
+
+Unstaged changes:
+    Modified:   code/group_sampling.R
+    Modified:   code/groupwise_resampling.R
+
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
@@ -1656,6 +1666,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/exploratory-data-analysis.html" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1910,23 +1937,171 @@ Add exploratory data analysis
   labs(x = &quot;Peak alpha frequency&quot;, title = &quot;Density of peak_alpha&quot;)</code></pre>
 <pre><code>Warning: Removed 1701987 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_original-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_original-1">
+Past versions of univariate_plots_original-1.png
+</button>
+</p>
+<div id="fig-univariate_plots_original-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_original-1.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = log(peak_alpha))) +
   geom_density() +
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, title = &quot;Density of log(peak_alpha)&quot;)</code></pre>
 <pre><code>Warning: Removed 1701987 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_original-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_original-2">
+Past versions of univariate_plots_original-2.png
+</button>
+</p>
+<div id="fig-univariate_plots_original-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_original-2.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = 1/peak_alpha)) +
   geom_density() +
   labs(x = &quot;Inverse of peak alpha frequency&quot;, title = &quot;Density of 1/peak_alpha&quot;)</code></pre>
 <pre><code>Warning: Removed 1701987 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_original-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_original-3">
+Past versions of univariate_plots_original-3.png
+</button>
+</p>
+<div id="fig-univariate_plots_original-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_original-3.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = ce_mac)) +
   geom_density() +
   labs(x = &quot;MAC at effect site&quot;, title = &quot;Density of ce_mac&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_original-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_original-4">
+Past versions of univariate_plots_original-4.png
+</button>
+</p>
+<div id="fig-univariate_plots_original-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_original-4.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = 1/ce_mac)) +
   geom_density() +
@@ -1934,6 +2109,43 @@ Add exploratory data analysis
   scale_x_continuous(limits = c(0, 3))</code></pre>
 <pre><code>Warning: Removed 221893 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_original-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_original-5">
+Past versions of univariate_plots_original-5.png
+</button>
+</p>
+<div id="fig-univariate_plots_original-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_original-5.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="filtered-dataset" class="section level3">
 <h3>Filtered dataset</h3>
@@ -1942,27 +2154,212 @@ Add exploratory data analysis
   geom_density() +
   labs(x = &quot;Peak alpha frequency&quot;, title = &quot;Density of peak_alpha&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_filtered-1">
+Past versions of univariate_plots_filtered-1.png
+</button>
+</p>
+<div id="fig-univariate_plots_filtered-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-1.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   ggplot(aes(x = log(peak_alpha))) +
   geom_density() +
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, title = &quot;Density of log(peak_alpha)&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_filtered-2">
+Past versions of univariate_plots_filtered-2.png
+</button>
+</p>
+<div id="fig-univariate_plots_filtered-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-2.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   ggplot(aes(x = 1/peak_alpha)) +
   geom_density() +
   labs(x = &quot;Inverse of peak alpha frequency&quot;, title = &quot;Density of 1/peak_alpha&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_filtered-3">
+Past versions of univariate_plots_filtered-3.png
+</button>
+</p>
+<div id="fig-univariate_plots_filtered-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-3.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   ggplot(aes(x = ce_mac)) +
   geom_density() +
   labs(x = &quot;MAC at effect site&quot;, title = &quot;Density of ce_mac&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_filtered-4">
+Past versions of univariate_plots_filtered-4.png
+</button>
+</p>
+<div id="fig-univariate_plots_filtered-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-4.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   ggplot(aes(x = 1/ce_mac)) +
   geom_density() +
   labs(x = &quot;Inverse of MAC at effect site&quot;, title = &quot;Density of 1/ce_mac&quot;) +
   scale_x_continuous(limits = c(0, 3))</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_filtered-5">
+Past versions of univariate_plots_filtered-5.png
+</button>
+</p>
+<div id="fig-univariate_plots_filtered-5" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-5.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="bivariate-plots" class="section level2">
@@ -1976,6 +2373,43 @@ Add exploratory data analysis
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Fixed bin width [0.1]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0193</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_original-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots_original-1">
+Past versions of bivariate_plots_original-1.png
+</button>
+</p>
+<div id="fig-bivariate_plots_original-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots_original-1.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac %&gt;%
   drop_na(peak_alpha) %&gt;%
   ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 25), fill = factor(stat(quantile)))) +
@@ -1983,6 +2417,43 @@ Add exploratory data analysis
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal number of observations per bin [25 bins]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0154</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_original-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots_original-2">
+Past versions of bivariate_plots_original-2.png
+</button>
+</p>
+<div id="fig-bivariate_plots_original-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots_original-2.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac %&gt;%
   drop_na(peak_alpha) %&gt;%
   ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 25), fill = factor(stat(quantile)))) +
@@ -1990,6 +2461,43 @@ Add exploratory data analysis
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal range [25 bins]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0204</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_original-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots_original-3">
+Past versions of bivariate_plots_original-3.png
+</button>
+</p>
+<div id="fig-bivariate_plots_original-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots_original-3.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="filtered-dataset-1" class="section level3">
 <h3>Filtered dataset</h3>
@@ -1999,18 +2507,129 @@ Add exploratory data analysis
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Fixed bin width [0.1], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0163</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots_filtered-1">
+Past versions of bivariate_plots_filtered-1.png
+</button>
+</p>
+<div id="fig-bivariate_plots_filtered-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-1.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 10), fill = factor(stat(quantile)))) +
   stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal number of observations per bin [10 bins], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.014</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots_filtered-2">
+Past versions of bivariate_plots_filtered-2.png
+</button>
+</p>
+<div id="fig-bivariate_plots_filtered-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-2.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 10), fill = factor(stat(quantile)))) +
   stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
   labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal range [10 bins], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0153</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-bivariate_plots_filtered-3">
+Past versions of bivariate_plots_filtered-3.png
+</button>
+</p>
+<div id="fig-bivariate_plots_filtered-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/12fe35a7286673eb1f39bcfa053bbd654c26bab0/docs/figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-3.png" target="_blank">12fe35a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div id="miscellaneous-plots" class="section level2">
