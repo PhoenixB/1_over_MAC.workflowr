@@ -435,7 +435,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-03-08
+<strong>Last updated:</strong> 2021-03-09
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -526,16 +526,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree83b1a2213b16fba72a885b9081b2f80edf55ecd2targetblank83b1a22a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/83b1a2213b16fba72a885b9081b2f80edf55ecd2" target="_blank">83b1a22</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree9ab7833da4d69772ebcd93106b308c2f76b37836targetblank9ab7833a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/9ab7833da4d69772ebcd93106b308c2f76b37836" target="_blank">9ab7833</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree83b1a2213b16fba72a885b9081b2f80edf55ecd2targetblank83b1a22a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree9ab7833da4d69772ebcd93106b308c2f76b37836targetblank9ab7833a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/83b1a2213b16fba72a885b9081b2f80edf55ecd2" target="_blank">83b1a22</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/9ab7833da4d69772ebcd93106b308c2f76b37836" target="_blank">9ab7833</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -1622,13 +1622,6 @@ Ignored files:
     Ignored:    output/one_over_mac.rds
     Ignored:    output/one_over_mac_filtered.rds
 
-Untracked files:
-    Untracked:  analysis/modelling.Rmd
-
-Unstaged changes:
-    Modified:   code/group_sampling.R
-    Modified:   code/groupwise_resampling.R
-
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
@@ -1666,6 +1659,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/9ab7833da4d69772ebcd93106b308c2f76b37836/analysis/exploratory-data-analysis.Rmd" target="_blank">9ab7833</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-09
+</td>
+<td>
+No scientific notation, updated page with summary, code reformatting
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/dff5366926d19c9a1bc03de177b28dd32dea5269/docs/exploratory-data-analysis.html" target="_blank">dff5366</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -1977,7 +2004,8 @@ PhoenixB
 <pre class="r"><code>one_over_mac %&gt;%
   ggplot(aes(x = log(peak_alpha))) +
   geom_density() +
-  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, title = &quot;Density of log(peak_alpha)&quot;)</code></pre>
+  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;,
+       title = &quot;Density of log(peak_alpha)&quot;)</code></pre>
 <pre><code>Warning: Removed 1701987 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_original-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -2018,9 +2046,10 @@ PhoenixB
 </div>
 </div>
 <pre class="r"><code>one_over_mac %&gt;%
-  ggplot(aes(x = 1/peak_alpha)) +
+  ggplot(aes(x = 1 / peak_alpha)) +
   geom_density() +
-  labs(x = &quot;Inverse of peak alpha frequency&quot;, title = &quot;Density of 1/peak_alpha&quot;)</code></pre>
+  labs(x = &quot;Inverse of peak alpha frequency&quot;,
+       title = &quot;Density of 1/peak_alpha&quot;)</code></pre>
 <pre><code>Warning: Removed 1701987 rows containing non-finite values (stat_density).</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_original-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -2103,7 +2132,7 @@ PhoenixB
 </div>
 </div>
 <pre class="r"><code>one_over_mac %&gt;%
-  ggplot(aes(x = 1/ce_mac)) +
+  ggplot(aes(x = 1 / ce_mac)) +
   geom_density() +
   labs(x = &quot;Inverse of MAC at effect site&quot;, title = &quot;Density of 1/ce_mac&quot;) +
   scale_x_continuous(limits = c(0, 3))</code></pre>
@@ -2194,7 +2223,8 @@ PhoenixB
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   ggplot(aes(x = log(peak_alpha))) +
   geom_density() +
-  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, title = &quot;Density of log(peak_alpha)&quot;)</code></pre>
+  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;,
+       title = &quot;Density of log(peak_alpha)&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_filtered-2">
@@ -2236,7 +2266,8 @@ PhoenixB
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   ggplot(aes(x = 1/peak_alpha)) +
   geom_density() +
-  labs(x = &quot;Inverse of peak alpha frequency&quot;, title = &quot;Density of 1/peak_alpha&quot;)</code></pre>
+  labs(x = &quot;Inverse of peak alpha frequency&quot;,
+       title = &quot;Density of 1/peak_alpha&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/univariate_plots_filtered-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-univariate_plots_filtered-3">
@@ -2368,9 +2399,23 @@ PhoenixB
 <h3>Original dataset</h3>
 <pre class="r"><code>one_over_mac %&gt;%
   drop_na(peak_alpha) %&gt;%
-  ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
-  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Fixed bin width [0.1]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+  ggplot(aes(
+    x = log(peak_alpha),
+    y = cut_width(ce_mac, width = 0.1),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = &quot;density_ridges_gradient&quot;,
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4
+  ) +
+  labs(
+    x = &quot;Natural logarithm of peak alpha frequency&quot;,
+    y = &quot;MAC at effect site&quot;,
+    title = &quot;Peak alpha frequency by ceMAC&quot;,
+    subtitle = &quot;Fixed bin width [0.1]&quot;
+  ) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0193</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_original-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -2412,9 +2457,23 @@ PhoenixB
 </div>
 <pre class="r"><code>one_over_mac %&gt;%
   drop_na(peak_alpha) %&gt;%
-  ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 25), fill = factor(stat(quantile)))) +
-  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal number of observations per bin [25 bins]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+  ggplot(aes(
+    x = log(peak_alpha),
+    y = cut_number(ce_mac, n = 25),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = &quot;density_ridges_gradient&quot;,
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4
+  ) +
+  labs(
+    x = &quot;Natural logarithm of peak alpha frequency&quot;,
+    y = &quot;MAC at effect site&quot;,
+    title = &quot;Peak alpha frequency by ceMAC&quot;,
+    subtitle = &quot;Equal number of observations per bin [25 bins]&quot;
+  ) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0154</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_original-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -2456,9 +2515,23 @@ PhoenixB
 </div>
 <pre class="r"><code>one_over_mac %&gt;%
   drop_na(peak_alpha) %&gt;%
-  ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 25), fill = factor(stat(quantile)))) +
-  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal range [25 bins]&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+  ggplot(aes(
+    x = log(peak_alpha),
+    y = cut_interval(ce_mac, n = 25),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = &quot;density_ridges_gradient&quot;,
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4
+  ) +
+  labs(
+    x = &quot;Natural logarithm of peak alpha frequency&quot;,
+    y = &quot;MAC at effect site&quot;,
+    title = &quot;Peak alpha frequency by ceMAC&quot;,
+    subtitle = &quot;Equal range [25 bins]&quot;
+  ) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0204</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_original-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -2502,9 +2575,23 @@ PhoenixB
 <div id="filtered-dataset-1" class="section level3">
 <h3>Filtered dataset</h3>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
-  ggplot(aes(x = log(peak_alpha), y = cut_width(ce_mac, width = 0.1), fill = factor(stat(quantile)))) +
-  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Fixed bin width [0.1], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+  ggplot(aes(
+    x = log(peak_alpha),
+    y = cut_width(ce_mac, width = 0.1),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = &quot;density_ridges_gradient&quot;,
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4
+  ) +
+  labs(
+    x = &quot;Natural logarithm of peak alpha frequency&quot;,
+    y = &quot;MAC at effect site&quot;,
+    title = &quot;Peak alpha frequency by ceMAC&quot;,
+    subtitle = &quot;Fixed bin width [0.1], filtered dataset&quot;
+  ) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0163</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -2545,9 +2632,23 @@ PhoenixB
 </div>
 </div>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
-  ggplot(aes(x = log(peak_alpha), y = cut_number(ce_mac, n = 10), fill = factor(stat(quantile)))) +
-  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal number of observations per bin [10 bins], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+  ggplot(aes(
+    x = log(peak_alpha),
+    y = cut_number(ce_mac, n = 10),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = &quot;density_ridges_gradient&quot;,
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4
+  ) +
+  labs(
+    x = &quot;Natural logarithm of peak alpha frequency&quot;,
+    y = &quot;MAC at effect site&quot;,
+    title = &quot;Peak alpha frequency by ceMAC&quot;,
+    subtitle = &quot;Equal number of observations per bin [10 bins], filtered dataset&quot;
+  ) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.014</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -2588,9 +2689,23 @@ PhoenixB
 </div>
 </div>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
-  ggplot(aes(x = log(peak_alpha), y = cut_interval(ce_mac, n = 10), fill = factor(stat(quantile)))) +
-  stat_density_ridges(geom = &quot;density_ridges_gradient&quot;, calc_ecdf = TRUE, quantile_lines = TRUE, quantiles = 4) +
-  labs(x = &quot;Natural logarithm of peak alpha frequency&quot;, y = &quot;MAC at effect site&quot;, title = &quot;Peak alpha frequency by ceMAC&quot;, subtitle = &quot;Equal range [10 bins], filtered dataset&quot;) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
+  ggplot(aes(
+    x = log(peak_alpha),
+    y = cut_interval(ce_mac, n = 10),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = &quot;density_ridges_gradient&quot;,
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4
+  ) +
+  labs(
+    x = &quot;Natural logarithm of peak alpha frequency&quot;,
+    y = &quot;MAC at effect site&quot;,
+    title = &quot;Peak alpha frequency by ceMAC&quot;,
+    subtitle = &quot;Equal range [10 bins], filtered dataset&quot;
+  ) + scale_fill_viridis_d(name = &quot;Quartiles&quot;)</code></pre>
 <pre><code>Picking joint bandwidth of 0.0153</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/bivariate_plots_filtered-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
@@ -2641,13 +2756,32 @@ PhoenixB
   select(pid, ce_mac, peak_alpha) %&gt;%
   group_by(pid) %&gt;%
   nest() %&gt;%
-  mutate(data = map(data, ~acf(., lag.max = 1, type = &quot;correlation&quot;, plot = FALSE))) %&gt;%
+  mutate(data = map(data, ~ acf(
+    .,
+    lag.max = 1,
+    type = &quot;correlation&quot;,
+    plot = FALSE
+  ))) %&gt;%
   # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %&gt;%
-  mutate(data = map(data, ~bind_cols(ce_mac__lag_1 = .x$acf[2,1,1], peak_alpha__lag_1 = .x$acf[2,2,2]))) %&gt;%
+  mutate(data = map(
+    data,
+    ~ bind_cols(
+      ce_mac__lag_1 = .x$acf[2, 1, 1],
+      peak_alpha__lag_1 = .x$acf[2, 2, 2]
+    )
+  )) %&gt;%
   unnest(data) %&gt;%
-  pivot_longer(cols = -pid, names_to = c(&quot;variable&quot;, &quot;lag&quot;), names_pattern = &quot;(.*)__lag_(.*)&quot;) %&gt;%
+  pivot_longer(
+    cols = -pid,
+    names_to = c(&quot;variable&quot;, &quot;lag&quot;),
+    names_pattern = &quot;(.*)__lag_(.*)&quot;
+  ) %&gt;%
   ggplot(aes(x = as.integer(pid), y = value)) +
-  facet_wrap(vars(variable), scales = &quot;free_y&quot;, labeller = labeller(variable = c(&quot;ce_mac&quot; = &quot;ceMAC&quot;, &quot;peak_alpha&quot; = &quot;Peak alpha frequency&quot;))) +
+  facet_wrap(vars(variable),
+             scales = &quot;free_y&quot;,
+             labeller = labeller(
+               variable = c(&quot;ce_mac&quot; = &quot;ceMAC&quot;, &quot;peak_alpha&quot; = &quot;Peak alpha frequency&quot;)
+             )) +
   geom_point() +
   labs(x = &quot;Patient&quot;, y = &quot;Lag 1 Autocorrelation&quot;, title = &quot;Lag 1 Autocorrelation by variable&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/autocorrelation-1.png" width="672" style="display: block; margin: auto;" /></p>
@@ -2703,13 +2837,32 @@ PhoenixB
   select(pid, ce_mac, peak_alpha) %&gt;%
   group_by(pid) %&gt;%
   nest() %&gt;%
-  mutate(data = map(data, ~acf(., lag.max = 2, type = &quot;correlation&quot;, plot = FALSE))) %&gt;%
+  mutate(data = map(data, ~ acf(
+    .,
+    lag.max = 2,
+    type = &quot;correlation&quot;,
+    plot = FALSE
+  ))) %&gt;%
   # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %&gt;%
-  mutate(data = map(data, ~bind_cols(ce_mac__lag_2 = .x$acf[3,1,1], peak_alpha__lag_2 = .x$acf[3,2,2]))) %&gt;%
+  mutate(data = map(
+    data,
+    ~ bind_cols(
+      ce_mac__lag_2 = .x$acf[3, 1, 1],
+      peak_alpha__lag_2 = .x$acf[3, 2, 2]
+    )
+  )) %&gt;%
   unnest(data) %&gt;%
-  pivot_longer(cols = -pid, names_to = c(&quot;variable&quot;, &quot;lag&quot;), names_pattern = &quot;(.*)__lag_(.*)&quot;) %&gt;%
+  pivot_longer(
+    cols = -pid,
+    names_to = c(&quot;variable&quot;, &quot;lag&quot;),
+    names_pattern = &quot;(.*)__lag_(.*)&quot;
+  ) %&gt;%
   ggplot(aes(x = as.integer(pid), y = value)) +
-  facet_wrap(vars(variable), scales = &quot;free_y&quot;, labeller = labeller(variable = c(&quot;ce_mac&quot; = &quot;ceMAC&quot;, &quot;peak_alpha&quot; = &quot;Peak alpha frequency&quot;))) +
+  facet_wrap(vars(variable),
+             scales = &quot;free_y&quot;,
+             labeller = labeller(
+               variable = c(&quot;ce_mac&quot; = &quot;ceMAC&quot;, &quot;peak_alpha&quot; = &quot;Peak alpha frequency&quot;)
+             )) +
   geom_point() +
   labs(x = &quot;Patient&quot;, y = &quot;Lag 2 Autocorrelation&quot;, title = &quot;Lag 2 Autocorrelation by variable&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/autocorrelation-2.png" width="672" style="display: block; margin: auto;" /></p>

@@ -435,7 +435,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-03-08
+<strong>Last updated:</strong> 2021-03-09
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -526,16 +526,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree11a959a515ae76731919f677d64aea916f11167ftargetblank11a959aa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/11a959a515ae76731919f677d64aea916f11167f" target="_blank">11a959a</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree9ab7833da4d69772ebcd93106b308c2f76b37836targetblank9ab7833a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/9ab7833da4d69772ebcd93106b308c2f76b37836" target="_blank">9ab7833</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree11a959a515ae76731919f677d64aea916f11167ftargetblank11a959aa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree9ab7833da4d69772ebcd93106b308c2f76b37836targetblank9ab7833a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/11a959a515ae76731919f677d64aea916f11167f" target="_blank">11a959a</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/9ab7833da4d69772ebcd93106b308c2f76b37836" target="_blank">9ab7833</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -1622,10 +1622,6 @@ Ignored files:
     Ignored:    output/one_over_mac.rds
     Ignored:    output/one_over_mac_filtered.rds
 
-Unstaged changes:
-    Modified:   code/group_sampling.R
-    Modified:   code/groupwise_resampling.R
-
 </code></pre>
 <p>
 Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
@@ -1663,6 +1659,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/9ab7833da4d69772ebcd93106b308c2f76b37836/analysis/modelling.Rmd" target="_blank">9ab7833</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-09
+</td>
+<td>
+No scientific notation, updated page with summary, code reformatting
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/ae5fbdb31a1bfd423ce52fce58d1ab3f9e73dc5e/docs/modelling.html" target="_blank">ae5fbdb</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1708,20 +1738,23 @@ Add modelling page
     gls(
       log(peak_alpha) ~ 1, data = df, method = &quot;ML&quot;
     ))) %&gt;%
-  mutate(model0 = map(model0, ~ broom.mixed::tidy(., exponentiate = TRUE)))
+  mutate(model0_tidy = map(model0, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
+  mutate(model0_criteria = map(model0, ~ tibble(aic = AIC(.x))))
 
 models %&gt;%
-  unnest(model0) %&gt;%
-  group_by(term) %&gt;%
-  mutate(across(estimate, list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = estimate)) +
-  facet_wrap(vars(term), scales = &quot;free&quot;) +
+  unnest(model0_tidy, names_sep = &quot;_&quot;) %&gt;%
+  group_by(model0_tidy_term) %&gt;%
+  mutate(across(model0_tidy_estimate, 
+                list(mean = mean, median = median))) %&gt;%
+  ggplot(aes(x = model0_tidy_estimate)) +
+  facet_wrap(vars(model0_tidy_term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = estimate_mean),
+  geom_vline(aes(xintercept = model0_tidy_estimate_mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = estimate_median),
+  geom_vline(aes(xintercept = model0_tidy_estimate_median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -1730,7 +1763,72 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/null_model-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/modelling.Rmd/null-1.png" width="672" style="display: block; margin: auto;" /></p>
+<div id="summary" class="section level4">
+<h4>Summary</h4>
+<pre class="r"><code>models %&gt;%
+  unnest(model0_tidy, names_sep = &quot;_&quot;) %&gt;%
+  unnest(model0_criteria, names_sep = &quot;_&quot;) %&gt;%
+  group_by(model0_tidy_term) %&gt;%
+  summarise(across(c(contains(&quot;estimate&quot;), 
+                     contains(&quot;p.value&quot;), 
+                     contains(&quot;aic&quot;)), 
+                   list(mean = mean, se = ~ sd(.x) / sqrt(n())))) %&gt;%
+  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
+               names_to = c(&quot;Bootstrap estimate&quot;, &quot;Statistic&quot;),
+               names_prefix = &quot;model0_&quot;, names_pattern = &quot;(?:tidy_|criteria_)?(.*)_(.*)$&quot;,
+               values_to = &quot;Value&quot;) %&gt;%
+  rename(&quot;Term&quot; = model0_tidy_term) %&gt;%
+  knitr::kable(digits = 10)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Bootstrap estimate</th>
+<th align="left">Statistic</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">estimate</td>
+<td align="left">mean</td>
+<td align="right">2.1511483</td>
+</tr>
+<tr class="even">
+<td align="left">(Intercept)</td>
+<td align="left">estimate</td>
+<td align="left">se</td>
+<td align="right">0.0001052</td>
+</tr>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">p.value</td>
+<td align="left">mean</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">(Intercept)</td>
+<td align="left">p.value</td>
+<td align="left">se</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">aic</td>
+<td align="left">mean</td>
+<td align="right">-8104.4035036</td>
+</tr>
+<tr class="even">
+<td align="left">(Intercept)</td>
+<td align="left">aic</td>
+<td align="left">se</td>
+<td align="right">13.6108520</td>
+</tr>
+</tbody>
+</table>
+</div>
 </div>
 <div id="model-with-ce_mac-as-fixed-effect" class="section level3">
 <h3>Model with ce_mac as fixed effect</h3>
@@ -1741,20 +1839,23 @@ models %&gt;%
     gls(
       log(peak_alpha) ~ ce_mac, data = df, method = &quot;ML&quot;
     ))) %&gt;%
-  mutate(model1 = map(model1, ~ broom.mixed::tidy(., exponentiate = TRUE)))
+  mutate(model1_tidy = map(model1, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
+  mutate(model1_criteria = map(model1, ~ tibble(aic = AIC(.x))))
 
 models %&gt;%
-  unnest(model1) %&gt;%
-  group_by(term) %&gt;%
-  mutate(across(estimate, list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = estimate)) +
-  facet_wrap(vars(term), scales = &quot;free&quot;) +
+  unnest(model1_tidy, names_sep = &quot;_&quot;) %&gt;%
+  group_by(model1_tidy_term) %&gt;%
+  mutate(across(model1_tidy_estimate, 
+                list(mean = mean, median = median))) %&gt;%
+  ggplot(aes(x = model1_tidy_estimate)) +
+  facet_wrap(vars(model1_tidy_term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = estimate_mean),
+  geom_vline(aes(xintercept = model1_tidy_estimate_mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = estimate_median),
+  geom_vline(aes(xintercept = model1_tidy_estimate_median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -1764,6 +1865,143 @@ models %&gt;%
     y = &quot;Density&quot;
   )</code></pre>
 <p><img src="figure/modelling.Rmd/ce_mac_fixed-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-ce_mac_fixed-1">
+Past versions of ce_mac_fixed-1.png
+</button>
+</p>
+<div id="fig-ce_mac_fixed-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/ae5fbdb31a1bfd423ce52fce58d1ab3f9e73dc5e/docs/figure/modelling.Rmd/ce_mac_fixed-1.png" target="_blank">ae5fbdb</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="summary-1" class="section level4">
+<h4>Summary</h4>
+<pre class="r"><code>models %&gt;%
+  unnest(model1_tidy, names_sep = &quot;_&quot;) %&gt;%
+  unnest(model1_criteria, names_sep = &quot;_&quot;) %&gt;%
+  group_by(model1_tidy_term) %&gt;%
+  summarise(across(c(contains(&quot;estimate&quot;), 
+                     contains(&quot;p.value&quot;), 
+                     contains(&quot;aic&quot;)), 
+                   list(mean = mean, se = ~ sd(.x) / sqrt(n())))) %&gt;%
+  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
+               names_to = c(&quot;Bootstrap estimate&quot;, &quot;Statistic&quot;),
+               names_prefix = &quot;model1_&quot;, names_pattern = &quot;(?:tidy_|criteria_)?(.*)_(.*)$&quot;,
+               values_to = &quot;Value&quot;) %&gt;%
+  rename(&quot;Term&quot; = model1_tidy_term) %&gt;%
+  knitr::kable(digits = 10)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Term</th>
+<th align="left">Bootstrap estimate</th>
+<th align="left">Statistic</th>
+<th align="right">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">estimate</td>
+<td align="left">mean</td>
+<td align="right">2.3086895</td>
+</tr>
+<tr class="even">
+<td align="left">(Intercept)</td>
+<td align="left">estimate</td>
+<td align="left">se</td>
+<td align="right">0.0006233</td>
+</tr>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">p.value</td>
+<td align="left">mean</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">(Intercept)</td>
+<td align="left">p.value</td>
+<td align="left">se</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">(Intercept)</td>
+<td align="left">aic</td>
+<td align="left">mean</td>
+<td align="right">-8615.4358208</td>
+</tr>
+<tr class="even">
+<td align="left">(Intercept)</td>
+<td align="left">aic</td>
+<td align="left">se</td>
+<td align="right">14.2073762</td>
+</tr>
+<tr class="odd">
+<td align="left">ce_mac</td>
+<td align="left">estimate</td>
+<td align="left">mean</td>
+<td align="right">-0.1898225</td>
+</tr>
+<tr class="even">
+<td align="left">ce_mac</td>
+<td align="left">estimate</td>
+<td align="left">se</td>
+<td align="right">0.0007330</td>
+</tr>
+<tr class="odd">
+<td align="left">ce_mac</td>
+<td align="left">p.value</td>
+<td align="left">mean</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="even">
+<td align="left">ce_mac</td>
+<td align="left">p.value</td>
+<td align="left">se</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr class="odd">
+<td align="left">ce_mac</td>
+<td align="left">aic</td>
+<td align="left">mean</td>
+<td align="right">-8615.4358208</td>
+</tr>
+<tr class="even">
+<td align="left">ce_mac</td>
+<td align="left">aic</td>
+<td align="left">se</td>
+<td align="right">14.2073762</td>
+</tr>
+</tbody>
+</table>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1810,6 +2048,7 @@ loaded via a namespace (and not attached):
 [53] ellipsis_0.3.1    generics_0.1.0    vctrs_0.3.6       tools_4.0.3      
 [57] hms_1.0.0         fastmap_1.1.0     yaml_2.2.1        colorspace_2.0-0 
 [61] rvest_0.3.6       memoise_2.0.0     knitr_1.31        haven_2.3.1      </code></pre>
+</div>
 </div>
 </div>
 </div>
