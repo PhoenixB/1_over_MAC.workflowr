@@ -67,7 +67,7 @@ resamples <-
 
 Intercept-only model with `log(peak_alpha)` as outcome.
 
-```{r null}
+```{r null_model}
 
 models <-
   resamples %>%
@@ -105,7 +105,7 @@ models %>%
 
 #### Summary
 
-```{r null_summary}
+```{r null_model_summary}
 
 models %>%
   unnest(model0_tidy, names_sep = "_") %>%
@@ -128,7 +128,7 @@ models %>%
 
 Model with `ce_mac` as fixed effect and `log(peak_alpha)` as outcome.
 
-```{r ce_mac_fixed}
+```{r linear_model}
 
 models <-
   models %>%
@@ -166,7 +166,7 @@ models %>%
 
 #### Summary
 
-```{r ce_mac_fixed_summary}
+```{r linear_model_summary}
 
 models %>%
   unnest(model1_tidy, names_sep = "_") %>%
