@@ -27,6 +27,8 @@ conflict_prefer("select", "dplyr", quiet = TRUE)
 conflict_prefer("filter", "dplyr", quiet = TRUE)
 conflict_prefer("collapse", "dplyr", quiet = TRUE)
 
+options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific notation
+
 one_over_mac_filtered <-
   read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
 
@@ -65,7 +67,7 @@ resamples <-
 
 Intercept-only model with `log(peak_alpha)` as outcome.
 
-```{r null_model}
+```{r null}
 
 models <-
   resamples %>%
@@ -73,20 +75,23 @@ models <-
     gls(
       log(peak_alpha) ~ 1, data = df, method = "ML"
     ))) %>%
-  mutate(model0 = map(model0, ~ broom.mixed::tidy(., exponentiate = TRUE)))
+  mutate(model0_tidy = map(model0, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model0_criteria = map(model0, ~ tibble(aic = AIC(.x))))
 
 models %>%
-  unnest(model0) %>%
-  group_by(term) %>%
-  mutate(across(estimate, list(mean = mean, median = median))) %>%
-  ggplot(aes(x = estimate)) +
-  facet_wrap(vars(term), scales = "free") +
+  unnest(model0_tidy, names_sep = "_") %>%
+  group_by(model0_tidy_term) %>%
+  mutate(across(model0_tidy_estimate, 
+                list(mean = mean, median = median))) %>%
+  ggplot(aes(x = model0_tidy_estimate)) +
+  facet_wrap(vars(model0_tidy_term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = estimate_mean),
+  geom_vline(aes(xintercept = model0_tidy_estimate_mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = estimate_median),
+  geom_vline(aes(xintercept = model0_tidy_estimate_median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -95,6 +100,27 @@ models %>%
     x = "Estimate",
     y = "Density"
   )
+
+```
+
+#### Summary
+
+```{r null_summary}
+
+models %>%
+  unnest(model0_tidy, names_sep = "_") %>%
+  unnest(model0_criteria, names_sep = "_") %>%
+  group_by(model0_tidy_term) %>%
+  summarise(across(c(contains("estimate"), 
+                     contains("p.value"), 
+                     contains("aic")), 
+                   list(mean = mean, se = ~ sd(.x) / sqrt(n())))) %>%
+  pivot_longer(cols = c(everything(), -contains("term")),
+               names_to = c("Bootstrap estimate", "Statistic"),
+               names_prefix = "model0_", names_pattern = "(?:tidy_|criteria_)?(.*)_(.*)$",
+               values_to = "Value") %>%
+  rename("Term" = model0_tidy_term) %>%
+  knitr::kable(digits = 10)
 
 ```
 
@@ -110,20 +136,23 @@ models <-
     gls(
       log(peak_alpha) ~ ce_mac, data = df, method = "ML"
     ))) %>%
-  mutate(model1 = map(model1, ~ broom.mixed::tidy(., exponentiate = TRUE)))
+  mutate(model1_tidy = map(model1, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model1_criteria = map(model1, ~ tibble(aic = AIC(.x))))
 
 models %>%
-  unnest(model1) %>%
-  group_by(term) %>%
-  mutate(across(estimate, list(mean = mean, median = median))) %>%
-  ggplot(aes(x = estimate)) +
-  facet_wrap(vars(term), scales = "free") +
+  unnest(model1_tidy, names_sep = "_") %>%
+  group_by(model1_tidy_term) %>%
+  mutate(across(model1_tidy_estimate, 
+                list(mean = mean, median = median))) %>%
+  ggplot(aes(x = model1_tidy_estimate)) +
+  facet_wrap(vars(model1_tidy_term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = estimate_mean),
+  geom_vline(aes(xintercept = model1_tidy_estimate_mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = estimate_median),
+  geom_vline(aes(xintercept = model1_tidy_estimate_median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -132,5 +161,26 @@ models %>%
     x = "Estimate",
     y = "Density"
   )
+
+```
+
+#### Summary
+
+```{r ce_mac_fixed_summary}
+
+models %>%
+  unnest(model1_tidy, names_sep = "_") %>%
+  unnest(model1_criteria, names_sep = "_") %>%
+  group_by(model1_tidy_term) %>%
+  summarise(across(c(contains("estimate"), 
+                     contains("p.value"), 
+                     contains("aic")), 
+                   list(mean = mean, se = ~ sd(.x) / sqrt(n())))) %>%
+  pivot_longer(cols = c(everything(), -contains("term")),
+               names_to = c("Bootstrap estimate", "Statistic"),
+               names_prefix = "model1_", names_pattern = "(?:tidy_|criteria_)?(.*)_(.*)$",
+               values_to = "Value") %>%
+  rename("Term" = model1_tidy_term) %>%
+  knitr::kable(digits = 10)
 
 ```
