@@ -265,39 +265,6 @@ one_over_mac_filtered %>%
   nest() %>%
   mutate(data = map(data, ~ acf(
     .,
-    lag.max = 1,
-    type = "correlation",
-    plot = FALSE
-  ))) %>%
-  # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %>%
-  mutate(data = map(
-    data,
-    ~ bind_cols(
-      ce_mac__lag_1 = .x$acf[2, 1, 1],
-      peak_alpha__lag_1 = .x$acf[2, 2, 2]
-    )
-  )) %>%
-  unnest(data) %>%
-  pivot_longer(
-    cols = -pid,
-    names_to = c("variable", "lag"),
-    names_pattern = "(.*)__lag_(.*)"
-  ) %>%
-  ggplot(aes(x = as.integer(pid), y = value)) +
-  facet_wrap(vars(variable),
-             scales = "free_y",
-             labeller = labeller(
-               variable = c("ce_mac" = "ceMAC", "peak_alpha" = "Peak alpha frequency")
-             )) +
-  geom_point() +
-  labs(x = "Patient", y = "Lag 1 Autocorrelation", title = "Lag 1 Autocorrelation by variable")
-
-one_over_mac_filtered %>%
-  select(pid, ce_mac, peak_alpha) %>%
-  group_by(pid) %>%
-  nest() %>%
-  mutate(data = map(data, ~ acf(
-    .,
     lag.max = 2,
     type = "correlation",
     plot = FALSE
@@ -306,6 +273,8 @@ one_over_mac_filtered %>%
   mutate(data = map(
     data,
     ~ bind_cols(
+      ce_mac__lag_1 = .x$acf[2, 1, 1],
+      peak_alpha__lag_1 = .x$acf[2, 2, 2],
       ce_mac__lag_2 = .x$acf[3, 1, 1],
       peak_alpha__lag_2 = .x$acf[3, 2, 2]
     )
@@ -316,13 +285,61 @@ one_over_mac_filtered %>%
     names_to = c("variable", "lag"),
     names_pattern = "(.*)__lag_(.*)"
   ) %>%
-  ggplot(aes(x = as.integer(pid), y = value)) +
+  ggplot(aes(x = as.integer(pid), y = value, colour = lag)) +
   facet_wrap(vars(variable),
              scales = "free_y",
              labeller = labeller(
-               variable = c("ce_mac" = "ceMAC", "peak_alpha" = "Peak alpha frequency")
+               variable = c("ce_mac" = "ceMAC",
+                            "peak_alpha" = "Peak alpha frequency")
              )) +
   geom_point() +
-  labs(x = "Patient", y = "Lag 2 Autocorrelation", title = "Lag 2 Autocorrelation by variable")
+  labs(x = "Patient", y = "Autocorrelation",
+       title = "Autocorrelation by variable", colour = "Lag") +
+  scale_colour_viridis_d() +
+  theme_dark()
+
+```
+
+## Partial autocorrelation plots
+
+```{r partial_autocorrelation}
+
+one_over_mac_filtered %>%
+  select(pid, ce_mac, peak_alpha) %>%
+  group_by(pid) %>%
+  nest() %>%
+  mutate(data = map(data, ~ pacf(
+    .,
+    lag.max = 2,
+    plot = FALSE
+  ))) %>%
+  # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %>%
+  mutate(data = map(
+    data,
+    ~ bind_cols(
+      ce_mac__lag_1 = .x$acf[1, 1, 1],
+      peak_alpha__lag_1 = .x$acf[1, 2, 2],
+      ce_mac__lag_2 = .x$acf[2, 1, 1],
+      peak_alpha__lag_2 = .x$acf[2, 2, 2]
+    )
+  )) %>%
+  unnest(data) %>%
+  pivot_longer(
+    cols = -pid,
+    names_to = c("variable", "lag"),
+    names_pattern = "(.*)__lag_(.*)"
+  ) %>%
+  ggplot(aes(x = as.integer(pid), y = value, colour = lag)) +
+  facet_wrap(vars(variable),
+             scales = "free_y",
+             labeller = labeller(
+               variable = c("ce_mac" = "ceMAC",
+                            "peak_alpha" = "Peak alpha frequency")
+             )) +
+  geom_point() +
+  labs(x = "Patient", y = "Partial autocorrelation",
+       title = "Partial autocorrelation by variable", colour = "Lag") +
+  scale_colour_viridis_d() +
+  theme_dark()
 
 ```
