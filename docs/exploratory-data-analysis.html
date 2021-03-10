@@ -435,7 +435,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-03-09
+<strong>Last updated:</strong> 2021-03-10
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -526,16 +526,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree9ab7833da4d69772ebcd93106b308c2f76b37836targetblank9ab7833a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/9ab7833da4d69772ebcd93106b308c2f76b37836" target="_blank">9ab7833</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtreea407386d6450bc0790fdcbd853d4e545a74d86b8targetblanka407386a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/a407386d6450bc0790fdcbd853d4e545a74d86b8" target="_blank">a407386</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree9ab7833da4d69772ebcd93106b308c2f76b37836targetblank9ab7833a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtreea407386d6450bc0790fdcbd853d4e545a74d86b8targetblanka407386a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/9ab7833da4d69772ebcd93106b308c2f76b37836" target="_blank">9ab7833</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/a407386d6450bc0790fdcbd853d4e545a74d86b8" target="_blank">a407386</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -1664,6 +1664,40 @@ Message
 Rmd
 </td>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/a407386d6450bc0790fdcbd853d4e545a74d86b8/analysis/exploratory-data-analysis.Rmd" target="_blank">a407386</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-10
+</td>
+<td>
+Recreate autocorrelation plots to show variables by facets and lags by colours in one plot, create partial
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/b7f01cb5c18f205d107424b1f865b960495cc307/docs/exploratory-data-analysis.html" target="_blank">b7f01cb</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-09
+</td>
+<td>
+Build site.
+</td>
+</tr>
+<tr>
+<td>
+Rmd
+</td>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/9ab7833da4d69772ebcd93106b308c2f76b37836/analysis/exploratory-data-analysis.Rmd" target="_blank">9ab7833</a>
 </td>
 <td>
@@ -2758,7 +2792,7 @@ PhoenixB
   nest() %&gt;%
   mutate(data = map(data, ~ acf(
     .,
-    lag.max = 1,
+    lag.max = 2,
     type = &quot;correlation&quot;,
     plot = FALSE
   ))) %&gt;%
@@ -2767,7 +2801,9 @@ PhoenixB
     data,
     ~ bind_cols(
       ce_mac__lag_1 = .x$acf[2, 1, 1],
-      peak_alpha__lag_1 = .x$acf[2, 2, 2]
+      peak_alpha__lag_1 = .x$acf[2, 2, 2],
+      ce_mac__lag_2 = .x$acf[3, 1, 1],
+      peak_alpha__lag_2 = .x$acf[3, 2, 2]
     )
   )) %&gt;%
   unnest(data) %&gt;%
@@ -2776,14 +2812,18 @@ PhoenixB
     names_to = c(&quot;variable&quot;, &quot;lag&quot;),
     names_pattern = &quot;(.*)__lag_(.*)&quot;
   ) %&gt;%
-  ggplot(aes(x = as.integer(pid), y = value)) +
+  ggplot(aes(x = as.integer(pid), y = value, colour = lag)) +
   facet_wrap(vars(variable),
              scales = &quot;free_y&quot;,
              labeller = labeller(
-               variable = c(&quot;ce_mac&quot; = &quot;ceMAC&quot;, &quot;peak_alpha&quot; = &quot;Peak alpha frequency&quot;)
+               variable = c(&quot;ce_mac&quot; = &quot;ceMAC&quot;,
+                            &quot;peak_alpha&quot; = &quot;Peak alpha frequency&quot;)
              )) +
   geom_point() +
-  labs(x = &quot;Patient&quot;, y = &quot;Lag 1 Autocorrelation&quot;, title = &quot;Lag 1 Autocorrelation by variable&quot;)</code></pre>
+  labs(x = &quot;Patient&quot;, y = &quot;Autocorrelation&quot;,
+       title = &quot;Autocorrelation by variable&quot;, colour = &quot;Lag&quot;) +
+  scale_colour_viridis_d() +
+  theme_dark()</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/autocorrelation-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-autocorrelation-1">
@@ -2833,22 +2873,26 @@ PhoenixB
 </table>
 </div>
 </div>
+</div>
+<div id="partial-autocorrelation-plots" class="section level2">
+<h2>Partial autocorrelation plots</h2>
 <pre class="r"><code>one_over_mac_filtered %&gt;%
   select(pid, ce_mac, peak_alpha) %&gt;%
   group_by(pid) %&gt;%
   nest() %&gt;%
-  mutate(data = map(data, ~ acf(
+  mutate(data = map(data, ~ pacf(
     .,
     lag.max = 2,
-    type = &quot;correlation&quot;,
     plot = FALSE
   ))) %&gt;%
   # mutate(data = map(data, ~as_tibble(bind_cols(lag_0 = .x$acf[1,,], lag_1 = .x$acf[2,,])))) %&gt;%
   mutate(data = map(
     data,
     ~ bind_cols(
-      ce_mac__lag_2 = .x$acf[3, 1, 1],
-      peak_alpha__lag_2 = .x$acf[3, 2, 2]
+      ce_mac__lag_1 = .x$acf[1, 1, 1],
+      peak_alpha__lag_1 = .x$acf[1, 2, 2],
+      ce_mac__lag_2 = .x$acf[2, 1, 1],
+      peak_alpha__lag_2 = .x$acf[2, 2, 2]
     )
   )) %&gt;%
   unnest(data) %&gt;%
@@ -2857,63 +2901,19 @@ PhoenixB
     names_to = c(&quot;variable&quot;, &quot;lag&quot;),
     names_pattern = &quot;(.*)__lag_(.*)&quot;
   ) %&gt;%
-  ggplot(aes(x = as.integer(pid), y = value)) +
+  ggplot(aes(x = as.integer(pid), y = value, colour = lag)) +
   facet_wrap(vars(variable),
              scales = &quot;free_y&quot;,
              labeller = labeller(
-               variable = c(&quot;ce_mac&quot; = &quot;ceMAC&quot;, &quot;peak_alpha&quot; = &quot;Peak alpha frequency&quot;)
+               variable = c(&quot;ce_mac&quot; = &quot;ceMAC&quot;,
+                            &quot;peak_alpha&quot; = &quot;Peak alpha frequency&quot;)
              )) +
   geom_point() +
-  labs(x = &quot;Patient&quot;, y = &quot;Lag 2 Autocorrelation&quot;, title = &quot;Lag 2 Autocorrelation by variable&quot;)</code></pre>
-<p><img src="figure/exploratory-data-analysis.Rmd/autocorrelation-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-autocorrelation-2">
-Past versions of autocorrelation-2.png
-</button>
-</p>
-<div id="fig-autocorrelation-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/d79965593913e6a013ed66264a824936e98ed7eb/docs/figure/exploratory-data-analysis.Rmd/autocorrelation-2.png" target="_blank">d799655</a>
-</td>
-<td>
-PhoenixB
-</td>
-<td>
-2021-03-07
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/90e3eb2b39b1aded8b034598957721f7b848b5a9/docs/figure/exploratory-data-analysis.Rmd/autocorrelation-2.png" target="_blank">90e3eb2</a>
-</td>
-<td>
-PhoenixB
-</td>
-<td>
-2021-02-28
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+  labs(x = &quot;Patient&quot;, y = &quot;Partial autocorrelation&quot;,
+       title = &quot;Partial autocorrelation by variable&quot;, colour = &quot;Lag&quot;) +
+  scale_colour_viridis_d() +
+  theme_dark()</code></pre>
+<p><img src="figure/exploratory-data-analysis.Rmd/partial_autocorrelation-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
