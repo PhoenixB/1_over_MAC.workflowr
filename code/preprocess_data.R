@@ -46,8 +46,8 @@ setwd(here())                                        # Project working directory
 set.seed(12345)                        # Set pseudo-random number generator seed
 options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific notation
 suppressWarnings(memory.limit(30000000)) # this is needed on some PCs to increase memory allowance, but has no impact on macs.
-conflict_prefer("filter", "dplyr") # Set preferred functions of conflicting packages
-conflict_prefer("discard", "purrr")
+conflict_prefer("filter", "dplyr", quiet = TRUE) # Set preferred functions of conflicting packages
+conflict_prefer("discard", "purrr", quiet = TRUE)
 
 ## ---------------------------
 
@@ -179,9 +179,27 @@ one_over_mac[,                       # Create range column for ce_mac by patient
   by = pid
   ]
 
-one_over_mac[,             # filter patients with lower-than-median ce_mac range
+one_over_mac[,             # Filter patients with lower-than-median ce_mac range
   range_outlier := ce_mac_range <= helper.ce_mac_range_median
   ]
+
+one_over_mac[,                               # Create centered column for ce_mac
+  ce_mac_centered := scale(ce_mac, scale = FALSE)
+]
+
+one_over_mac[,                  # Create within-group centered column for ce_mac
+  ce_mac_pid_centered := scale(ce_mac, scale = FALSE),
+  by = pid
+  ]
+
+one_over_mac[,                               # Create scaled column for ce_mac
+  ce_mac_scaled := scale(ce_mac)
+]
+
+one_over_mac[,                  # Create within-group scaled column for ce_mac
+  ce_mac_pid_scaled := scale(ce_mac),
+  by = pid
+]
 
 one_over_mac_filtered <-                               # Create filtered dataset
   na.omit(
