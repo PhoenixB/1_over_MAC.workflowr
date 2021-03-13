@@ -35,13 +35,18 @@ one_over_mac_filtered <-
 
 ## Introduction
 
+## To do
+
+* Add density adjustments and/or histogram to univariate plots
+* Add univariate age plots
+* Add univariate natural logarithm of ce_mac plot
 
 ## Data structure
 
 ```{r data_structure}
 
 one_over_mac %>%
-  select(pid, time, ce_mac, peak_alpha) %>%
+  select(pid, age, time, ce_mac, peak_alpha) %>%
   print(n = 20)
 
 ```
@@ -120,13 +125,152 @@ one_over_mac_filtered %>%
 
 ### Original dataset
 
-```{r bivariate_plots_original}
+#### Age versus ceMAC
 
+```{r age_ce_mac_biv_original}
 
 one_over_mac %>%
-  drop_na(peak_alpha) %>%
+  drop_na(age, ce_mac) %>%
   ggplot(aes(
-    x = log(peak_alpha),
+    x = ce_mac,
+    y = cut_width(age, width = 5),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.05
+  ) +
+  labs(
+    x = "MAC at effect site",
+    y = "Age",
+    title = "ceMAC by age",
+    subtitle = "Fixed bin width [5]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac %>%
+  drop_na(age, ce_mac) %>%
+  ggplot(aes(
+    x = ce_mac,
+    y = cut_number(age, n = 15),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.05
+  ) +
+  labs(
+    x = "MAC at effect site",
+    y = "Age",
+    title = "ceMAC by age",
+    subtitle = "Equal number of observations per bin [15 bins]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac %>%
+  drop_na(age, ce_mac) %>%
+  ggplot(aes(
+    x = ce_mac,
+    y = cut_interval(age, n = 15),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.05
+  ) +
+  labs(
+    x = "MAC at effect site",
+    y = "Age",
+    title = "ceMAC by age",
+    subtitle = "Equal range [15 bins]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+```
+
+#### Age versus peak alpha frequency
+
+```{r age_peak_alpha_biv_original}
+
+one_over_mac %>%
+  drop_na(age, peak_alpha) %>%
+  ggplot(aes(
+    x = peak_alpha,
+    y = cut_width(age, width = 5),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.25
+  ) +
+  labs(
+    x = "Peak alpha frequency [Hz]",
+    y = "Age",
+    title = "Peak alpha frequency by age",
+    subtitle = "Fixed bin width [5]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac %>%
+  drop_na(age, peak_alpha) %>%
+  ggplot(aes(
+    x = peak_alpha,
+    y = cut_number(age, n = 15),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.25
+  ) +
+  labs(
+    x = "Peak alpha frequency [Hz]",
+    y = "Age",
+    title = "Peak alpha frequency by age",
+    subtitle = "Equal number of observations per bin [15 bins]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac %>%
+  drop_na(age, peak_alpha) %>%
+  ggplot(aes(
+    x = peak_alpha,
+    y = cut_interval(age, n = 15),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.25
+  ) +
+  labs(
+    x = "Peak alpha frequency [Hz]",
+    y = "Age",
+    title = "Peak alpha frequency by age",
+    subtitle = "Equal range [15 bins]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+```
+
+#### ceMAC versus peak alpha frequency
+
+```{r ce_mac_peak_alpha_biv_original}
+
+one_over_mac %>%
+  drop_na(ce_mac, peak_alpha) %>%
+  ggplot(aes(
+    x = peak_alpha,
     y = cut_width(ce_mac, width = 0.1),
     fill = factor(stat(quantile))
   )) +
@@ -137,16 +281,16 @@ one_over_mac %>%
     quantiles = 4
   ) +
   labs(
-    x = "Natural logarithm of peak alpha frequency",
+    x = "Peak alpha frequency [Hz]",
     y = "MAC at effect site",
     title = "Peak alpha frequency by ceMAC",
     subtitle = "Fixed bin width [0.1]"
   ) + scale_fill_viridis_d(name = "Quartiles")
 
 one_over_mac %>%
-  drop_na(peak_alpha) %>%
+  drop_na(ce_mac, peak_alpha) %>%
   ggplot(aes(
-    x = log(peak_alpha),
+    x = peak_alpha,
     y = cut_number(ce_mac, n = 25),
     fill = factor(stat(quantile))
   )) +
@@ -157,16 +301,16 @@ one_over_mac %>%
     quantiles = 4
   ) +
   labs(
-    x = "Natural logarithm of peak alpha frequency",
+    x = "Peak alpha frequency [Hz]",
     y = "MAC at effect site",
     title = "Peak alpha frequency by ceMAC",
     subtitle = "Equal number of observations per bin [25 bins]"
   ) + scale_fill_viridis_d(name = "Quartiles")
 
 one_over_mac %>%
-  drop_na(peak_alpha) %>%
+  drop_na(ce_mac, peak_alpha) %>%
   ggplot(aes(
-    x = log(peak_alpha),
+    x = peak_alpha,
     y = cut_interval(ce_mac, n = 25),
     fill = factor(stat(quantile))
   )) +
@@ -177,7 +321,7 @@ one_over_mac %>%
     quantiles = 4
   ) +
   labs(
-    x = "Natural logarithm of peak alpha frequency",
+    x = "Peak alpha frequency [Hz]",
     y = "MAC at effect site",
     title = "Peak alpha frequency by ceMAC",
     subtitle = "Equal range [25 bins]"
@@ -187,11 +331,79 @@ one_over_mac %>%
 
 ### Filtered dataset
 
-```{r bivariate_plots_filtered}
+#### Age versus ceMAC
+
+```{r age_ce_mac_biv_filtered}
 
 one_over_mac_filtered %>%
   ggplot(aes(
-    x = log(peak_alpha),
+    x = ce_mac,
+    y = cut_width(age, width = 5),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.05
+  ) +
+  labs(
+    x = "MAC at effect site",
+    y = "Age",
+    title = "ceMAC by age",
+    subtitle = "Fixed bin width [5]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac_filtered %>%
+  ggplot(aes(
+    x = ce_mac,
+    y = cut_number(age, n = 15),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.05
+  ) +
+  labs(
+    x = "MAC at effect site",
+    y = "Age",
+    title = "ceMAC by age",
+    subtitle = "Equal number of observations per bin [15 bins]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+one_over_mac_filtered %>%
+  ggplot(aes(
+    x = ce_mac,
+    y = cut_interval(age, n = 15),
+    fill = factor(stat(quantile))
+  )) +
+  stat_density_ridges(
+    geom = "density_ridges_gradient",
+    calc_ecdf = TRUE,
+    quantile_lines = TRUE,
+    quantiles = 4,
+    bandwidth = 0.05
+  ) +
+  labs(
+    x = "MAC at effect site",
+    y = "Age",
+    title = "ceMAC by age",
+    subtitle = "Equal range [25 bins]"
+  ) + scale_fill_viridis_d(name = "Quartiles")
+
+```
+
+#### ceMAC versus peak alpha frequency
+
+```{r ce_mac_peak_alpha_biv_filtered}
+
+one_over_mac_filtered %>%
+  ggplot(aes(
+    x = peak_alpha,
     y = cut_width(ce_mac, width = 0.1),
     fill = factor(stat(quantile))
   )) +
@@ -202,7 +414,7 @@ one_over_mac_filtered %>%
     quantiles = 4
   ) +
   labs(
-    x = "Natural logarithm of peak alpha frequency",
+    x = "Peak alpha frequency [Hz]",
     y = "MAC at effect site",
     title = "Peak alpha frequency by ceMAC",
     subtitle = "Fixed bin width [0.1], filtered dataset"
@@ -210,7 +422,7 @@ one_over_mac_filtered %>%
 
 one_over_mac_filtered %>%
   ggplot(aes(
-    x = log(peak_alpha),
+    x = peak_alpha,
     y = cut_number(ce_mac, n = 10),
     fill = factor(stat(quantile))
   )) +
@@ -221,7 +433,7 @@ one_over_mac_filtered %>%
     quantiles = 4
   ) +
   labs(
-    x = "Natural logarithm of peak alpha frequency",
+    x = "Peak alpha frequency [Hz]",
     y = "MAC at effect site",
     title = "Peak alpha frequency by ceMAC",
     subtitle = "Equal number of observations per bin [10 bins], filtered dataset"
@@ -229,7 +441,7 @@ one_over_mac_filtered %>%
 
 one_over_mac_filtered %>%
   ggplot(aes(
-    x = log(peak_alpha),
+    x = peak_alpha,
     y = cut_interval(ce_mac, n = 10),
     fill = factor(stat(quantile))
   )) +
@@ -240,7 +452,7 @@ one_over_mac_filtered %>%
     quantiles = 4
   ) +
   labs(
-    x = "Natural logarithm of peak alpha frequency",
+    x = "Peak alpha frequency [Hz]",
     y = "MAC at effect site",
     title = "Peak alpha frequency by ceMAC",
     subtitle = "Equal range [10 bins], filtered dataset"
