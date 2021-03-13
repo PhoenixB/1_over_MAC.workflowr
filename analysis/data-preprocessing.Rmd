@@ -12,9 +12,15 @@ editor_options:
 ## Data preprocessing steps
 
 1. Load data as separate csv files
-2. Combine separate datasets into `one_over_mac` data.table object
+2. Combine separate data sets into `one_over_mac` data.table object
 3. Load Excel files with rejected patients
-4. Mark rejected patients in `one_over_mac`
-5. Calculate modified z-score from `peak_alpha` per patient and mark scores above 3.5
-6. Mark `ce_mac` values above 1.5 and below 0.5, which is clinically sensible
-7. Calculate range differences of `ce_mac` per patient and mark those below the median
+4. Load separate csv file with age data
+5. Combine data sets with age
+6. Mark rejected patients in `one_over_mac`
+7. Calculate modified z-score from `peak_alpha` per patient and mark scores above 3.5
+8. Mark `ce_mac` values above 1.5 and below 0.5, which is clinically sensible
+9. Calculate range differences of `ce_mac` per patient and mark those below the median
+
+## To do
+
+* Calculate log(ce_mac) and center at mean
