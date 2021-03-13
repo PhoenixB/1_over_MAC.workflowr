@@ -48,6 +48,8 @@ options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific not
 suppressWarnings(memory.limit(30000000)) # this is needed on some PCs to increase memory allowance, but has no impact on macs.
 conflict_prefer("filter", "dplyr", quiet = TRUE) # Set preferred functions of conflicting packages
 conflict_prefer("discard", "purrr", quiet = TRUE)
+conflict_prefer("col_factor", "readr", quiet = TRUE)
+conflict_prefer(":=", "data.table", quiet = TRUE)
 
 ## ---------------------------
 
@@ -102,7 +104,12 @@ patients_to_reject <-
   filter(file_date == max(file_date))            # Filter only newest rejections
 
 data_files <-                                  # Directory listing of data files
-  dir_ls(path = data_path, regexp = "\\.csv$")
+  dir_ls(path = data_path,
+         regexp = glue(
+           "alpha_freq_(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May",
+           "|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t)?(?:ember)?|Oct(?:ober)?|",
+           "Nov(?:ember)?|Dec(?:ember)?)(?:19[7-9]\\d|2\\d{{3}})_\\d*?\\.csv$")
+         )
 
 one_over_mac <-
   data_files %>%
@@ -126,6 +133,42 @@ one_over_mac[,                                         # Remove file name column
 ]
 
 setkey(one_over_mac, pid, time)              # Set keys and sort by pid and time
+
+age_files <-                                    # Directory listing of age files
+  dir_ls(path = data_path, regexp = "alpha_freq_ages_.*?\\.csv$")
+
+patients_ages <-
+  age_files %>%                          # Read age files from directory listing
+  map(~ read_csv(
+    file = .x,
+    col_names = c("pid", "age"),
+    col_types = cols(col_factor(), col_integer()),
+    na = c("", "NA", "NaN")
+  )) %>%
+  bind_rows(.id = "file_name") %>%                         # Bind lists together
+  mutate(file_date = my(                          # Set date column of age files
+    str_replace(
+      file_name,
+      glue(
+        ".*?_(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|J",
+        "ul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:",
+        "ember)?)(19[7-9]\\d|2\\d{{3}})\\.csv$"),
+      "\\1 \\2"
+    )
+  )) %>%
+  select(file_date, pid, age) %>%
+  modify_at(vars(pid), as_factor) %>%
+  filter(file_date == max(file_date))            # Filter only newest rejections
+
+setDT(patients_ages)
+setkey(patients_ages, pid)
+
+one_over_mac <-
+  patients_ages[one_over_mac]
+
+one_over_mac[,                                         # Remove file name column
+  file_date := NULL
+]
 
 # one_over_mac[,                  # Create rolling means for ce_mac and peak_alpha
 #                 paste0(c("ce_mac", "peak_alpha"), "_mean_5pt") :=
@@ -192,11 +235,11 @@ one_over_mac[,                  # Create within-group centered column for ce_mac
   by = pid
   ]
 
-one_over_mac[,                               # Create scaled column for ce_mac
+one_over_mac[,                                 # Create scaled column for ce_mac
   ce_mac_scaled := scale(ce_mac)
 ]
 
-one_over_mac[,                  # Create within-group scaled column for ce_mac
+one_over_mac[,                    # Create within-group scaled column for ce_mac
   ce_mac_pid_scaled := scale(ce_mac),
   by = pid
 ]
