@@ -158,7 +158,7 @@ patients_ages <-
   )) %>%
   select(file_date, pid, age) %>%
   modify_at(vars(pid), as_factor) %>%
-  filter(file_date == max(file_date))            # Filter only newest rejections
+  filter(file_date == max(file_date))                  # Filter only newest ages
 
 setDT(patients_ages)
 setkey(patients_ages, pid)
