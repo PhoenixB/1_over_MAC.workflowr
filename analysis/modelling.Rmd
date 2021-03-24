@@ -12,54 +12,65 @@ editor_options:
 if (!require("pacman", quietly = TRUE)) {
   install.packages("pacman")
 }
-pacman::p_load(
-  "tidyverse",
-  "conflicted",
-  "fs",
-  "glue",
-  "nlme",
-  "broom.mixed"
-)
+pacman::p_load("conflicted")
 
-source(path_wd("code", "groupwise_resampling", ext = "R"))
-
+# Resolve function conflicts before loading other packages
 conflict_prefer("select", "dplyr", quiet = TRUE)
 conflict_prefer("filter", "dplyr", quiet = TRUE)
 conflict_prefer("collapse", "dplyr", quiet = TRUE)
+
+pacman::p_load(
+  "tidyverse",
+  "fs",
+  "glue",
+  "nlme",
+  "broom.mixed",
+  "performance",
+  "MuMIn"
+)
+
+source(path_wd("code", "groupwise_resampling", ext = "R"))
 
 options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific notation
 
 one_over_mac_filtered <-
   read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
 
-# models <-
-#   resamples %>%
-#   mutate(model0 = map(data, function(df) gls(log(peak_alpha) ~ 1, data = df, method = "ML"))) %>%
-#   mutate(model1 = map(data, function(df) gls(log(peak_alpha) ~ ce_mac, data = df, method = "ML"))) %>%
-#   mutate(model2 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = df, random = ~ 1 | pid, method = "ML"))) %>%
-#   mutate(model3 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid, method = "ML")))
-#   mutate(model4 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = tibble.1overmac_train, random = ~ ce_mac | pid, correlation = corAR1(), method = "ML")))
-#   mutate(model5 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = tibble.1overmac_train, random = ~ ce_mac | pid, correlation = corAR1(form = ~ 1 | pid), method = "ML")))
-#   mutate(model6 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = tibble.1overmac_train, random = ~ ce_mac | pid, correlation = corAR1(form = ~ time | pid), method = "ML")))
-#   mutate(model7 = map(data, function(df) lme(log(peak_alpha) ~ ce_mac, data = tibble.1overmac_train, random = ~ ce_mac | pid, correlation = corARMA(form = ~ time | pid, p = 1, q = 1), method = "ML")))
-
 ```
 
 ## Introduction
 
-Data is resampled groupwise over `pid`, with 1% of the data each and repeated
-100 times. This will be increased in the future.
+Data is resampled groupwise over `pid` without replacing, with 1% of the data
+each and repeated 100 times. This will likely be increased in the future.
 
 ```{r introduction}
 
 resamples <-
-  resample_groupwise(one_over_mac_filtered,
-                     pid,
+  one_over_mac_filtered %>%
+  resample_groupwise(pid,
                      prop = 0.01,
                      times = 100) %>%
   mutate(data = map(data, ~ arrange(.x, pid, time)))
 
+mean_subsample_size <-
+  resamples %>%
+  mutate(subsample_size = map(data, ~ nrow(.x))) %>%
+  unnest(subsample_size) %>%
+  summarise(mean = mean(subsample_size)) %>%
+  pull(mean)
+
+eff_sample_frac <- mean_subsample_size / nrow(one_over_mac_filtered)
+
+models <- resamples
+
 ```
+
+## To do
+
+* Transform/center predictors
+* Test for correlation of random intercept and slope
+* Subsample performance measures for all models incl. R-squared
+* Introduce continuous autoregressive process with corCAR1
 
 ## Modelling
 
@@ -70,14 +81,18 @@ Intercept-only model with `log(peak_alpha)` as outcome.
 ```{r null_model}
 
 models <-
-  resamples %>%
+  models %>%
   mutate(model0 = map(data, function(df)
     gls(
-      log(peak_alpha) ~ 1, data = df, method = "ML"
+      log(peak_alpha) ~ 1, data = df, method = "ML",
+      control = glsControl()
     ))) %>%
-  mutate(model0_tidy = map(model0, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model0_criteria = map(model0, ~ tibble(aic = AIC(.x))))
+  mutate(model0_tidy =
+           map(model0, ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model0_performance =
+           map(model0, ~ tibble(rmse = performance::performance_rmse(.x),
+                                mse = performance::performance_mse(.x)))) %>%
+  mutate(model0_glance = map(model0, ~ broom.mixed::glance(.)))
 
 models %>%
   unnest(model0_tidy, names_sep = "_") %>%
@@ -95,7 +110,7 @@ models %>%
              colour = "blue",
              linetype = "dashed") +
   labs(
-    title = "Bootstrapped estimate plot",
+    title = "Subsampled estimate plot",
     subtitle = "Mean in red, median in blue",
     x = "Estimate",
     y = "Density"
@@ -109,18 +124,17 @@ models %>%
 
 models %>%
   unnest(model0_tidy, names_sep = "_") %>%
-  unnest(model0_criteria, names_sep = "_") %>%
   group_by(model0_tidy_term) %>%
-  summarise(across(c(contains("estimate"), 
-                     contains("p.value"), 
-                     contains("aic")), 
-                   list(mean = mean, se = ~ sd(.x) / sqrt(n())))) %>%
+  summarise(across(c(contains("estimate")), 
+                   list(mean = mean,
+                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
   pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("Bootstrap estimate", "Statistic"),
-               names_prefix = "model0_", names_pattern = "(?:tidy_|criteria_)?(.*)_(.*)$",
-               values_to = "Value") %>%
-  rename("Term" = model0_tidy_term) %>%
-  knitr::kable(digits = 10)
+               names_to = c("subsample.estimate", "statistic"),
+               names_prefix = "model0_",
+               names_pattern = "(?:tidy_)?(.*)_(.*)$",
+               values_to = "value") %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
+                                          "Statistic", "Value"))
 
 ```
 
@@ -134,11 +148,12 @@ models <-
   models %>%
   mutate(model1 = map(data, function(df)
     gls(
-      log(peak_alpha) ~ ce_mac, data = df, method = "ML"
+      log(peak_alpha) ~ ce_mac, data = df, method = "ML",
+      control = glsControl() 
     ))) %>%
   mutate(model1_tidy = map(model1, 
                            ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model1_criteria = map(model1, ~ tibble(aic = AIC(.x))))
+  mutate(model1_glance = map(model1, ~ broom.mixed::glance(.)))
 
 models %>%
   unnest(model1_tidy, names_sep = "_") %>%
@@ -156,7 +171,7 @@ models %>%
              colour = "blue",
              linetype = "dashed") +
   labs(
-    title = "Bootstrapped estimate plot",
+    title = "Subsampled estimate plot",
     subtitle = "Mean in red, median in blue",
     x = "Estimate",
     y = "Density"
@@ -170,17 +185,394 @@ models %>%
 
 models %>%
   unnest(model1_tidy, names_sep = "_") %>%
-  unnest(model1_criteria, names_sep = "_") %>%
   group_by(model1_tidy_term) %>%
-  summarise(across(c(contains("estimate"), 
-                     contains("p.value"), 
-                     contains("aic")), 
-                   list(mean = mean, se = ~ sd(.x) / sqrt(n())))) %>%
+  summarise(across(c(contains("estimate")), 
+                   list(mean = mean,
+                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
   pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("Bootstrap estimate", "Statistic"),
-               names_prefix = "model1_", names_pattern = "(?:tidy_|criteria_)?(.*)_(.*)$",
-               values_to = "Value") %>%
-  rename("Term" = model1_tidy_term) %>%
-  knitr::kable(digits = 10)
+               names_to = c("subsample.estimate", "statistic"),
+               names_prefix = "model1_",
+               names_pattern = "(?:tidy_)?(.*)_(.*)$",
+               values_to = "value") %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
+                                          "Statistic", "Value"))
+
+```
+
+### Model with ce_mac as fixed effect and pid as random intercept
+
+Model with `ce_mac` as fixed effect, `pid` as random intercept and
+`log(peak_alpha)` as outcome.
+
+```{r mixed_intercept_model}
+
+models <-
+  models %>%
+  mutate(model2 = map(data, function(df)
+    lme(
+      log(peak_alpha) ~ ce_mac, data = df, random = ~ 1 | pid, method = "ML",
+      control = lmeControl(maxIter = 100)
+    ))) %>%
+  mutate(model2_tidy = map(model2, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model2_glance = map(model2, ~ broom.mixed::glance(.)))
+
+models %>%
+  unnest(model2_tidy, names_sep = "_") %>%
+  group_by(model2_tidy_term) %>%
+  mutate(across(model2_tidy_estimate, 
+                list(mean = mean, median = median))) %>%
+  ggplot(aes(x = model2_tidy_estimate)) +
+  facet_wrap(vars(model2_tidy_term), scales = "free") +
+  geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
+  geom_density() +
+  geom_vline(aes(xintercept = model2_tidy_estimate_mean),
+             colour = "red",
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = model2_tidy_estimate_median),
+             colour = "blue",
+             linetype = "dashed") +
+  labs(
+    title = "Subsampled estimate plot",
+    subtitle = "Mean in red, median in blue",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Summary
+
+```{r mixed_intercept_model_summary}
+
+models %>%
+  unnest(model2_tidy, names_sep = "_") %>%
+  group_by(model2_tidy_term) %>%
+  summarise(across(c(contains("estimate")), 
+                   list(mean = mean,
+                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
+  pivot_longer(cols = c(everything(), -contains("term")),
+               names_to = c("subsample.estimate", "statistic"),
+               names_prefix = "model2_",
+               names_pattern = "(?:tidy_)?(.*)_(.*)$",
+               values_to = "value") %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
+                                          "Statistic", "Value"))
+
+```
+
+### Model with ce_mac as fixed effect and random intercept and slope of ce_mac on pid
+
+Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
+random slope and `log(peak_alpha)` as outcome.
+
+```{r mixed_intercept_slope_model}
+
+models <-
+  models %>%
+  mutate(model3 = map(data, function(df)
+    lme(
+      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
+      method = "ML", control = lmeControl(maxIter = 100)
+    ))) %>%
+  mutate(model3_tidy = map(model3, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model3_glance = map(model3, ~ broom.mixed::glance(.)))
+
+models %>%
+  unnest(model3_tidy, names_sep = "_") %>%
+  group_by(model3_tidy_term) %>%
+  mutate(across(model3_tidy_estimate, 
+                list(mean = mean, median = median))) %>%
+  ggplot(aes(x = model3_tidy_estimate)) +
+  facet_wrap(vars(model3_tidy_term), scales = "free") +
+  geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
+  geom_density() +
+  geom_vline(aes(xintercept = model3_tidy_estimate_mean),
+             colour = "red",
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = model3_tidy_estimate_median),
+             colour = "blue",
+             linetype = "dashed") +
+  labs(
+    title = "Subsampled estimate plot",
+    subtitle = "Mean in red, median in blue",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Summary
+
+```{r mixed_intercept_slope_model_summary}
+
+models %>%
+  unnest(model3_tidy, names_sep = "_") %>%
+  group_by(model3_tidy_term) %>%
+  summarise(across(c(contains("estimate")), 
+                   list(mean = mean,
+                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
+  pivot_longer(cols = c(everything(), -contains("term")),
+               names_to = c("subsample.estimate", "statistic"),
+               names_prefix = "model3_",
+               names_pattern = "(?:tidy_)?(.*)_(.*)$",
+               values_to = "value") %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
+                                          "Statistic", "Value"))
+
+```
+
+### Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and AR1 process within pid
+
+Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
+random slope, AR1 error structure within `pid` and `log(peak_alpha)` as outcome.
+
+```{r mixed_intercept_slope_ar1_model}
+
+models <-
+  models %>%
+  mutate(model4 = map(data, function(df)
+    lme(
+      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
+      correlation = corAR1(form = ~ time), method = "ML",
+      control = lmeControl(maxIter = 100)
+    ))) %>%
+  mutate(model4_tidy = map(model4, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model4_glance = map(model4, ~ broom.mixed::glance(.)))
+
+models %>%
+  unnest(model4_tidy, names_sep = "_") %>%
+  group_by(model4_tidy_term) %>%
+  mutate(across(model4_tidy_estimate, 
+                list(mean = mean, median = median))) %>%
+  ggplot(aes(x = model4_tidy_estimate)) +
+  facet_wrap(vars(model4_tidy_term), scales = "free") +
+  geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
+  geom_density() +
+  geom_vline(aes(xintercept = model4_tidy_estimate_mean),
+             colour = "red",
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = model4_tidy_estimate_median),
+             colour = "blue",
+             linetype = "dashed") +
+  labs(
+    title = "Subsampled estimate plot",
+    subtitle = "Mean in red, median in blue",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Summary
+
+```{r mixed_intercept_slope_ar1_model_summary}
+
+models %>%
+  unnest(model4_tidy, names_sep = "_") %>%
+  group_by(model4_tidy_term) %>%
+  summarise(across(c(contains("estimate")), 
+                   list(mean = mean,
+                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
+  pivot_longer(cols = c(everything(), -contains("term")),
+               names_to = c("subsample.estimate", "statistic"),
+               names_prefix = "model4_",
+               names_pattern = "(?:tidy_)?(.*)_(.*)$",
+               values_to = "value") %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
+                                          "Statistic", "Value"))
+
+```
+
+### Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and continuous AR1 process within pid
+
+Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
+random slope, continuous AR1 error structure within `pid` and `log(peak_alpha)`
+as outcome.
+
+```{r mixed_intercept_slope_car1_model}
+
+models <-
+  models %>%
+  mutate(model5 = map(data, function(df)
+    lme(
+      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
+      correlation = corCAR1(form = ~ time), method = "ML",
+      control = lmeControl()
+    ))) %>%
+  mutate(model5_tidy = map(model5, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model5_glance = map(model5, ~ broom.mixed::glance(.)))
+
+models %>%
+  unnest(model5_tidy, names_sep = "_") %>%
+  group_by(model5_tidy_term) %>%
+  mutate(across(model5_tidy_estimate, 
+                list(mean = mean, median = median))) %>%
+  ggplot(aes(x = model5_tidy_estimate)) +
+  facet_wrap(vars(model5_tidy_term), scales = "free") +
+  geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
+  geom_density() +
+  geom_vline(aes(xintercept = model5_tidy_estimate_mean),
+             colour = "red",
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = model5_tidy_estimate_median),
+             colour = "blue",
+             linetype = "dashed") +
+  labs(
+    title = "Subsampled estimate plot",
+    subtitle = "Mean in red, median in blue",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Summary
+
+```{r mixed_intercept_slope_car1_model_summary}
+
+models %>%
+  unnest(model5_tidy, names_sep = "_") %>%
+  group_by(model5_tidy_term) %>%
+  summarise(across(c(contains("estimate")), 
+                   list(mean = mean,
+                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
+  pivot_longer(cols = c(everything(), -contains("term")),
+               names_to = c("subsample.estimate", "statistic"),
+               names_prefix = "model5_",
+               names_pattern = "(?:tidy_)?(.*)_(.*)$",
+               values_to = "value") %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
+                                          "Statistic", "Value"))
+
+```
+
+### Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and MA2 process within pid
+
+Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
+random slope, MA2 error structure within `pid` and `log(peak_alpha)` as outcome.
+
+```{r mixed_intercept_slope_ma2_model}
+
+models <-
+  models %>%
+  mutate(model6 = map(data, function(df)
+    lme(
+      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
+      correlation = corARMA(form = ~ time, q = 2), method = "ML",
+      control = lmeControl()
+    ))) %>%
+  mutate(model6_tidy = map(model6, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model6_glance = map(model6, ~ broom.mixed::glance(.)))
+
+models %>%
+  unnest(model6_tidy, names_sep = "_") %>%
+  group_by(model6_tidy_term) %>%
+  mutate(across(model6_tidy_estimate, 
+                list(mean = mean, median = median))) %>%
+  ggplot(aes(x = model6_tidy_estimate)) +
+  facet_wrap(vars(model6_tidy_term), scales = "free") +
+  geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
+  geom_density() +
+  geom_vline(aes(xintercept = model6_tidy_estimate_mean),
+             colour = "red",
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = model6_tidy_estimate_median),
+             colour = "blue",
+             linetype = "dashed") +
+  labs(
+    title = "Subsampled estimate plot",
+    subtitle = "Mean in red, median in blue",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Summary
+
+```{r mixed_intercept_slope_ma2_model_summary}
+
+models %>%
+  unnest(model6_tidy, names_sep = "_") %>%
+  group_by(model6_tidy_term) %>%
+  summarise(across(c(contains("estimate")), 
+                   list(mean = mean,
+                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
+  pivot_longer(cols = c(everything(), -contains("term")),
+               names_to = c("subsample.estimate", "statistic"),
+               names_prefix = "model6_",
+               names_pattern = "(?:tidy_)?(.*)_(.*)$",
+               values_to = "value") %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
+                                          "Statistic", "Value"))
+
+```
+
+### Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and ARMA1,1 process within pid
+
+Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
+random slope, ARMA1,1 error structure within `pid` and `log(peak_alpha)` as
+outcome.
+
+```{r mixed_intercept_slope_arma11_model}
+
+models <-
+  models %>%
+  mutate(model7 = map(data, function(df)
+    lme(
+      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
+      correlation = corARMA(form = ~ time, p = 1, q = 1, fixed = TRUE), method = "ML",
+      control = lmeControl()
+    ))) %>%
+  mutate(model7_tidy = map(model7, 
+                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
+  mutate(model7_glance = map(model7, ~ broom.mixed::glance(.)))
+
+models %>%
+  unnest(model7_tidy, names_sep = "_") %>%
+  group_by(model7_tidy_term) %>%
+  mutate(across(model7_tidy_estimate, 
+                list(mean = mean, median = median))) %>%
+  ggplot(aes(x = model7_tidy_estimate)) +
+  facet_wrap(vars(model7_tidy_term), scales = "free") +
+  geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
+  geom_density() +
+  geom_vline(aes(xintercept = model7_tidy_estimate_mean),
+             colour = "red",
+             linetype = "dashed") +
+  geom_vline(aes(xintercept = model7_tidy_estimate_median),
+             colour = "blue",
+             linetype = "dashed") +
+  labs(
+    title = "Subsampled estimate plot",
+    subtitle = "Mean in red, median in blue",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Summary
+
+```{r mixed_intercept_slope_arma11_model_summary}
+
+models %>%
+  unnest(model7_tidy, names_sep = "_") %>%
+  group_by(model7_tidy_term) %>%
+  summarise(across(c(contains("estimate")), 
+                   list(mean = mean,
+                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
+  pivot_longer(cols = c(everything(), -contains("term")),
+               names_to = c("subsample.estimate", "statistic"),
+               names_prefix = "model7_",
+               names_pattern = "(?:tidy_)?(.*)_(.*)$",
+               values_to = "value") %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
+                                          "Statistic", "Value"))
 
 ```
