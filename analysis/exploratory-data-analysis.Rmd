@@ -38,6 +38,8 @@ one_over_mac_filtered <-
 ## To do
 
 * Add density adjustments and/or histogram to univariate plots
+* Use stat_density for density plots
+* Rename univariate density plots
 * Add univariate age plots
 * Add univariate natural logarithm of ce_mac plot
 
@@ -49,47 +51,87 @@ one_over_mac %>%
   select(pid, age, time, ce_mac, peak_alpha) %>%
   print(n = 20)
 
+one_over_mac %>%
+  summarise(across(c(pid, time, age, ce_mac, peak_alpha),
+                   ~ sum(is.na(.x)))) %>%
+  pivot_longer(cols = everything(),
+               names_to = "variable",
+               values_to = "count") %>%
+  knitr::kable(col.names = c("Variable", "Count"),
+               caption = "Missing values")
+
+one_over_mac %>%
+  distinct(pid) %>%
+  summarise(pid = n()) %>%
+  pivot_longer(cols = c(pid),
+               names_to = "variable",
+               values_to = "count") %>%
+  knitr::kable(col.names = c("Variable", "Count"),
+               caption = "Distinct values")
+
 ```
 
 ## Univariate plots
 
 ### Original dataset
 
-```{r univariate_plots_original}
+#### Outcome
+
+```{r univariate_plots_original_outcome}
 
 one_over_mac %>%
+  drop_na(peak_alpha) %>%
   ggplot(aes(x = peak_alpha)) +
   geom_density() +
-  labs(x = "Peak alpha frequency", title = "Density of peak_alpha")
+  labs(x = "Peak alpha frequency",
+       title = "Density of peak_alpha")
 
 one_over_mac %>%
+  drop_na(peak_alpha) %>%
   ggplot(aes(x = log(peak_alpha))) +
   geom_density() +
   labs(x = "Natural logarithm of peak alpha frequency",
        title = "Density of log(peak_alpha)")
 
 one_over_mac %>%
+  drop_na(peak_alpha) %>%
   ggplot(aes(x = 1 / peak_alpha)) +
   geom_density() +
   labs(x = "Inverse of peak alpha frequency",
        title = "Density of 1/peak_alpha")
 
+```
+
+#### Predictors
+
+```{r univariate_plots_original_predictors}
+
 one_over_mac %>%
+  drop_na(ce_mac) %>%
   ggplot(aes(x = ce_mac)) +
   geom_density() +
   labs(x = "MAC at effect site", title = "Density of ce_mac")
 
 one_over_mac %>%
+  drop_na(ce_mac) %>%
   ggplot(aes(x = 1 / ce_mac)) +
   geom_density() +
   labs(x = "Inverse of MAC at effect site", title = "Density of 1/ce_mac") +
   scale_x_continuous(limits = c(0, 3))
 
+one_over_mac %>%
+  drop_na(age) %>%
+  ggplot(aes(x = age)) +
+  geom_density() +
+  labs(x = "Age [years]", title = "Density of age")
+
 ```
 
 ### Filtered dataset
 
-```{r univariate_plots_filtered}
+#### Outcome
+
+```{r univariate_plots_filtered_outcome}
 
 one_over_mac_filtered %>%
   ggplot(aes(x = peak_alpha)) +
@@ -107,6 +149,11 @@ one_over_mac_filtered %>%
   geom_density() +
   labs(x = "Inverse of peak alpha frequency",
        title = "Density of 1/peak_alpha")
+```
+
+#### Predictors
+
+```{r univariate_plots_filtered_predictors}
 
 one_over_mac_filtered %>%
   ggplot(aes(x = ce_mac)) +
@@ -118,6 +165,11 @@ one_over_mac_filtered %>%
   geom_density() +
   labs(x = "Inverse of MAC at effect site", title = "Density of 1/ce_mac") +
   scale_x_continuous(limits = c(0, 3))
+
+one_over_mac_filtered %>%
+  ggplot(aes(x = age)) +
+  geom_density_line() +
+  labs(x = "Age [years]", title = "Density of age")
 
 ```
 
