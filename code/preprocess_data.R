@@ -170,18 +170,13 @@ one_over_mac[,                                         # Remove file name column
   file_date := NULL
 ]
 
-# one_over_mac[,                  # Create rolling means for ce_mac and peak_alpha
-#                 paste0(c("ce_mac", "peak_alpha"), "_mean_5pt") :=
-#                   lapply(
-#                     .SD,
-#                     frollmean,
-#                     n = 5,
-#                     align = "center",
-#                     na.rm = FALSE,
-#                     hasNA = TRUE
-#                   ),
-#                 by = pid,
-#                 .SDcols = c("ce_mac", "peak_alpha")]
+one_over_mac[,                  # Create rolling means for ce_mac and peak_alpha
+             paste0(rep(c("ce_mac", "peak_alpha"), each = 2),
+                    rep(c("_mean_5pt", "_mean_15pt"), times = 2)) :=
+               frollmean(.SD, n = c(5, 15), align = "center", na.rm = FALSE,
+                         hasNA = TRUE),
+             by = pid,
+             .SDcols = c("ce_mac", "peak_alpha")]
 
 one_over_mac[,                               # Mark patients from rejection list
   rejected := pid %in% pluck(patients_to_reject, "pid")
