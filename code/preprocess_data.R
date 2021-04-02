@@ -239,6 +239,15 @@ one_over_mac[,                    # Create within-group scaled column for ce_mac
   by = pid
 ]
 
+one_over_mac[,                                   # Create mean column for ce_mac
+  ce_mac_mean := mean(ce_mac)
+]
+
+one_over_mac[,                      # Create within-group mean column for ce_mac
+  ce_mac_pid_mean := mean(ce_mac),
+  by = pid
+]
+
 one_over_mac_filtered <-                               # Create filtered dataset
   na.omit(
     one_over_mac[
@@ -246,6 +255,10 @@ one_over_mac_filtered <-                               # Create filtered dataset
         peak_alpha_outlier != TRUE & range_outlier != TRUE
     ]
   )
+
+one_over_mac_filtered[,
+  pid := fct_drop(pid)
+]
 
 # Set class to tibble
 setattr(one_over_mac, "class", c("tbl", "tbl_df", "data.frame"))
