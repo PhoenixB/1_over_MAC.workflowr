@@ -166,6 +166,8 @@ setkey(patients_ages, pid)
 one_over_mac <-
   patients_ages[one_over_mac]
 
+setkey(one_over_mac, pid, time) # Reset keys and sort by pid and time after join
+
 one_over_mac[,                                         # Remove file name column
   file_date := NULL
 ]
@@ -256,13 +258,11 @@ one_over_mac_filtered <-                               # Create filtered dataset
     ]
   )
 
+setkey(one_over_mac_filtered, pid, time)     # Set keys and sort by pid and time
+
 one_over_mac_filtered[,
   pid := fct_drop(pid)
 ]
-
-# Set class to tibble
-setattr(one_over_mac, "class", c("tbl", "tbl_df", "data.frame"))
-setattr(one_over_mac_filtered, "class", c("tbl", "tbl_df", "data.frame"))
 
 # Save processed data to disk
 write_rds(one_over_mac, file = path_wd("output", "one_over_mac", ext = "rds"))
