@@ -97,15 +97,16 @@ write_rds(resamples, file = path_wd("output", "resamples", ext = "rds"))
 tictoc::toc(log = TRUE)
 
 # Calculate average subsample size
-resamples[, subsample_size := map_dbl(resample, ~ nrow(.x))]
-
 mean_subsample_size <-
-  resamples[, mean(subsample_size)]
-
-resamples[, subsample_size := NULL]
+  resamples[, .(subsample_size = map_dbl(resample, ~ nrow(.x)))
+            ][, mean(subsample_size)]
 
 # Calculate effective sample fraction
 eff_sample_frac <- mean_subsample_size / nrow(one_over_mac_filtered)
+
+# Save effective sample fraction
+write_rds(eff_sample_frac,
+          file = path_wd("output", "eff_sample_frac", ext = "rds"))
 
 # Null model
 
