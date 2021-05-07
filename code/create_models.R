@@ -23,6 +23,11 @@
 if (!require("pacman")) {
   install.packages("pacman")
 }
+
+pacman::p_load("profvis", "htmlwidgets")
+
+model_profile <- profvis({
+
 pacman::p_load(
   "conflicted",
   "tidyverse",
@@ -70,8 +75,8 @@ setkey(one_over_mac_filtered, pid, time)
 
 tictoc::tic(msg = "Resampling data", quiet = FALSE)
 
-n_resamples <- 100
-prop <- 0.01
+n_resamples <- 10
+n_obs <- 100
 
 resamples <-
   data.table(seed = 1:n_resamples)
@@ -81,7 +86,7 @@ setkey(resamples, seed)
 resamples[, resample := map(seed,
                       function(seed, data, prop) {
                         set.seed(seed)
-                        data[, slice_sample(.SD, prop = prop), by = pid]
+                        data[, slice_sample(.SD, n = n_obs), by = pid]
                         },
                       data = one_over_mac_filtered,
                       prop = prop)][]
@@ -114,24 +119,22 @@ tictoc::tic(msg = "Modelling model 0", quiet = FALSE)
 
 model0 <-
   resamples[,
-            .(seed, resample, model = map(resample,
-                         ~ gls(
-                           log(peak_alpha) ~ 1,
-                           data = .x,
-                           method = "REML",
-                           control = glsControl())))
+            .(seed, model = map(resample,
+                                function(data, ...) {
+                                  model <- gls(data = data, ...)
+                                  model
+                                  },
+                                model = log(peak_alpha) ~ 1,
+                                method = "ML",
+                                control = glsControl()))
   ][,
-    .(seed, resample, model,
+    .(seed, model,
       tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))))
-  ][,
-    .(seed, resample, model, tidy,
+                 ~ setDT(broom.mixed::tidy(.x))),
       performance = map(model,
                         ~ data.table(
                           rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))))
-  ][,
-    .(seed, resample, model, tidy, performance,
+                          mse = performance::performance_mse(.x))),
       glance = map(model,
                    ~ setDT(broom.mixed::glance(.x))))
   ]
@@ -150,25 +153,22 @@ tictoc::tic(msg = "Modelling model 1", quiet = FALSE)
 
 model1 <-
   resamples[,
-            .(seed, resample,
-              model = map(resample,
-                          ~ gls(
-                            log(peak_alpha) ~ ce_mac_pid_centered,
-                            data = .x,
-                            method = "REML",
-                            control = glsControl())))
+            .(seed, model = map(resample,
+                                function(data, ...) {
+                                  model <- gls(data = data, ...)
+                                  model
+                                },
+                                model = log(peak_alpha) ~ ce_mac_pid_centered,
+                                method = "ML",
+                                control = glsControl()))
   ][,
-    .(seed, resample, model,
+    .(seed, model,
       tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))))
-  ][,
-    .(seed, resample, model, tidy,
+                 ~ setDT(broom.mixed::tidy(.x))),
       performance = map(model,
                         ~ data.table(
                           rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))))
-  ][,
-    .(seed, resample, model, tidy, performance,
+                          mse = performance::performance_mse(.x))),
       glance = map(model,
                    ~ setDT(broom.mixed::glance(.x))))
   ]
@@ -187,27 +187,26 @@ tictoc::tic(msg = "Modelling model 2", quiet = FALSE)
 
 model2 <-
   resamples[,
-            .(seed, resample,
+            .(seed,
               model = map(resample,
-                          ~ lme(
-                            log(peak_alpha) ~ ce_mac_pid_centered,
-                            data = .x,
-                            random = ~ 1 | pid,
-                            method = "REML",
-                            control = lmeControl(maxIter = 100)
-                            )))
+                          function(data, ...) {
+                            model <- lme(data = data, ...)
+                            pluck(model, "data") <- NULL
+                            model
+                          },
+                          fixed = log(peak_alpha) ~ ce_mac_pid_centered,
+                          random = ~ 1 | pid,
+                          method = "ML",
+                          control = lmeControl(maxIter = 100,
+                                               returnObject = TRUE)))
   ][,
-    .(seed, resample, model,
+    .(seed, model,
       tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))))
-  ][,
-    .(seed, resample, model, tidy,
+                 ~ setDT(broom.mixed::tidy(.x))),
       performance = map(model,
                         ~ data.table(
                           rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))))
-  ][,
-    .(seed, resample, model, tidy, performance,
+                          mse = performance::performance_mse(.x))),
       glance = map(model,
                    ~ setDT(broom.mixed::glance(.x))))
   ]
@@ -227,27 +226,26 @@ tictoc::tic(msg = "Modelling model 3", quiet = FALSE)
 
 model3 <-
   resamples[,
-            .(seed, resample,
+            .(seed,
               model = map(resample,
-                          ~ lme(
-                            log(peak_alpha) ~ ce_mac_pid_centered,
-                            data = .x,
-                            random = ~ ce_mac_pid_centered | pid,
-                            method = "REML",
-                            control = lmeControl(maxIter = 100)
-                            )))
+                          function(data, ...) {
+                            model <- lme(data = data, ...)
+                            pluck(model, "data") <- NULL
+                            model
+                          },
+                          fixed = log(peak_alpha) ~ ce_mac_pid_centered,
+                          random = ~ ce_mac_pid_centered | pid,
+                          method = "ML",
+                          control = lmeControl(maxIter = 100,
+                                               returnObject = TRUE)))
   ][,
-    .(seed, resample, model,
+    .(seed, model,
       tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))))
-  ][,
-    .(seed, resample, model, tidy,
+                 ~ setDT(broom.mixed::tidy(.x))),
       performance = map(model,
                         ~ data.table(
                           rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))))
-  ][,
-    .(seed, resample, model, tidy, performance,
+                          mse = performance::performance_mse(.x))),
       glance = map(model,
                    ~ setDT(broom.mixed::glance(.x))))
   ]
@@ -267,28 +265,27 @@ tictoc::tic(msg = "Modelling model 4", quiet = FALSE)
 
 model4 <-
   resamples[,
-            .(seed, resample,
+            .(seed,
               model = map(resample,
-                          ~ lme(
-                            log(peak_alpha) ~ ce_mac_pid_centered,
-                            data = .x,
-                            random = ~ ce_mac_pid_centered | pid,
-                            correlation = corAR1(form = ~ time),
-                            method = "REML",
-                            control = lmeControl(maxIter = 100)
-                            )))
+                          function(data, ...) {
+                            model <- lme(data = data, ...)
+                            pluck(model, "data") <- NULL
+                            model
+                          },
+                          fixed = log(peak_alpha) ~ ce_mac_pid_centered,
+                          random = ~ ce_mac_pid_centered | pid,
+                          correlation = corAR1(form = ~ time),
+                          method = "ML",
+                          control = lmeControl(maxIter = 100,
+                                               returnObject = TRUE)))
   ][,
-    .(seed, resample, model,
+    .(seed, model,
       tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))))
-  ][,
-    .(seed, resample, model, tidy,
+                 ~ setDT(broom.mixed::tidy(.x))),
       performance = map(model,
                         ~ data.table(
                           rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))))
-  ][,
-    .(seed, resample, model, tidy, performance,
+                          mse = performance::performance_mse(.x))),
       glance = map(model,
                    ~ setDT(broom.mixed::glance(.x))))
   ]
@@ -308,28 +305,27 @@ tictoc::tic(msg = "Modelling model 5", quiet = FALSE)
 
 model5 <-
   resamples[,
-            .(seed, resample,
+            .(seed,
               model = map(resample,
-                          ~ lme(
-                            log(peak_alpha) ~ ce_mac_pid_centered,
-                            data = .x,
-                            random = ~ ce_mac_pid_centered | pid,
-                            correlation = corCAR1(form = ~ time),
-                            method = "REML",
-                            control = lmeControl(maxIter = 100)
-                            )))
+                          function(data, ...) {
+                            model <- lme(data = data, ...)
+                            pluck(model, "data") <- NULL
+                            model
+                          },
+                          fixed = log(peak_alpha) ~ ce_mac_pid_centered,
+                          random = ~ ce_mac_pid_centered | pid,
+                          correlation = corCAR1(form = ~ time),
+                          method = "ML",
+                          control = lmeControl(maxIter = 100,
+                                               returnObject = TRUE)))
   ][,
-    .(seed, resample, model,
+    .(seed, model,
       tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))))
-  ][,
-    .(seed, resample, model, tidy,
+                 ~ setDT(broom.mixed::tidy(.x))),
       performance = map(model,
                         ~ data.table(
                           rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))))
-  ][,
-    .(seed, resample, model, tidy, performance,
+                          mse = performance::performance_mse(.x))),
       glance = map(model,
                    ~ setDT(broom.mixed::glance(.x))))
   ]
@@ -349,28 +345,27 @@ tictoc::tic(msg = "Modelling model 6", quiet = FALSE)
 
 model6 <-
   resamples[,
-            .(seed, resample,
+            .(seed,
               model = map(resample,
-                          ~ lme(
-                            log(peak_alpha) ~ ce_mac_pid_centered,
-                            data = .x,
-                            random = ~ ce_mac_pid_centered | pid,
-                            correlation = corARMA(form = ~ time, q = 2),
-                            method = "REML",
-                            control = lmeControl(maxIter = 100)
-                          )))
+                          function(data, ...) {
+                            model <- lme(data = data, ...)
+                            pluck(model, "data") <- NULL
+                            model
+                          },
+                          fixed = log(peak_alpha) ~ ce_mac_pid_centered,
+                          random = ~ ce_mac_pid_centered | pid,
+                          correlation = corARMA(form = ~ time, q = 2),
+                          method = "ML",
+                          control = lmeControl(maxIter = 100,
+                                               returnObject = TRUE)))
   ][,
-    .(seed, resample, model,
+    .(seed, model,
       tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))))
-  ][,
-    .(seed, resample, model, tidy,
+                 ~ setDT(broom.mixed::tidy(.x))),
       performance = map(model,
                         ~ data.table(
                           rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))))
-  ][,
-    .(seed, resample, model, tidy, performance,
+                          mse = performance::performance_mse(.x))),
       glance = map(model,
                    ~ setDT(broom.mixed::glance(.x))))
   ]
@@ -390,29 +385,28 @@ tictoc::tic(msg = "Modelling model 7", quiet = FALSE)
 
 model7 <-
   resamples[,
-            .(seed, resample,
+            .(seed,
               model = map(resample,
-                          ~ lme(
-                            log(peak_alpha) ~ ce_mac_pid_centered,
-                            data = .x,
-                            random = ~ ce_mac_pid_centered | pid,
-                            correlation = corARMA(form = ~ time, p = 1,
-                                                  q = 1, fixed = TRUE),
-                            method = "REML",
-                            control = lmeControl(maxIter = 100)
-                          )))
+                          function(data, ...) {
+                            model <- lme(data = data, ...)
+                            pluck(model, "data") <- NULL
+                            model
+                          },
+                          fixed = log(peak_alpha) ~ ce_mac_pid_centered,
+                          random = ~ ce_mac_pid_centered | pid,
+                          correlation = corARMA(form = ~ time, p = 1,
+                                                q = 1, fixed = TRUE),
+                          method = "ML",
+                          control = lmeControl(maxIter = 100,
+                                               returnObject = TRUE)))
   ][,
-    .(seed, resample, model,
+    .(seed, model,
       tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))))
-  ][,
-    .(seed, resample, model, tidy,
+                 ~ setDT(broom.mixed::tidy(.x))),
       performance = map(model,
                         ~ data.table(
                           rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))))
-  ][,
-    .(seed, resample, model, tidy, performance,
+                          mse = performance::performance_mse(.x))),
       glance = map(model,
                    ~ setDT(broom.mixed::glance(.x))))
   ]
@@ -426,3 +420,7 @@ write_rds(model7, file = path_wd("output", "model7", ext = "rds"))
 tictoc::toc(log = TRUE)
 
 tictoc::tic.log()
+
+})
+
+saveWidget(model_profile, file = path_wd("output", "model_profile", ext = "html"))
