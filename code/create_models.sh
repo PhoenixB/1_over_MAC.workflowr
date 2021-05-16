@@ -11,7 +11,7 @@
 #SBATCH --mem=256G
 #SBATCH --time=24:00:00
 
-#SBATCH --partition=amd
+#SBATCH --partition=epyc2
 
 #### Environment variables ####
 
