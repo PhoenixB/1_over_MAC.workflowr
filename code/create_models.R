@@ -127,16 +127,19 @@ model0 <-
                                 model = log(peak_alpha) ~ 1,
                                 method = "ML",
                                 control = glsControl()))
-  ][,
-    .(seed, model,
-      tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))),
-      performance = map(model,
-                        ~ data.table(
-                          rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))),
-      glance = map(model,
-                   ~ setDT(broom.mixed::glance(.x))))
+  ]
+
+model0_specs <-
+  model0[,
+         .(seed,
+           tidy = map(model,
+                      ~ setDT(broom.mixed::tidy(.x))),
+           performance = map(model,
+                             ~ data.table(
+                               rmse = performance::performance_rmse(.x),
+                               mse = performance::performance_mse(.x))),
+           glance = map(model,
+                        ~ setDT(broom.mixed::glance(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -144,6 +147,7 @@ tictoc::toc(log = TRUE)
 tictoc::tic(msg = "Saving model 0", quiet = FALSE)
 
 write_rds(model0, file = path_wd("output", "model0", ext = "rds"))
+write_rds(model0_specs, file = path_wd("output", "model0_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
@@ -161,16 +165,19 @@ model1 <-
                                 model = log(peak_alpha) ~ ce_mac_pid_centered,
                                 method = "ML",
                                 control = glsControl()))
-  ][,
-    .(seed, model,
-      tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))),
-      performance = map(model,
-                        ~ data.table(
-                          rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))),
-      glance = map(model,
-                   ~ setDT(broom.mixed::glance(.x))))
+  ]
+
+model1_specs <-
+  model1[,
+         .(seed,
+           tidy = map(model,
+                      ~ setDT(broom.mixed::tidy(.x))),
+           performance = map(model,
+                             ~ data.table(
+                               rmse = performance::performance_rmse(.x),
+                               mse = performance::performance_mse(.x))),
+           glance = map(model,
+                        ~ setDT(broom.mixed::glance(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -178,6 +185,7 @@ tictoc::toc(log = TRUE)
 tictoc::tic(msg = "Saving model 1", quiet = FALSE)
 
 write_rds(model1, file = path_wd("output", "model1", ext = "rds"))
+write_rds(model1_specs, file = path_wd("output", "model1_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
@@ -199,16 +207,19 @@ model2 <-
                           method = "ML",
                           control = lmeControl(maxIter = 100,
                                                returnObject = TRUE)))
-  ][,
-    .(seed, model,
-      tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))),
-      performance = map(model,
-                        ~ data.table(
-                          rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))),
-      glance = map(model,
-                   ~ setDT(broom.mixed::glance(.x))))
+  ]
+
+model2_specs <-
+  model2[,
+         .(seed,
+           tidy = map(model,
+                      ~ setDT(broom.mixed::tidy(.x))),
+           performance = map(model,
+                             ~ data.table(
+                               rmse = performance::performance_rmse(.x),
+                               mse = performance::performance_mse(.x))),
+           glance = map(model,
+                        ~ setDT(broom.mixed::glance(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -216,6 +227,7 @@ tictoc::toc(log = TRUE)
 tictoc::tic(msg = "Saving model 2", quiet = FALSE)
 
 write_rds(model2, file = path_wd("output", "model2", ext = "rds"))
+write_rds(model2_specs, file = path_wd("output", "model2_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
@@ -238,16 +250,19 @@ model3 <-
                           method = "ML",
                           control = lmeControl(maxIter = 100,
                                                returnObject = TRUE)))
-  ][,
-    .(seed, model,
-      tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))),
-      performance = map(model,
-                        ~ data.table(
-                          rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))),
-      glance = map(model,
-                   ~ setDT(broom.mixed::glance(.x))))
+  ]
+
+model3_specs <-
+  model3[,
+         .(seed,
+           tidy = map(model,
+                      ~ setDT(broom.mixed::tidy(.x))),
+           performance = map(model,
+                             ~ data.table(
+                               rmse = performance::performance_rmse(.x),
+                               mse = performance::performance_mse(.x))),
+           glance = map(model,
+                        ~ setDT(broom.mixed::glance(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -255,6 +270,7 @@ tictoc::toc(log = TRUE)
 tictoc::tic(msg = "Saving model 3", quiet = FALSE)
 
 write_rds(model3, file = path_wd("output", "model3", ext = "rds"))
+write_rds(model3_specs, file = path_wd("output", "model3_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
@@ -278,16 +294,19 @@ model4 <-
                           method = "ML",
                           control = lmeControl(maxIter = 100,
                                                returnObject = TRUE)))
-  ][,
-    .(seed, model,
-      tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))),
-      performance = map(model,
-                        ~ data.table(
-                          rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))),
-      glance = map(model,
-                   ~ setDT(broom.mixed::glance(.x))))
+  ]
+
+model4_specs <-
+  model4[,
+         .(seed,
+           tidy = map(model,
+                      ~ setDT(broom.mixed::tidy(.x))),
+           performance = map(model,
+                             ~ data.table(
+                               rmse = performance::performance_rmse(.x),
+                               mse = performance::performance_mse(.x))),
+           glance = map(model,
+                        ~ setDT(broom.mixed::glance(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -295,6 +314,7 @@ tictoc::toc(log = TRUE)
 tictoc::tic(msg = "Saving model 4", quiet = FALSE)
 
 write_rds(model4, file = path_wd("output", "model4", ext = "rds"))
+write_rds(model4_specs, file = path_wd("output", "model4_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
@@ -318,16 +338,19 @@ model5 <-
                           method = "ML",
                           control = lmeControl(maxIter = 100,
                                                returnObject = TRUE)))
-  ][,
-    .(seed, model,
-      tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))),
-      performance = map(model,
-                        ~ data.table(
-                          rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))),
-      glance = map(model,
-                   ~ setDT(broom.mixed::glance(.x))))
+  ]
+
+model5_specs <-
+  model5[,
+         .(seed,
+           tidy = map(model,
+                      ~ setDT(broom.mixed::tidy(.x))),
+           performance = map(model,
+                             ~ data.table(
+                               rmse = performance::performance_rmse(.x),
+                               mse = performance::performance_mse(.x))),
+           glance = map(model,
+                        ~ setDT(broom.mixed::glance(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -335,6 +358,7 @@ tictoc::toc(log = TRUE)
 tictoc::tic(msg = "Saving model 5", quiet = FALSE)
 
 write_rds(model5, file = path_wd("output", "model5", ext = "rds"))
+write_rds(model5_specs, file = path_wd("output", "model5_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
@@ -358,16 +382,19 @@ model6 <-
                           method = "ML",
                           control = lmeControl(maxIter = 100,
                                                returnObject = TRUE)))
-  ][,
-    .(seed, model,
-      tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))),
-      performance = map(model,
-                        ~ data.table(
-                          rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))),
-      glance = map(model,
-                   ~ setDT(broom.mixed::glance(.x))))
+  ]
+
+model6_specs <-
+  model6[,
+         .(seed,
+           tidy = map(model,
+                      ~ setDT(broom.mixed::tidy(.x))),
+           performance = map(model,
+                             ~ data.table(
+                               rmse = performance::performance_rmse(.x),
+                               mse = performance::performance_mse(.x))),
+           glance = map(model,
+                        ~ setDT(broom.mixed::glance(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -375,6 +402,7 @@ tictoc::toc(log = TRUE)
 tictoc::tic(msg = "Saving model 6", quiet = FALSE)
 
 write_rds(model6, file = path_wd("output", "model6", ext = "rds"))
+write_rds(model6_specs, file = path_wd("output", "model6_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
@@ -399,16 +427,19 @@ model7 <-
                           method = "ML",
                           control = lmeControl(maxIter = 100,
                                                returnObject = TRUE)))
-  ][,
-    .(seed, model,
-      tidy = map(model,
-                 ~ setDT(broom.mixed::tidy(.x))),
-      performance = map(model,
-                        ~ data.table(
-                          rmse = performance::performance_rmse(.x),
-                          mse = performance::performance_mse(.x))),
-      glance = map(model,
-                   ~ setDT(broom.mixed::glance(.x))))
+  ]
+
+model7_specs <-
+  model7[,
+         .(seed,
+           tidy = map(model,
+                      ~ setDT(broom.mixed::tidy(.x))),
+           performance = map(model,
+                             ~ data.table(
+                               rmse = performance::performance_rmse(.x),
+                               mse = performance::performance_mse(.x))),
+           glance = map(model,
+                        ~ setDT(broom.mixed::glance(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -416,6 +447,7 @@ tictoc::toc(log = TRUE)
 tictoc::tic(msg = "Saving model 7", quiet = FALSE)
 
 write_rds(model7, file = path_wd("output", "model7", ext = "rds"))
+write_rds(model7_specs, file = path_wd("output", "model7_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
