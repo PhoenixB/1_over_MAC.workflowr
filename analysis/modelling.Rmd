@@ -24,89 +24,52 @@ pacman::p_load(
   "fs",
   "glue",
   "nlme",
-  "broom.mixed",
-  "performance",
-  "MuMIn"
+  "MuMIn",
+  "data.table"
 )
 
-source(path_wd("code", "groupwise_resampling", ext = "R"))
-
 options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific notation
-
-one_over_mac_filtered <-
-  read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
 
 ```
 
 ## Introduction
 
-Data is resampled groupwise over `pid` without replacing, with 1% of the data
-each and repeated 100 times. This will likely be increased in the future.
-
-```{r introduction}
-
-resamples <-
-  one_over_mac_filtered %>%
-  resample_groupwise(pid,
-                     prop = 0.01,
-                     times = 100) %>%
-  mutate(data = map(data, ~ arrange(.x, pid, time)))
-
-mean_subsample_size <-
-  resamples %>%
-  mutate(subsample_size = map(data, ~ nrow(.x))) %>%
-  unnest(subsample_size) %>%
-  summarise(mean = mean(subsample_size)) %>%
-  pull(mean)
-
-eff_sample_frac <- mean_subsample_size / nrow(one_over_mac_filtered)
-
-models <- resamples
-
-```
+Data is resampled groupwise over `pid` without replacing, with 100 observations
+per patient and repeated 100 times. This is necessary to calculate models in a
+timely manner.
 
 ## To do
 
-* Transform/center predictors
-* Test for correlation of random intercept and slope
-* Subsample performance measures for all models incl. R-squared
-* Introduce continuous autoregressive process with corCAR1
+* Nothing so far
 
 ## Modelling
 
 ### Null model
 
+```{r load_null_model, include=FALSE}
+
+model0_specs <-
+  read_rds(file = path_wd("output", "model0_specs", ext = "rds"))
+
+```
+
 Intercept-only model with `log(peak_alpha)` as outcome.
 
-```{r null_model}
+#### Estimates plot
 
-models <-
-  models %>%
-  mutate(model0 = map(data, function(df)
-    gls(
-      log(peak_alpha) ~ 1, data = df, method = "ML",
-      control = glsControl()
-    ))) %>%
-  mutate(model0_tidy =
-           map(model0, ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model0_performance =
-           map(model0, ~ tibble(rmse = performance::performance_rmse(.x),
-                                mse = performance::performance_mse(.x)))) %>%
-  mutate(model0_glance = map(model0, ~ broom.mixed::glance(.)))
+```{r null_model_plot}
 
-models %>%
-  unnest(model0_tidy, names_sep = "_") %>%
-  group_by(model0_tidy_term) %>%
-  mutate(across(model0_tidy_estimate, 
-                list(mean = mean, median = median))) %>%
-  ggplot(aes(x = model0_tidy_estimate)) +
-  facet_wrap(vars(model0_tidy_term), scales = "free") +
+model0_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model0_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = model0_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -118,56 +81,123 @@ models %>%
 
 ```
 
-#### Summary
+#### Estimates table
 
 ```{r null_model_summary}
 
-models %>%
-  unnest(model0_tidy, names_sep = "_") %>%
-  group_by(model0_tidy_term) %>%
-  summarise(across(c(contains("estimate")), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
-  pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("subsample.estimate", "statistic"),
-               names_prefix = "model0_",
-               names_pattern = "(?:tidy_)?(.*)_(.*)$",
-               values_to = "value") %>%
-  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
-                                          "Statistic", "Value"))
+model0_estimates <-
+  model0_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model0_estimates, id.vars = "term"), term) %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Statistic", "Value"))
+
+```
+
+#### Performance
+
+```{r null_model_performance}
+
+model0_performance <-
+  model0_specs[, rbindlist(performance, idcol = "seed")]
+
+setkey(melt(model0_performance,
+            id.vars = "seed",
+            measure.vars = c("AIC", "RMSE")), seed, variable) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = "free",
+    labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density() +
+  labs(
+    title = "Subsampled performance plot",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Residuals diagnostics
+
+```{r null_model_resid_diag}
+
+model0_residuals <-
+  model0_specs[, rbindlist(residuals, idcol = "seed")]
+
+model0_residuals[seed %in% c(1)] %>%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = "Normalized residuals QQ-plot",
+    # subtitle = "Colours indicate different subsample seeds",
+    x = "Theoretical quantiles",
+    y = "Sample quantiles"
+  )
+
+model0_residuals[seed %in% c(1:5)] %>%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals density plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Normalized residuals",
+    y = "Density"
+  )
+
+model0_acf <-
+  model0_residuals[, .(residuals = list(.SD)), by = "seed"
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = "correlation",
+                         plot = FALSE)))]
+
+model0_acf[1:5, rbindlist(acf, idcol = "seed")] %>%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals ACF plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Lag",
+    y = "ACF"
+  )
 
 ```
 
 ### Model with ce_mac as fixed effect
 
+```{r load_linear_model, include=FALSE}
+
+model1_specs <-
+  read_rds(file = path_wd("output", "model1_specs", ext = "rds"))
+
+```
+
 Model with `ce_mac` as fixed effect and `log(peak_alpha)` as outcome.
 
-```{r linear_model}
+#### Estimates plot
 
-models <-
-  models %>%
-  mutate(model1 = map(data, function(df)
-    gls(
-      log(peak_alpha) ~ ce_mac, data = df, method = "ML",
-      control = glsControl() 
-    ))) %>%
-  mutate(model1_tidy = map(model1, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model1_glance = map(model1, ~ broom.mixed::glance(.)))
+```{r linear_model_plot}
 
-models %>%
-  unnest(model1_tidy, names_sep = "_") %>%
-  group_by(model1_tidy_term) %>%
-  mutate(across(model1_tidy_estimate, 
-                list(mean = mean, median = median))) %>%
-  ggplot(aes(x = model1_tidy_estimate)) +
-  facet_wrap(vars(model1_tidy_term), scales = "free") +
+model1_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model1_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = model1_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -179,57 +209,124 @@ models %>%
 
 ```
 
-#### Summary
+#### Estimates table
 
 ```{r linear_model_summary}
 
-models %>%
-  unnest(model1_tidy, names_sep = "_") %>%
-  group_by(model1_tidy_term) %>%
-  summarise(across(c(contains("estimate")), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
-  pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("subsample.estimate", "statistic"),
-               names_prefix = "model1_",
-               names_pattern = "(?:tidy_)?(.*)_(.*)$",
-               values_to = "value") %>%
-  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
-                                          "Statistic", "Value"))
+model1_estimates <-
+  model1_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model1_estimates, id.vars = "term"), term) %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Statistic", "Value"))
+
+```
+
+#### Performance
+
+```{r linear_model_performance}
+
+model1_performance <-
+  model1_specs[, rbindlist(performance, idcol = "seed")]
+
+setkey(melt(model1_performance,
+            id.vars = "seed",
+            measure.vars = c("AIC", "RMSE")), seed, variable) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = "free",
+    labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density() +
+  labs(
+    title = "Subsampled performance plot",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Residuals diagnostics
+
+```{r linear_model_resid_diag}
+
+model1_residuals <-
+  model1_specs[, rbindlist(residuals, idcol = "seed")]
+
+model1_residuals[seed %in% c(1)] %>%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = "Normalized residuals QQ-plot",
+    # subtitle = "Colours indicate different subsample seeds",
+    x = "Theoretical quantiles",
+    y = "Sample quantiles"
+  )
+
+model1_residuals[seed %in% c(1:5)] %>%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals density plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Normalized residuals",
+    y = "Density"
+  )
+
+model1_acf <-
+  model1_residuals[, .(residuals = list(.SD)), by = "seed"
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = "correlation",
+                         plot = FALSE)))]
+
+model1_acf[1:5, rbindlist(acf, idcol = "seed")] %>%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals ACF plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Lag",
+    y = "ACF"
+  )
 
 ```
 
 ### Model with ce_mac as fixed effect and pid as random intercept
 
+```{r load_mixed_intercept_model, include=FALSE}
+
+model2_specs <-
+  read_rds(file = path_wd("output", "model2_specs", ext = "rds"))
+
+```
+
 Model with `ce_mac` as fixed effect, `pid` as random intercept and
 `log(peak_alpha)` as outcome.
 
-```{r mixed_intercept_model}
+#### Estimates plot
 
-models <-
-  models %>%
-  mutate(model2 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ 1 | pid, method = "ML",
-      control = lmeControl(maxIter = 100)
-    ))) %>%
-  mutate(model2_tidy = map(model2, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model2_glance = map(model2, ~ broom.mixed::glance(.)))
+```{r mixed_intercept_model_plot}
 
-models %>%
-  unnest(model2_tidy, names_sep = "_") %>%
-  group_by(model2_tidy_term) %>%
-  mutate(across(model2_tidy_estimate, 
-                list(mean = mean, median = median))) %>%
-  ggplot(aes(x = model2_tidy_estimate)) +
-  facet_wrap(vars(model2_tidy_term), scales = "free") +
+model2_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model2_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = model2_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -241,57 +338,124 @@ models %>%
 
 ```
 
-#### Summary
+#### Estimates table
 
 ```{r mixed_intercept_model_summary}
 
-models %>%
-  unnest(model2_tidy, names_sep = "_") %>%
-  group_by(model2_tidy_term) %>%
-  summarise(across(c(contains("estimate")), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
-  pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("subsample.estimate", "statistic"),
-               names_prefix = "model2_",
-               names_pattern = "(?:tidy_)?(.*)_(.*)$",
-               values_to = "value") %>%
-  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
-                                          "Statistic", "Value"))
+model2_estimates <-
+  model2_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model2_estimates, id.vars = "term"), term) %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Statistic", "Value"))
+
+```
+
+#### Performance
+
+```{r mixed_intercept_model_performance}
+
+model2_performance <-
+  model2_specs[, rbindlist(performance, idcol = "seed")]
+
+setkey(melt(model2_performance,
+            id.vars = "seed",
+            measure.vars = c("AIC", "RMSE")), seed, variable) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = "free",
+    labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density() +
+  labs(
+    title = "Subsampled performance plot",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Residuals diagnostics
+
+```{r mixed_intercept_model_resid_diag}
+
+model2_residuals <-
+  model2_specs[, rbindlist(residuals, idcol = "seed")]
+
+model2_residuals[seed %in% c(1)] %>%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = "Normalized residuals QQ-plot",
+    # subtitle = "Colours indicate different subsample seeds",
+    x = "Theoretical quantiles",
+    y = "Sample quantiles"
+  )
+
+model2_residuals[seed %in% c(1:5)] %>%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals density plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Normalized residuals",
+    y = "Density"
+  )
+
+model2_acf <-
+  model2_residuals[, .(residuals = list(.SD)), by = "seed"
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = "correlation",
+                         plot = FALSE)))]
+
+model2_acf[1:5, rbindlist(acf, idcol = "seed")] %>%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals ACF plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Lag",
+    y = "ACF"
+  )
 
 ```
 
 ### Model with ce_mac as fixed effect and random intercept and slope of ce_mac on pid
 
+```{r load_mixed_intercept_slope_model, include=FALSE}
+
+model3_specs <-
+  read_rds(file = path_wd("output", "model3_specs", ext = "rds"))
+
+```
+
 Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
 random slope and `log(peak_alpha)` as outcome.
 
-```{r mixed_intercept_slope_model}
+#### Estimates plot
 
-models <-
-  models %>%
-  mutate(model3 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      method = "ML", control = lmeControl(maxIter = 100)
-    ))) %>%
-  mutate(model3_tidy = map(model3, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model3_glance = map(model3, ~ broom.mixed::glance(.)))
+```{r mixed_intercept_slope_model_plot}
 
-models %>%
-  unnest(model3_tidy, names_sep = "_") %>%
-  group_by(model3_tidy_term) %>%
-  mutate(across(model3_tidy_estimate, 
-                list(mean = mean, median = median))) %>%
-  ggplot(aes(x = model3_tidy_estimate)) +
-  facet_wrap(vars(model3_tidy_term), scales = "free") +
+model3_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model3_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = model3_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -303,58 +467,124 @@ models %>%
 
 ```
 
-#### Summary
+#### Estimates table
 
 ```{r mixed_intercept_slope_model_summary}
 
-models %>%
-  unnest(model3_tidy, names_sep = "_") %>%
-  group_by(model3_tidy_term) %>%
-  summarise(across(c(contains("estimate")), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
-  pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("subsample.estimate", "statistic"),
-               names_prefix = "model3_",
-               names_pattern = "(?:tidy_)?(.*)_(.*)$",
-               values_to = "value") %>%
-  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
-                                          "Statistic", "Value"))
+model3_estimates <-
+  model3_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model3_estimates, id.vars = "term"), term) %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Statistic", "Value"))
+
+```
+
+#### Performance
+
+```{r mixed_intercept_slope_model_performance}
+
+model3_performance <-
+  model3_specs[, rbindlist(performance, idcol = "seed")]
+
+setkey(melt(model3_performance,
+            id.vars = "seed",
+            measure.vars = c("AIC", "RMSE")), seed, variable) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = "free",
+    labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density() +
+  labs(
+    title = "Subsampled performance plot",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Residuals diagnostics
+
+```{r mixed_intercept_slope_model_resid_diag}
+
+model3_residuals <-
+  model3_specs[, rbindlist(residuals, idcol = "seed")]
+
+model3_residuals[seed %in% c(1)] %>%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = "Normalized residuals QQ-plot",
+    # subtitle = "Colours indicate different subsample seeds",
+    x = "Theoretical quantiles",
+    y = "Sample quantiles"
+  )
+
+model3_residuals[seed %in% c(1:5)] %>%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals density plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Normalized residuals",
+    y = "Density"
+  )
+
+model3_acf <-
+  model3_residuals[, .(residuals = list(.SD)), by = "seed"
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = "correlation",
+                         plot = FALSE)))]
+
+model3_acf[1:5, rbindlist(acf, idcol = "seed")] %>%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals ACF plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Lag",
+    y = "ACF"
+  )
 
 ```
 
 ### Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and AR1 process within pid
 
+```{r load_mixed_intercept_slope_ar1_model, include=FALSE}
+
+model4_specs <-
+  read_rds(file = path_wd("output", "model4_specs", ext = "rds"))
+
+```
+
 Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
 random slope, AR1 error structure within `pid` and `log(peak_alpha)` as outcome.
 
-```{r mixed_intercept_slope_ar1_model}
+#### Estimates plot
 
-models <-
-  models %>%
-  mutate(model4 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      correlation = corAR1(form = ~ time), method = "ML",
-      control = lmeControl(maxIter = 100)
-    ))) %>%
-  mutate(model4_tidy = map(model4, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model4_glance = map(model4, ~ broom.mixed::glance(.)))
+```{r mixed_intercept_slope_ar1_model_plot}
 
-models %>%
-  unnest(model4_tidy, names_sep = "_") %>%
-  group_by(model4_tidy_term) %>%
-  mutate(across(model4_tidy_estimate, 
-                list(mean = mean, median = median))) %>%
-  ggplot(aes(x = model4_tidy_estimate)) +
-  facet_wrap(vars(model4_tidy_term), scales = "free") +
+model4_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model4_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = model4_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -366,59 +596,125 @@ models %>%
 
 ```
 
-#### Summary
+#### Estimates table
 
 ```{r mixed_intercept_slope_ar1_model_summary}
 
-models %>%
-  unnest(model4_tidy, names_sep = "_") %>%
-  group_by(model4_tidy_term) %>%
-  summarise(across(c(contains("estimate")), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
-  pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("subsample.estimate", "statistic"),
-               names_prefix = "model4_",
-               names_pattern = "(?:tidy_)?(.*)_(.*)$",
-               values_to = "value") %>%
-  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
-                                          "Statistic", "Value"))
+model4_estimates <-
+  model4_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model4_estimates, id.vars = "term"), term) %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Statistic", "Value"))
+
+```
+
+#### Performance
+
+```{r mixed_intercept_slope_ar1_model_performance}
+
+model4_performance <-
+  model4_specs[, rbindlist(performance, idcol = "seed")]
+
+setkey(melt(model4_performance,
+            id.vars = "seed",
+            measure.vars = c("AIC", "RMSE")), seed, variable) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = "free",
+    labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density() +
+  labs(
+    title = "Subsampled performance plot",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Residuals diagnostics
+
+```{r mixed_intercept_slope_ar1_model_resid_diag}
+
+model4_residuals <-
+  model4_specs[, rbindlist(residuals, idcol = "seed")]
+
+model4_residuals[seed %in% c(1)] %>%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = "Normalized residuals QQ-plot",
+    # subtitle = "Colours indicate different subsample seeds",
+    x = "Theoretical quantiles",
+    y = "Sample quantiles"
+  )
+
+model4_residuals[seed %in% c(1:5)] %>%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals density plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Normalized residuals",
+    y = "Density"
+  )
+
+model4_acf <-
+  model4_residuals[, .(residuals = list(.SD)), by = "seed"
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = "correlation",
+                         plot = FALSE)))]
+
+model4_acf[1:5, rbindlist(acf, idcol = "seed")] %>%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals ACF plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Lag",
+    y = "ACF"
+  )
 
 ```
 
 ### Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and continuous AR1 process within pid
 
+```{r load_mixed_intercept_slope_car1_model, include=FALSE}
+
+model5_specs <-
+  read_rds(file = path_wd("output", "model5_specs", ext = "rds"))
+
+```
+
 Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
 random slope, continuous AR1 error structure within `pid` and `log(peak_alpha)`
 as outcome.
 
-```{r mixed_intercept_slope_car1_model}
+#### Estimates plot
 
-models <-
-  models %>%
-  mutate(model5 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      correlation = corCAR1(form = ~ time), method = "ML",
-      control = lmeControl()
-    ))) %>%
-  mutate(model5_tidy = map(model5, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model5_glance = map(model5, ~ broom.mixed::glance(.)))
+```{r mixed_intercept_slope_car1_model_plot}
 
-models %>%
-  unnest(model5_tidy, names_sep = "_") %>%
-  group_by(model5_tidy_term) %>%
-  mutate(across(model5_tidy_estimate, 
-                list(mean = mean, median = median))) %>%
-  ggplot(aes(x = model5_tidy_estimate)) +
-  facet_wrap(vars(model5_tidy_term), scales = "free") +
+model5_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model5_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = model5_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -430,58 +726,124 @@ models %>%
 
 ```
 
-#### Summary
+#### Estimates table
 
 ```{r mixed_intercept_slope_car1_model_summary}
 
-models %>%
-  unnest(model5_tidy, names_sep = "_") %>%
-  group_by(model5_tidy_term) %>%
-  summarise(across(c(contains("estimate")), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
-  pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("subsample.estimate", "statistic"),
-               names_prefix = "model5_",
-               names_pattern = "(?:tidy_)?(.*)_(.*)$",
-               values_to = "value") %>%
-  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
-                                          "Statistic", "Value"))
+model5_estimates <-
+  model5_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model5_estimates, id.vars = "term"), term) %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Statistic", "Value"))
+
+```
+
+#### Performance
+
+```{r mixed_intercept_slope_car1_model_performance}
+
+model5_performance <-
+  model5_specs[, rbindlist(performance, idcol = "seed")]
+
+setkey(melt(model5_performance,
+            id.vars = "seed",
+            measure.vars = c("AIC", "RMSE")), seed, variable) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = "free",
+    labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density() +
+  labs(
+    title = "Subsampled performance plot",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Residuals diagnostics
+
+```{r mixed_intercept_slope_car1_model_resid_diag}
+
+model5_residuals <-
+  model5_specs[, rbindlist(residuals, idcol = "seed")]
+
+model5_residuals[seed %in% c(1)] %>%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = "Normalized residuals QQ-plot",
+    # subtitle = "Colours indicate different subsample seeds",
+    x = "Theoretical quantiles",
+    y = "Sample quantiles"
+  )
+
+model5_residuals[seed %in% c(1:5)] %>%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals density plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Normalized residuals",
+    y = "Density"
+  )
+
+model5_acf <-
+  model5_residuals[, .(residuals = list(.SD)), by = "seed"
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = "correlation",
+                         plot = FALSE)))]
+
+model5_acf[1:5, rbindlist(acf, idcol = "seed")] %>%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals ACF plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Lag",
+    y = "ACF"
+  )
 
 ```
 
 ### Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and MA2 process within pid
 
+```{r load_mixed_intercept_slope_ma2_model, include=FALSE}
+
+model6_specs <-
+  read_rds(file = path_wd("output", "model6_specs", ext = "rds"))
+
+```
+
 Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
 random slope, MA2 error structure within `pid` and `log(peak_alpha)` as outcome.
 
-```{r mixed_intercept_slope_ma2_model}
+#### Estimates plot
 
-models <-
-  models %>%
-  mutate(model6 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      correlation = corARMA(form = ~ time, q = 2), method = "ML",
-      control = lmeControl()
-    ))) %>%
-  mutate(model6_tidy = map(model6, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model6_glance = map(model6, ~ broom.mixed::glance(.)))
+```{r mixed_intercept_slope_ma2_model_plot}
 
-models %>%
-  unnest(model6_tidy, names_sep = "_") %>%
-  group_by(model6_tidy_term) %>%
-  mutate(across(model6_tidy_estimate, 
-                list(mean = mean, median = median))) %>%
-  ggplot(aes(x = model6_tidy_estimate)) +
-  facet_wrap(vars(model6_tidy_term), scales = "free") +
+model6_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model6_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = model6_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -493,59 +855,125 @@ models %>%
 
 ```
 
-#### Summary
+#### Estimates table
 
 ```{r mixed_intercept_slope_ma2_model_summary}
 
-models %>%
-  unnest(model6_tidy, names_sep = "_") %>%
-  group_by(model6_tidy_term) %>%
-  summarise(across(c(contains("estimate")), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
-  pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("subsample.estimate", "statistic"),
-               names_prefix = "model6_",
-               names_pattern = "(?:tidy_)?(.*)_(.*)$",
-               values_to = "value") %>%
-  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
-                                          "Statistic", "Value"))
+model6_estimates <-
+  model6_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model6_estimates, id.vars = "term"), term) %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Statistic", "Value"))
+
+```
+
+#### Performance
+
+```{r mixed_intercept_slope_ma2_model_performance}
+
+model6_performance <-
+  model6_specs[, rbindlist(performance, idcol = "seed")]
+
+setkey(melt(model6_performance,
+            id.vars = "seed",
+            measure.vars = c("AIC", "RMSE")), seed, variable) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = "free",
+    labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density() +
+  labs(
+    title = "Subsampled performance plot",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Residuals diagnostics
+
+```{r mixed_intercept_slope_ma2_model_resid_diag}
+
+model6_residuals <-
+  model6_specs[, rbindlist(residuals, idcol = "seed")]
+
+model6_residuals[seed %in% c(1)] %>%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = "Normalized residuals QQ-plot",
+    # subtitle = "Colours indicate different subsample seeds",
+    x = "Theoretical quantiles",
+    y = "Sample quantiles"
+  )
+
+model6_residuals[seed %in% c(1:5)] %>%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals density plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Normalized residuals",
+    y = "Density"
+  )
+
+model6_acf <-
+  model6_residuals[, .(residuals = list(.SD)), by = "seed"
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = "correlation",
+                         plot = FALSE)))]
+
+model6_acf[1:5, rbindlist(acf, idcol = "seed")] %>%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals ACF plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Lag",
+    y = "ACF"
+  )
 
 ```
 
 ### Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and ARMA1,1 process within pid
 
+```{r load_mixed_intercept_slope_arma11_model, include=FALSE}
+
+model7_specs <-
+  read_rds(file = path_wd("output", "model7_specs", ext = "rds"))
+
+```
+
 Model with `ce_mac` as fixed effect, `pid` as random intercept, `ce_mac:pid` as
 random slope, ARMA1,1 error structure within `pid` and `log(peak_alpha)` as
 outcome.
 
-```{r mixed_intercept_slope_arma11_model}
+#### Estimates plot
 
-models <-
-  models %>%
-  mutate(model7 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      correlation = corARMA(form = ~ time, p = 1, q = 1, fixed = TRUE), method = "ML",
-      control = lmeControl()
-    ))) %>%
-  mutate(model7_tidy = map(model7, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %>%
-  mutate(model7_glance = map(model7, ~ broom.mixed::glance(.)))
+```{r mixed_intercept_slope_arma11_model_plot}
 
-models %>%
-  unnest(model7_tidy, names_sep = "_") %>%
-  group_by(model7_tidy_term) %>%
-  mutate(across(model7_tidy_estimate, 
-                list(mean = mean, median = median))) %>%
-  ggplot(aes(x = model7_tidy_estimate)) +
-  facet_wrap(vars(model7_tidy_term), scales = "free") +
+model7_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %>%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = "free") +
   geom_histogram(aes(y = ..density..), position = "identity", bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model7_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = "red",
              linetype = "dashed") +
-  geom_vline(aes(xintercept = model7_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = "blue",
              linetype = "dashed") +
   labs(
@@ -557,22 +985,136 @@ models %>%
 
 ```
 
-#### Summary
+#### Estimates table
 
 ```{r mixed_intercept_slope_arma11_model_summary}
 
-models %>%
-  unnest(model7_tidy, names_sep = "_") %>%
-  group_by(model7_tidy_term) %>%
-  summarise(across(c(contains("estimate")), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %>%
-  pivot_longer(cols = c(everything(), -contains("term")),
-               names_to = c("subsample.estimate", "statistic"),
-               names_prefix = "model7_",
-               names_pattern = "(?:tidy_)?(.*)_(.*)$",
-               values_to = "value") %>%
-  knitr::kable(digits = 10, col.names = c("Term", "Subsample estimate",
-                                          "Statistic", "Value"))
+model7_estimates <-
+  model7_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model7_estimates, id.vars = "term"), term) %>%
+  knitr::kable(digits = 10, col.names = c("Term", "Statistic", "Value"))
+
+```
+
+#### Performance
+
+```{r mixed_intercept_slope_arma11_model_performance}
+
+model7_performance <-
+  model7_specs[, rbindlist(performance, idcol = "seed")]
+
+setkey(melt(model7_performance,
+            id.vars = "seed",
+            measure.vars = c("AIC", "RMSE")), seed, variable) %>%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = "free",
+    labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density() +
+  labs(
+    title = "Subsampled performance plot",
+    x = "Estimate",
+    y = "Density"
+  )
+
+```
+
+#### Residuals diagnostics
+
+```{r mixed_intercept_slope_arma11_model_resid_diag}
+
+model7_residuals <-
+  model7_specs[, rbindlist(residuals, idcol = "seed")]
+
+model7_residuals[seed %in% c(1)] %>%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = "Normalized residuals QQ-plot",
+    # subtitle = "Colours indicate different subsample seeds",
+    x = "Theoretical quantiles",
+    y = "Sample quantiles"
+  )
+
+model7_residuals[seed %in% c(1:5)] %>%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals density plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Normalized residuals",
+    y = "Density"
+  )
+
+model7_acf <-
+  model7_residuals[, .(residuals = list(.SD)), by = "seed"
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = "correlation",
+                         plot = FALSE)))]
+
+model7_acf[1:5, rbindlist(acf, idcol = "seed")] %>%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  theme(legend.position = "none") +
+  labs(
+    title = "Subsampled normalized residuals ACF plot",
+    subtitle = "Colours indicate different subsample seeds",
+    x = "Lag",
+    y = "ACF"
+  )
+
+```
+
+## Compare model performances
+
+```{r performance_comparison}
+
+# Compare performances plot
+setkey(melt(rbind(
+  model0_specs,
+  model1_specs,
+  model2_specs,
+  model3_specs,
+  model4_specs,
+  model5_specs,
+  model6_specs,
+  model7_specs,
+  idcol = "model")[, .(seed,
+                       model,
+                       rbindlist(performance, fill = TRUE))],
+  id.vars = c("seed", "model"),
+  measure.vars = c("AIC", "RMSE")),
+  model, seed, variable)[] %>%
+  ggplot(aes(x = value,
+             fill = factor(model,
+                           labels = c("Null",
+                                      "Linear",
+                                      "Mixed intercept",
+                                      "Mixed intercept/slope",
+                                      "Mixed intercept/slope AR1",
+                                      "Mixed intercept/slope CAR1",
+                                      "Mixed intercept/slope MA2",
+                                      "Mixed intercept/slope ARMA1,1")))) +
+  facet_wrap(vars(variable), scales = "free", ncol = 1,
+  labeller = labeller(variable = c("RMSE" = "RMSE", "AIC" = "AIC"))) +
+  stat_density(alpha = 0.5, position = position_identity()) +
+  scale_fill_viridis_d() +
+  labs(
+    title = "Subsampled performance density plot",
+    fill = "Model",
+    x = "Value",
+    y = "Density"
+  )
 
 ```
