@@ -24,10 +24,6 @@ if (!require("pacman")) {
   install.packages("pacman")
 }
 
-pacman::p_load("profvis", "htmlwidgets")
-
-model_profile <- profvis({
-
 pacman::p_load(
   "conflicted",
   "tidyverse",
@@ -43,13 +39,22 @@ pacman::p_load(
 
 ## ---------------------------
 
-setwd(here())                                        # Project working directory
+# Project working directory
+setwd(here())
 
 ## ---------------------------
 
-set.seed(12345)                        # Set pseudo-random number generator seed
-options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific notation
-suppressWarnings(memory.limit(30000000)) # this is needed on some PCs to increase memory allowance, but has no impact on macs.
+# Set pseudo-random number generator seed
+set.seed(12345)
+
+# I prefer to view outputs in non-scientific notation
+options(scipen = 6, digits = 4)
+
+# This is needed on some PCs to increase memory allowance, but has no impact on
+# macs
+suppressWarnings(memory.limit(30000000))
+
+# Resolve function conflicts
 conflict_prefer("select", "dplyr", quiet = TRUE)
 conflict_prefer("filter", "dplyr", quiet = TRUE)
 conflict_prefer("collapse", "dplyr", quiet = TRUE)
@@ -62,56 +67,14 @@ conflict_prefer("collapse", "dplyr", quiet = TRUE)
 
 ## ---------------------------
 
-## load data
-
-one_over_mac_filtered <-
-  read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
-
-setkey(one_over_mac_filtered, pid, time)
-
-## ---------------------------
-
-# Create resamples
-
-tictoc::tic(msg = "Resampling data", quiet = FALSE)
-
-n_resamples <- 10
-n_obs <- 100
+## Load resamples
 
 resamples <-
-  data.table(seed = 1:n_resamples)
-
-setkey(resamples, seed)
-
-resamples[, resample := map(seed,
-                      function(seed, data, prop) {
-                        set.seed(seed)
-                        data[, slice_sample(.SD, n = n_obs), by = pid]
-                        },
-                      data = one_over_mac_filtered,
-                      prop = prop)][]
+  read_rds(file = path_wd("output", "resamples", ext = "rds"))
 
 resamples[, resample := map(resample, ~ setkey(.x, pid, time))]
 
-tictoc::toc(log = TRUE)
-
-tictoc::tic(msg = "Saving resamples", quiet = FALSE)
-
-write_rds(resamples, file = path_wd("output", "resamples", ext = "rds"))
-
-tictoc::toc(log = TRUE)
-
-# Calculate average subsample size
-mean_subsample_size <-
-  resamples[, .(subsample_size = map_dbl(resample, ~ nrow(.x)))
-            ][, mean(subsample_size)]
-
-# Calculate effective sample fraction
-eff_sample_frac <- mean_subsample_size / nrow(one_over_mac_filtered)
-
-# Save effective sample fraction
-write_rds(eff_sample_frac,
-          file = path_wd("output", "eff_sample_frac", ext = "rds"))
+## ---------------------------
 
 # Null model
 
@@ -121,7 +84,11 @@ model0 <-
   resamples[,
             .(seed, model = map(resample,
                                 function(data, ...) {
+                                  args <- list(...)
                                   model <- gls(data = data, ...)
+                                  model$call$model <- args$model
+                                  model$call$control <- args$control
+                                  model$data <- data
                                   model
                                   },
                                 model = log(peak_alpha) ~ 1,
@@ -135,18 +102,22 @@ model0_specs <-
            tidy = map(model,
                       ~ setDT(broom.mixed::tidy(.x))),
            performance = map(model,
-                             ~ data.table(
-                               rmse = performance::performance_rmse(.x),
-                               mse = performance::performance_mse(.x))),
-           glance = map(model,
-                        ~ setDT(broom.mixed::glance(.x))))
+                             ~ setDT(performance::model_performance(.x))),
+           residuals = map(model,
+                           ~ data.table(
+                             raw = residuals(.x, type = "response"),
+                             pearson = residuals(.x, type = "pearson"),
+                             normalized = residuals(.x, type = "normalized"))),
+           fitted = map(model,
+                        ~ data.table(
+                          fitted = fitted(.x))))
   ]
 
 tictoc::toc(log = TRUE)
 
 tictoc::tic(msg = "Saving model 0", quiet = FALSE)
 
-write_rds(model0, file = path_wd("output", "model0", ext = "rds"))
+# write_rds(model0, file = path_wd("output", "model0", ext = "rds"))
 write_rds(model0_specs, file = path_wd("output", "model0_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
@@ -159,7 +130,10 @@ model1 <-
   resamples[,
             .(seed, model = map(resample,
                                 function(data, ...) {
+                                  args <- list(...)
                                   model <- gls(data = data, ...)
+                                  model$call$model = args$model
+                                  model$call$control = args$control
                                   model
                                 },
                                 model = log(peak_alpha) ~ ce_mac_pid_centered,
@@ -173,18 +147,22 @@ model1_specs <-
            tidy = map(model,
                       ~ setDT(broom.mixed::tidy(.x))),
            performance = map(model,
-                             ~ data.table(
-                               rmse = performance::performance_rmse(.x),
-                               mse = performance::performance_mse(.x))),
-           glance = map(model,
-                        ~ setDT(broom.mixed::glance(.x))))
+                             ~ setDT(performance::model_performance(.x))),
+           residuals = map(model,
+                           ~ data.table(
+                             raw = residuals(.x, type = "response"),
+                             pearson = residuals(.x, type = "pearson"),
+                             normalized = residuals(.x, type = "normalized"))),
+           fitted = map(model,
+                        ~ data.table(
+                          fitted = fitted(.x))))
   ]
 
 tictoc::toc(log = TRUE)
 
 tictoc::tic(msg = "Saving model 1", quiet = FALSE)
 
-write_rds(model1, file = path_wd("output", "model1", ext = "rds"))
+# write_rds(model1, file = path_wd("output", "model1", ext = "rds"))
 write_rds(model1_specs, file = path_wd("output", "model1_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
@@ -198,8 +176,11 @@ model2 <-
             .(seed,
               model = map(resample,
                           function(data, ...) {
+                            args = list(...)
                             model <- lme(data = data, ...)
-                            pluck(model, "data") <- NULL
+                            model$call$fixed <- args$fixed
+                            model$call$random <- args$random
+                            model$call$control <- args$control
                             model
                           },
                           fixed = log(peak_alpha) ~ ce_mac_pid_centered,
@@ -215,18 +196,25 @@ model2_specs <-
            tidy = map(model,
                       ~ setDT(broom.mixed::tidy(.x))),
            performance = map(model,
-                             ~ data.table(
-                               rmse = performance::performance_rmse(.x),
-                               mse = performance::performance_mse(.x))),
-           glance = map(model,
-                        ~ setDT(broom.mixed::glance(.x))))
+                             ~ setDT(performance::model_performance(.x))),
+           residuals = map(model,
+                           ~ data.table(
+                             raw = residuals(.x, type = "response"),
+                             pearson = residuals(.x, type = "pearson"),
+                             normalized = residuals(.x, type = "normalized"))),
+           fitted = map(model,
+                        ~ data.table(
+                          fitted = fitted(.x, level = 0:1))),
+           ranef = map(model,
+                        ~ data.table(
+                          ranef = ranef(.x))))
   ]
 
 tictoc::toc(log = TRUE)
 
 tictoc::tic(msg = "Saving model 2", quiet = FALSE)
 
-write_rds(model2, file = path_wd("output", "model2", ext = "rds"))
+# write_rds(model2, file = path_wd("output", "model2", ext = "rds"))
 write_rds(model2_specs, file = path_wd("output", "model2_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
@@ -241,8 +229,11 @@ model3 <-
             .(seed,
               model = map(resample,
                           function(data, ...) {
+                            args = list(...)
                             model <- lme(data = data, ...)
-                            pluck(model, "data") <- NULL
+                            model$call$fixed <- args$fixed
+                            model$call$random <- args$random
+                            model$call$control <- args$control
                             model
                           },
                           fixed = log(peak_alpha) ~ ce_mac_pid_centered,
@@ -258,18 +249,25 @@ model3_specs <-
            tidy = map(model,
                       ~ setDT(broom.mixed::tidy(.x))),
            performance = map(model,
-                             ~ data.table(
-                               rmse = performance::performance_rmse(.x),
-                               mse = performance::performance_mse(.x))),
-           glance = map(model,
-                        ~ setDT(broom.mixed::glance(.x))))
+                             ~ setDT(performance::model_performance(.x))),
+           residuals = map(model,
+                           ~ data.table(
+                             raw = residuals(.x, type = "response"),
+                             pearson = residuals(.x, type = "pearson"),
+                             normalized = residuals(.x, type = "normalized"))),
+           fitted = map(model,
+                        ~ data.table(
+                          fitted = fitted(.x, level = 0:1))),
+           ranef = map(model,
+                       ~ data.table(
+                         ranef = ranef(.x))))
   ]
 
 tictoc::toc(log = TRUE)
 
 tictoc::tic(msg = "Saving model 3", quiet = FALSE)
 
-write_rds(model3, file = path_wd("output", "model3", ext = "rds"))
+# write_rds(model3, file = path_wd("output", "model3", ext = "rds"))
 write_rds(model3_specs, file = path_wd("output", "model3_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
@@ -284,8 +282,12 @@ model4 <-
             .(seed,
               model = map(resample,
                           function(data, ...) {
+                            args = list(...)
                             model <- lme(data = data, ...)
-                            pluck(model, "data") <- NULL
+                            model$call$fixed <- args$fixed
+                            model$call$random <- args$random
+                            model$call$control <- args$control
+                            model$call$correlation <- args$correlation
                             model
                           },
                           fixed = log(peak_alpha) ~ ce_mac_pid_centered,
@@ -302,18 +304,25 @@ model4_specs <-
            tidy = map(model,
                       ~ setDT(broom.mixed::tidy(.x))),
            performance = map(model,
-                             ~ data.table(
-                               rmse = performance::performance_rmse(.x),
-                               mse = performance::performance_mse(.x))),
-           glance = map(model,
-                        ~ setDT(broom.mixed::glance(.x))))
+                             ~ setDT(performance::model_performance(.x))),
+           residuals = map(model,
+                           ~ data.table(
+                             raw = residuals(.x, type = "response"),
+                             pearson = residuals(.x, type = "pearson"),
+                             normalized = residuals(.x, type = "normalized"))),
+           fitted = map(model,
+                        ~ data.table(
+                          fitted = fitted(.x, level = 0:1))),
+           ranef = map(model,
+                       ~ data.table(
+                         ranef = ranef(.x))))
   ]
 
 tictoc::toc(log = TRUE)
 
 tictoc::tic(msg = "Saving model 4", quiet = FALSE)
 
-write_rds(model4, file = path_wd("output", "model4", ext = "rds"))
+# write_rds(model4, file = path_wd("output", "model4", ext = "rds"))
 write_rds(model4_specs, file = path_wd("output", "model4_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
@@ -328,8 +337,12 @@ model5 <-
             .(seed,
               model = map(resample,
                           function(data, ...) {
+                            args = list(...)
                             model <- lme(data = data, ...)
-                            pluck(model, "data") <- NULL
+                            model$call$fixed <- args$fixed
+                            model$call$random <- args$random
+                            model$call$control <- args$control
+                            model$call$correlation <- args$correlation
                             model
                           },
                           fixed = log(peak_alpha) ~ ce_mac_pid_centered,
@@ -346,11 +359,18 @@ model5_specs <-
            tidy = map(model,
                       ~ setDT(broom.mixed::tidy(.x))),
            performance = map(model,
-                             ~ data.table(
-                               rmse = performance::performance_rmse(.x),
-                               mse = performance::performance_mse(.x))),
-           glance = map(model,
-                        ~ setDT(broom.mixed::glance(.x))))
+                             ~ setDT(performance::model_performance(.x))),
+           residuals = map(model,
+                           ~ data.table(
+                             raw = residuals(.x, type = "response"),
+                             pearson = residuals(.x, type = "pearson"),
+                             normalized = residuals(.x, type = "normalized"))),
+           fitted = map(model,
+                        ~ data.table(
+                          fitted = fitted(.x, level = 0:1))),
+           ranef = map(model,
+                       ~ data.table(
+                         ranef = ranef(.x))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -372,8 +392,12 @@ model6 <-
             .(seed,
               model = map(resample,
                           function(data, ...) {
+                            args = list(...)
                             model <- lme(data = data, ...)
-                            pluck(model, "data") <- NULL
+                            model$call$fixed <- args$fixed
+                            model$call$random <- args$random
+                            model$call$control <- args$control
+                            model$call$correlation <- args$correlation
                             model
                           },
                           fixed = log(peak_alpha) ~ ce_mac_pid_centered,
@@ -390,18 +414,25 @@ model6_specs <-
            tidy = map(model,
                       ~ setDT(broom.mixed::tidy(.x))),
            performance = map(model,
-                             ~ data.table(
-                               rmse = performance::performance_rmse(.x),
-                               mse = performance::performance_mse(.x))),
-           glance = map(model,
-                        ~ setDT(broom.mixed::glance(.x))))
+                             ~ setDT(performance::model_performance(.x))),
+           residuals = map(model,
+                           ~ data.table(
+                             raw = residuals(.x, type = "response"),
+                             pearson = residuals(.x, type = "pearson"),
+                             normalized = residuals(.x, type = "normalized"))),
+           fitted = map(model,
+                        ~ data.table(
+                          fitted = fitted(.x, level = 0:1))),
+           ranef = map(model,
+                       ~ data.table(
+                         ranef = ranef(.x))))
   ]
 
 tictoc::toc(log = TRUE)
 
 tictoc::tic(msg = "Saving model 6", quiet = FALSE)
 
-write_rds(model6, file = path_wd("output", "model6", ext = "rds"))
+# write_rds(model6, file = path_wd("output", "model6", ext = "rds"))
 write_rds(model6_specs, file = path_wd("output", "model6_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
@@ -416,8 +447,12 @@ model7 <-
             .(seed,
               model = map(resample,
                           function(data, ...) {
+                            args = list(...)
                             model <- lme(data = data, ...)
-                            pluck(model, "data") <- NULL
+                            model$call$fixed <- args$fixed
+                            model$call$random <- args$random
+                            model$call$control <- args$control
+                            model$call$correlation <- args$correlation
                             model
                           },
                           fixed = log(peak_alpha) ~ ce_mac_pid_centered,
@@ -435,24 +470,27 @@ model7_specs <-
            tidy = map(model,
                       ~ setDT(broom.mixed::tidy(.x))),
            performance = map(model,
-                             ~ data.table(
-                               rmse = performance::performance_rmse(.x),
-                               mse = performance::performance_mse(.x))),
-           glance = map(model,
-                        ~ setDT(broom.mixed::glance(.x))))
+                             ~ setDT(performance::model_performance(.x))),
+           residuals = map(model,
+                           ~ data.table(
+                             raw = residuals(.x, type = "response"),
+                             pearson = residuals(.x, type = "pearson"),
+                             normalized = residuals(.x, type = "normalized"))),
+           fitted = map(model,
+                        ~ data.table(
+                          fitted = fitted(.x, level = 0:1))),
+           ranef = map(model,
+                       ~ data.table(
+                         ranef = ranef(.x))))
   ]
 
 tictoc::toc(log = TRUE)
 
 tictoc::tic(msg = "Saving model 7", quiet = FALSE)
 
-write_rds(model7, file = path_wd("output", "model7", ext = "rds"))
+# write_rds(model7, file = path_wd("output", "model7", ext = "rds"))
 write_rds(model7_specs, file = path_wd("output", "model7_specs", ext = "rds"))
 
 tictoc::toc(log = TRUE)
 
 tictoc::tic.log()
-
-})
-
-saveWidget(model_profile, file = path_wd("output", "model_profile", ext = "html"))
