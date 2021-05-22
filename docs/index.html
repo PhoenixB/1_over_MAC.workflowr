@@ -307,6 +307,9 @@ $(document).ready(function () {
   <a href="modelling.html">Modelling</a>
 </li>
 <li>
+  <a href="final-model.html">Final model</a>
+</li>
+<li>
   <a href="about.html">About</a>
 </li>
 <li>
@@ -355,7 +358,7 @@ $(document).ready(function () {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-03-08
+<strong>Last updated:</strong> 2021-05-22
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -386,22 +389,23 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree83b1a2213b16fba72a885b9081b2f80edf55ecd2targetblank83b1a22a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/83b1a2213b16fba72a885b9081b2f80edf55ecd2" target="_blank">83b1a22</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree72fd1291c0182fcfb4850398f65058c0d3171388targetblank72fd129a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/72fd1291c0182fcfb4850398f65058c0d3171388" target="_blank">72fd129</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree83b1a2213b16fba72a885b9081b2f80edf55ecd2targetblank83b1a22a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree72fd1291c0182fcfb4850398f65058c0d3171388targetblank72fd129a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/83b1a2213b16fba72a885b9081b2f80edf55ecd2" target="_blank">83b1a22</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/72fd1291c0182fcfb4850398f65058c0d3171388" target="_blank">72fd129</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    data/alpha_freq_Sept2020_1.csv
@@ -1476,18 +1480,25 @@ Ignored files:
     Ignored:    data/alpha_freq_Sept2020_997.csv
     Ignored:    data/alpha_freq_Sept2020_998.csv
     Ignored:    data/alpha_freq_Sept2020_999.csv
+    Ignored:    data/alpha_freq_ages_March2021.csv
     Ignored:    data/to_reject_from_analysis_02.10.2020.xlsx
     Ignored:    data/to_reject_from_analysis_17.09.2020.xlsx
     Ignored:    data/to_reject_from_analysis_28.09.2020.xlsx
+    Ignored:    output/.DS_Store
+    Ignored:    output/eff_sample_frac.rds
+    Ignored:    output/model0_specs.rds
+    Ignored:    output/model1_specs.rds
+    Ignored:    output/model2_specs.rds
+    Ignored:    output/model3_specs.rds
+    Ignored:    output/model4_specs.rds
+    Ignored:    output/model5_specs.rds
+    Ignored:    output/model6_specs.rds
+    Ignored:    output/model7_specs.rds
     Ignored:    output/one_over_mac.rds
     Ignored:    output/one_over_mac_filtered.rds
-
-Untracked files:
-    Untracked:  analysis/modelling.Rmd
-
-Unstaged changes:
-    Modified:   code/group_sampling.R
-    Modified:   code/groupwise_resampling.R
+    Ignored:    output/preprocess_profile.html
+    Ignored:    output/preprocess_profile_files/
+    Ignored:    output/resamples.rds
 
 </code></pre>
 <p>
@@ -1526,6 +1537,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/72fd1291c0182fcfb4850398f65058c0d3171388/analysis/index.Rmd" target="_blank">72fd129</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-22
+</td>
+<td>
+Add page and navigation item for final model
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/dff5366926d19c9a1bc03de177b28dd32dea5269/docs/index.html" target="_blank">dff5366</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-08
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1672,8 +1717,9 @@ Start workflowr project.
 <p>Welcome to my research website.</p>
 <ul>
 <li><a href="data-preprocessing.html">Data Preprocessing</a></li>
-<li><a href="exploratory-data-analysis.html">Exploratory Data Analysis</a>.</li>
-<li><a href="modelling.html">Modelling</a>.</li>
+<li><a href="exploratory-data-analysis.html">Exploratory Data Analysis</a></li>
+<li><a href="modelling.html">Modelling</a></li>
+<li><a href="final-model.html">Final model</a></li>
 </ul>
 
 

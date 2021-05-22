@@ -385,6 +385,9 @@ div.tocify {
   <a href="modelling.html">Modelling</a>
 </li>
 <li>
+  <a href="final-model.html">Final model</a>
+</li>
+<li>
   <a href="about.html">About</a>
 </li>
 <li>
@@ -435,7 +438,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-05-07
+<strong>Last updated:</strong> 2021-05-22
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -526,16 +529,16 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtreedf7ac250a377e9ce75926a79dfc65ed765821ff5targetblankdf7ac25a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/df7ac250a377e9ce75926a79dfc65ed765821ff5" target="_blank">df7ac25</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree72fd1291c0182fcfb4850398f65058c0d3171388targetblank72fd129a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/72fd1291c0182fcfb4850398f65058c0d3171388" target="_blank">72fd129</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtreedf7ac250a377e9ce75926a79dfc65ed765821ff5targetblankdf7ac25a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree72fd1291c0182fcfb4850398f65058c0d3171388targetblank72fd129a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/df7ac250a377e9ce75926a79dfc65ed765821ff5" target="_blank">df7ac25</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/72fd1291c0182fcfb4850398f65058c0d3171388" target="_blank">72fd129</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -1623,22 +1626,19 @@ Ignored files:
     Ignored:    data/to_reject_from_analysis_28.09.2020.xlsx
     Ignored:    output/.DS_Store
     Ignored:    output/eff_sample_frac.rds
-    Ignored:    output/model0.rds
-    Ignored:    output/model1.rds
-    Ignored:    output/model2.rds
-    Ignored:    output/model3.rds
-    Ignored:    output/model4.rds
-    Ignored:    output/model5.rds
-    Ignored:    output/model6.rds
-    Ignored:    output/model7.rds
+    Ignored:    output/model0_specs.rds
+    Ignored:    output/model1_specs.rds
+    Ignored:    output/model2_specs.rds
+    Ignored:    output/model3_specs.rds
+    Ignored:    output/model4_specs.rds
+    Ignored:    output/model5_specs.rds
+    Ignored:    output/model6_specs.rds
+    Ignored:    output/model7_specs.rds
     Ignored:    output/one_over_mac.rds
     Ignored:    output/one_over_mac_filtered.rds
     Ignored:    output/preprocess_profile.html
     Ignored:    output/preprocess_profile_files/
     Ignored:    output/resamples.rds
-
-Unstaged changes:
-    Modified:   analysis/modelling.Rmd
 
 </code></pre>
 <p>
@@ -1677,6 +1677,23 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/exploratory-data-analysis.html" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2305,6 +2322,43 @@ one_over_mac[, .N, by = pid
   labs(title = &quot;Observation density per patient&quot;,
        x = &quot;Observation count&quot;, y = &quot;Density&quot;, fill = &quot;Quartile&quot;)</code></pre>
 <p><img src="figure/exploratory-data-analysis.Rmd/data_structure-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-data_structure-1">
+Past versions of data_structure-1.png
+</button>
+</p>
+<div id="fig-data_structure-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/data_structure-1.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 <div id="univariate-plots" class="section level2">
 <h2>Univariate plots</h2>
@@ -2607,6 +2661,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_outcome-1.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_outcome-1.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -2650,6 +2715,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_outcome-2.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_outcome-2.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -2691,6 +2767,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_outcome-3.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_outcome-3.png" target="_blank">0d009c5</a>
@@ -2738,6 +2825,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_predictors-1.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_predictors-1.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -2781,6 +2879,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_predictors-2.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_predictors-2.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -2821,6 +2930,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_predictors-3.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/univariate_plots_filtered_predictors-3.png" target="_blank">0d009c5</a>
@@ -3414,6 +3534,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/age_ce_mac_biv_filtered-1.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/age_ce_mac_biv_filtered-1.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -3482,6 +3613,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/age_ce_mac_biv_filtered-2.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/age_ce_mac_biv_filtered-2.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -3548,6 +3690,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/age_ce_mac_biv_filtered-3.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/age_ce_mac_biv_filtered-3.png" target="_blank">0d009c5</a>
@@ -3621,6 +3774,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/ce_mac_peak_alpha_biv_filtered-1.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/ce_mac_peak_alpha_biv_filtered-1.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -3689,6 +3853,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/ce_mac_peak_alpha_biv_filtered-2.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/ce_mac_peak_alpha_biv_filtered-2.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -3755,6 +3930,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/ce_mac_peak_alpha_biv_filtered-3.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/ce_mac_peak_alpha_biv_filtered-3.png" target="_blank">0d009c5</a>
@@ -3860,6 +4046,17 @@ Date
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/autocorrelation-1.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
 <tr>
 <td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/autocorrelation-1.png" target="_blank">0d009c5</a>
@@ -3983,6 +4180,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/6592e477e3b121f8c2210cc73674bd18c69e87e4/docs/figure/exploratory-data-analysis.Rmd/partial_autocorrelation-1.png" target="_blank">6592e47</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-07
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/0d009c5e6b837ed54cfae1f39d2fa5e9ff8a5816/docs/figure/exploratory-data-analysis.Rmd/partial_autocorrelation-1.png" target="_blank">0d009c5</a>
 </td>
 <td>
@@ -4031,27 +4239,27 @@ attached base packages:
 
 other attached packages:
  [1] data.table_1.13.6 ggridges_0.5.3    glue_1.4.2        fs_1.5.0         
- [5] conflicted_1.0.4  forcats_0.5.1     stringr_1.4.0     dplyr_1.0.5      
- [9] purrr_0.3.4       readr_1.4.0       tidyr_1.1.3       tibble_3.1.0     
+ [5] conflicted_1.0.4  forcats_0.5.1     stringr_1.4.0     dplyr_1.0.6      
+ [9] purrr_0.3.4       readr_1.4.0       tidyr_1.1.3       tibble_3.1.2     
 [13] ggplot2_3.3.3     tidyverse_1.3.0   pacman_0.5.1     
 
 loaded via a namespace (and not attached):
  [1] Rcpp_1.0.6        lubridate_1.7.10  assertthat_0.2.1  rprojroot_2.0.2  
  [5] digest_0.6.27     utf8_1.2.1        plyr_1.8.6        R6_2.5.0         
- [9] cellranger_1.1.0  backports_1.2.1   reprex_1.0.0      evaluate_0.14    
-[13] highr_0.8         httr_1.4.2        pillar_1.6.0      rlang_0.4.10     
+ [9] cellranger_1.1.0  backports_1.2.1   reprex_2.0.0      evaluate_0.14    
+[13] highr_0.8         httr_1.4.2        pillar_1.6.1      rlang_0.4.11     
 [17] readxl_1.3.1      rstudioapi_0.13   whisker_0.4       rmarkdown_2.6    
-[21] labeling_0.4.2    munsell_0.5.0     broom_0.7.5       compiler_4.0.3   
+[21] labeling_0.4.2    munsell_0.5.0     broom_0.7.6       compiler_4.0.3   
 [25] httpuv_1.5.5      modelr_0.1.8      xfun_0.21         pkgconfig_2.0.3  
 [29] htmltools_0.5.1.1 tidyselect_1.1.0  workflowr_1.6.2   viridisLite_0.4.0
-[33] fansi_0.4.2       crayon_1.4.1      dbplyr_2.1.0      withr_2.4.1      
+[33] fansi_0.4.2       crayon_1.4.1      dbplyr_2.1.1      withr_2.4.1      
 [37] later_1.1.0.1     grid_4.0.3        jsonlite_1.7.2    gtable_0.3.0     
 [41] lifecycle_1.0.0   DBI_1.1.1         git2r_0.28.0      magrittr_2.0.1   
 [45] scales_1.1.1      cachem_1.0.4      cli_2.4.0         stringi_1.5.3    
-[49] farver_2.1.0      promises_1.2.0.1  xml2_1.3.2        ellipsis_0.3.1   
-[53] generics_0.1.0    vctrs_0.3.7       tools_4.0.3       hms_1.0.0        
+[49] farver_2.1.0      promises_1.2.0.1  xml2_1.3.2        ellipsis_0.3.2   
+[53] generics_0.1.0    vctrs_0.3.8       tools_4.0.3       hms_1.1.0        
 [57] fastmap_1.1.0     yaml_2.2.1        colorspace_2.0-0  rvest_1.0.0      
-[61] memoise_2.0.0     knitr_1.31        haven_2.3.1      </code></pre>
+[61] memoise_2.0.0     knitr_1.31        haven_2.4.1      </code></pre>
 </div>
 </div>
 
