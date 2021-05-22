@@ -385,6 +385,9 @@ div.tocify {
   <a href="modelling.html">Modelling</a>
 </li>
 <li>
+  <a href="final-model.html">Final model</a>
+</li>
+<li>
   <a href="about.html">About</a>
 </li>
 <li>
@@ -435,7 +438,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-03-24
+<strong>Last updated:</strong> 2021-05-22
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -526,22 +529,23 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtreebd8ccaa6358ad78a1fab6ce0618cf0591f825c38targetblankbd8ccaaa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/bd8ccaa6358ad78a1fab6ce0618cf0591f825c38" target="_blank">bd8ccaa</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree73530a4c91ae22194f3295832175532ca3f5b5catargetblank73530a4a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/73530a4c91ae22194f3295832175532ca3f5b5ca" target="_blank">73530a4</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtreebd8ccaa6358ad78a1fab6ce0618cf0591f825c38targetblankbd8ccaaa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree73530a4c91ae22194f3295832175532ca3f5b5catargetblank73530a4a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/bd8ccaa6358ad78a1fab6ce0618cf0591f825c38" target="_blank">bd8ccaa</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/73530a4c91ae22194f3295832175532ca3f5b5ca" target="_blank">73530a4</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
     Ignored:    data/alpha_freq_Sept2020_1.csv
@@ -1620,8 +1624,28 @@ Ignored files:
     Ignored:    data/to_reject_from_analysis_02.10.2020.xlsx
     Ignored:    data/to_reject_from_analysis_17.09.2020.xlsx
     Ignored:    data/to_reject_from_analysis_28.09.2020.xlsx
+    Ignored:    output/.DS_Store
+    Ignored:    output/eff_sample_frac.rds
+    Ignored:    output/model0_specs.rds
+    Ignored:    output/model1_specs.rds
+    Ignored:    output/model2_specs.rds
+    Ignored:    output/model3_specs.rds
+    Ignored:    output/model4_specs.rds
+    Ignored:    output/model5_specs.rds
+    Ignored:    output/model6_specs.rds
+    Ignored:    output/model7_specs.rds
     Ignored:    output/one_over_mac.rds
     Ignored:    output/one_over_mac_filtered.rds
+    Ignored:    output/preprocess_profile.html
+    Ignored:    output/preprocess_profile_files/
+    Ignored:    output/resamples.rds
+
+Untracked files:
+    Untracked:  analysis/final-model.Rmd
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -1660,6 +1684,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/73530a4c91ae22194f3295832175532ca3f5b5ca/analysis/modelling.Rmd" target="_blank">73530a4</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-22
+</td>
+<td>
+Remove unnecessary stuff, outsource resampling, remove old to do’s, use only model specs from outsourced code, use
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/7fe469aa1451776cd73b367f001c3f9f8712fa00/docs/modelling.html" target="_blank">7fe469a</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1788,32 +1846,12 @@ Add modelling page
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Data is resampled groupwise over <code>pid</code> without replacing, with 1% of the data each and repeated 100 times. This will likely be increased in the future.</p>
-<pre class="r"><code>resamples &lt;-
-  one_over_mac_filtered %&gt;%
-  resample_groupwise(pid,
-                     prop = 0.01,
-                     times = 100) %&gt;%
-  mutate(data = map(data, ~ arrange(.x, pid, time)))
-
-mean_subsample_size &lt;-
-  resamples %&gt;%
-  mutate(subsample_size = map(data, ~ nrow(.x))) %&gt;%
-  unnest(subsample_size) %&gt;%
-  summarise(mean = mean(subsample_size)) %&gt;%
-  pull(mean)
-
-eff_sample_frac &lt;- mean_subsample_size / nrow(one_over_mac_filtered)
-
-models &lt;- resamples</code></pre>
+<p>Data is resampled groupwise over <code>pid</code> without replacing, with 100 observations per patient and repeated 100 times. This is necessary to calculate models in a timely manner.</p>
 </div>
 <div id="to-do" class="section level2">
 <h2>To do</h2>
 <ul>
-<li>Transform/center predictors</li>
-<li>Test for correlation of random intercept and slope</li>
-<li>Subsample performance measures for all models incl. R-squared</li>
-<li>Introduce continuous autoregressive process with corCAR1</li>
+<li>Nothing so far</li>
 </ul>
 </div>
 <div id="modelling" class="section level2">
@@ -1821,33 +1859,19 @@ models &lt;- resamples</code></pre>
 <div id="null-model" class="section level3">
 <h3>Null model</h3>
 <p>Intercept-only model with <code>log(peak_alpha)</code> as outcome.</p>
-<pre class="r"><code>models &lt;-
-  models %&gt;%
-  mutate(model0 = map(data, function(df)
-    gls(
-      log(peak_alpha) ~ 1, data = df, method = &quot;ML&quot;,
-      control = glsControl()
-    ))) %&gt;%
-  mutate(model0_tidy =
-           map(model0, ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
-  mutate(model0_performance =
-           map(model0, ~ tibble(rmse = performance::performance_rmse(.x),
-                                mse = performance::performance_mse(.x)))) %&gt;%
-  mutate(model0_glance = map(model0, ~ broom.mixed::glance(.)))
-
-models %&gt;%
-  unnest(model0_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model0_tidy_term) %&gt;%
-  mutate(across(model0_tidy_estimate, 
-                list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = model0_tidy_estimate)) +
-  facet_wrap(vars(model0_tidy_term), scales = &quot;free&quot;) +
+<div id="estimates-plot" class="section level4">
+<h4>Estimates plot</h4>
+<pre class="r"><code>model0_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %&gt;%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model0_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = model0_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -1856,86 +1880,22 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/null_model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-null_model-1">
-Past versions of null_model-1.png
-</button>
-</p>
-<div id="fig-null_model-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/e61bf64b41bd362abd227ad375a72686c68a8dea/docs/figure/modelling.Rmd/null_model-1.png" target="_blank">e61bf64</a>
-</td>
-<td>
-PhoenixB
-</td>
-<td>
-2021-03-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/b7f01cb5c18f205d107424b1f865b960495cc307/docs/figure/modelling.Rmd/null_model-1.png" target="_blank">b7f01cb</a>
-</td>
-<td>
-PhoenixB
-</td>
-<td>
-2021-03-09
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/ae5fbdb31a1bfd423ce52fce58d1ab3f9e73dc5e/docs/figure/modelling.Rmd/null_model-1.png" target="_blank">ae5fbdb</a>
-</td>
-<td>
-PhoenixB
-</td>
-<td>
-2021-03-08
-</td>
-</tr>
-</tbody>
-</table>
+<p><img src="figure/modelling.Rmd/null_model_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-</div>
-<div id="summary" class="section level4">
-<h4>Summary</h4>
-<pre class="r"><code>models %&gt;%
-  unnest(model0_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model0_tidy_term) %&gt;%
-  summarise(across(c(contains(&quot;estimate&quot;)), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %&gt;%
-  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
-               names_to = c(&quot;subsample.estimate&quot;, &quot;statistic&quot;),
-               names_prefix = &quot;model0_&quot;,
-               names_pattern = &quot;(?:tidy_)?(.*)_(.*)$&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Subsample estimate&quot;,
-                                          &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
+<div id="estimates-table" class="section level4">
+<h4>Estimates table</h4>
+<pre class="r"><code>model0_estimates &lt;-
+  model0_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model0_estimates, id.vars = &quot;term&quot;), term) %&gt;%
+  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">Term</th>
-<th align="left">Subsample estimate</th>
 <th align="left">Statistic</th>
 <th align="right">Value</th>
 </tr>
@@ -1943,47 +1903,104 @@ PhoenixB
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">2.1516040</td>
+<td align="right">2.15501200</td>
 </tr>
 <tr class="even">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0001017</td>
+<td align="right">0.00005986</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="performance" class="section level4">
+<h4>Performance</h4>
+<pre class="r"><code>model0_performance &lt;-
+  model0_specs[, rbindlist(performance, idcol = &quot;seed&quot;)]
+
+setkey(melt(model0_performance,
+            id.vars = &quot;seed&quot;,
+            measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)), seed, variable) %&gt;%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = &quot;free&quot;,
+    labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density() +
+  labs(
+    title = &quot;Subsampled performance plot&quot;,
+    x = &quot;Estimate&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/null_model_performance-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals-diagnostics" class="section level4">
+<h4>Residuals diagnostics</h4>
+<pre class="r"><code>model0_residuals &lt;-
+  model0_specs[, rbindlist(residuals, idcol = &quot;seed&quot;)]
+
+model0_residuals[seed %in% c(1)] %&gt;%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = &quot;Normalized residuals QQ-plot&quot;,
+    # subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Theoretical quantiles&quot;,
+    y = &quot;Sample quantiles&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/null_model_resid_diag-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model0_residuals[seed %in% c(1:5)] %&gt;%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals density plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Normalized residuals&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/null_model_resid_diag-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model0_acf &lt;-
+  model0_residuals[, .(residuals = list(.SD)), by = &quot;seed&quot;
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = &quot;correlation&quot;,
+                         plot = FALSE)))]
+
+model0_acf[1:5, rbindlist(acf, idcol = &quot;seed&quot;)] %&gt;%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  scale_fill_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals ACF plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Lag&quot;,
+    y = &quot;ACF&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/null_model_resid_diag-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-with-ce_mac-as-fixed-effect" class="section level3">
 <h3>Model with ce_mac as fixed effect</h3>
 <p>Model with <code>ce_mac</code> as fixed effect and <code>log(peak_alpha)</code> as outcome.</p>
-<pre class="r"><code>models &lt;-
-  models %&gt;%
-  mutate(model1 = map(data, function(df)
-    gls(
-      log(peak_alpha) ~ ce_mac, data = df, method = &quot;ML&quot;,
-      control = glsControl() 
-    ))) %&gt;%
-  mutate(model1_tidy = map(model1, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
-  mutate(model1_glance = map(model1, ~ broom.mixed::glance(.)))
-
-models %&gt;%
-  unnest(model1_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model1_tidy_term) %&gt;%
-  mutate(across(model1_tidy_estimate, 
-                list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = model1_tidy_estimate)) +
-  facet_wrap(vars(model1_tidy_term), scales = &quot;free&quot;) +
+<div id="estimates-plot-1" class="section level4">
+<h4>Estimates plot</h4>
+<pre class="r"><code>model1_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %&gt;%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model1_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = model1_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -1992,64 +2009,22 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/linear_model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-linear_model-1">
-Past versions of linear_model-1.png
-</button>
-</p>
-<div id="fig-linear_model-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/e61bf64b41bd362abd227ad375a72686c68a8dea/docs/figure/modelling.Rmd/linear_model-1.png" target="_blank">e61bf64</a>
-</td>
-<td>
-PhoenixB
-</td>
-<td>
-2021-03-09
-</td>
-</tr>
-</tbody>
-</table>
+<p><img src="figure/modelling.Rmd/linear_model_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-</div>
-<div id="summary-1" class="section level4">
-<h4>Summary</h4>
-<pre class="r"><code>models %&gt;%
-  unnest(model1_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model1_tidy_term) %&gt;%
-  summarise(across(c(contains(&quot;estimate&quot;)), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %&gt;%
-  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
-               names_to = c(&quot;subsample.estimate&quot;, &quot;statistic&quot;),
-               names_prefix = &quot;model1_&quot;,
-               names_pattern = &quot;(?:tidy_)?(.*)_(.*)$&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Subsample estimate&quot;,
-                                          &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
+<div id="estimates-table-1" class="section level4">
+<h4>Estimates table</h4>
+<pre class="r"><code>model1_estimates &lt;-
+  model1_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model1_estimates, id.vars = &quot;term&quot;), term) %&gt;%
+  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">Term</th>
-<th align="left">Subsample estimate</th>
 <th align="left">Statistic</th>
 <th align="right">Value</th>
 </tr>
@@ -2057,59 +2032,114 @@ PhoenixB
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">2.3117676</td>
+<td align="right">2.15911693</td>
 </tr>
 <tr class="even">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0006427</td>
+<td align="right">0.00005767</td>
 </tr>
 <tr class="odd">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">mean</td>
-<td align="right">-0.1931464</td>
+<td align="right">-0.23698950</td>
 </tr>
 <tr class="even">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">se</td>
-<td align="right">0.0007654</td>
+<td align="right">0.00044430</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="performance-1" class="section level4">
+<h4>Performance</h4>
+<pre class="r"><code>model1_performance &lt;-
+  model1_specs[, rbindlist(performance, idcol = &quot;seed&quot;)]
+
+setkey(melt(model1_performance,
+            id.vars = &quot;seed&quot;,
+            measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)), seed, variable) %&gt;%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = &quot;free&quot;,
+    labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density() +
+  labs(
+    title = &quot;Subsampled performance plot&quot;,
+    x = &quot;Estimate&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/linear_model_performance-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals-diagnostics-1" class="section level4">
+<h4>Residuals diagnostics</h4>
+<pre class="r"><code>model1_residuals &lt;-
+  model1_specs[, rbindlist(residuals, idcol = &quot;seed&quot;)]
+
+model1_residuals[seed %in% c(1)] %&gt;%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = &quot;Normalized residuals QQ-plot&quot;,
+    # subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Theoretical quantiles&quot;,
+    y = &quot;Sample quantiles&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/linear_model_resid_diag-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model1_residuals[seed %in% c(1:5)] %&gt;%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals density plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Normalized residuals&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/linear_model_resid_diag-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model1_acf &lt;-
+  model1_residuals[, .(residuals = list(.SD)), by = &quot;seed&quot;
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = &quot;correlation&quot;,
+                         plot = FALSE)))]
+
+model1_acf[1:5, rbindlist(acf, idcol = &quot;seed&quot;)] %&gt;%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  scale_fill_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals ACF plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Lag&quot;,
+    y = &quot;ACF&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/linear_model_resid_diag-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-with-ce_mac-as-fixed-effect-and-pid-as-random-intercept" class="section level3">
 <h3>Model with ce_mac as fixed effect and pid as random intercept</h3>
 <p>Model with <code>ce_mac</code> as fixed effect, <code>pid</code> as random intercept and <code>log(peak_alpha)</code> as outcome.</p>
-<pre class="r"><code>models &lt;-
-  models %&gt;%
-  mutate(model2 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ 1 | pid, method = &quot;ML&quot;,
-      control = lmeControl(maxIter = 100)
-    ))) %&gt;%
-  mutate(model2_tidy = map(model2, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
-  mutate(model2_glance = map(model2, ~ broom.mixed::glance(.)))
-
-models %&gt;%
-  unnest(model2_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model2_tidy_term) %&gt;%
-  mutate(across(model2_tidy_estimate, 
-                list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = model2_tidy_estimate)) +
-  facet_wrap(vars(model2_tidy_term), scales = &quot;free&quot;) +
+<div id="estimates-plot-2" class="section level4">
+<h4>Estimates plot</h4>
+<pre class="r"><code>model2_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %&gt;%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model2_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = model2_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -2118,27 +2148,22 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/mixed_intercept_model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="summary-2" class="section level4">
-<h4>Summary</h4>
-<pre class="r"><code>models %&gt;%
-  unnest(model2_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model2_tidy_term) %&gt;%
-  summarise(across(c(contains(&quot;estimate&quot;)), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %&gt;%
-  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
-               names_to = c(&quot;subsample.estimate&quot;, &quot;statistic&quot;),
-               names_prefix = &quot;model2_&quot;,
-               names_pattern = &quot;(?:tidy_)?(.*)_(.*)$&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Subsample estimate&quot;,
-                                          &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_model_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="estimates-table-2" class="section level4">
+<h4>Estimates table</h4>
+<pre class="r"><code>model2_estimates &lt;-
+  model2_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model2_estimates, id.vars = &quot;term&quot;), term) %&gt;%
+  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">Term</th>
-<th align="left">Subsample estimate</th>
 <th align="left">Statistic</th>
 <th align="right">Value</th>
 </tr>
@@ -2146,83 +2171,134 @@ models %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">2.4263007</td>
+<td align="right">2.16018044</td>
 </tr>
 <tr class="even">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0007511</td>
+<td align="right">0.00005737</td>
 </tr>
 <tr class="odd">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">mean</td>
-<td align="right">-0.3248311</td>
+<td align="right">-0.29835076</td>
 </tr>
 <tr class="even">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">se</td>
-<td align="right">0.0008500</td>
+<td align="right">0.00042865</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.1320796</td>
+<td align="right">0.12882003</td>
 </tr>
 <tr class="even">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0002143</td>
+<td align="right">0.00005548</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.0959188</td>
+<td align="right">0.11088858</td>
 </tr>
 <tr class="even">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0001361</td>
+<td align="right">0.00006370</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="performance-2" class="section level4">
+<h4>Performance</h4>
+<pre class="r"><code>model2_performance &lt;-
+  model2_specs[, rbindlist(performance, idcol = &quot;seed&quot;)]
+
+setkey(melt(model2_performance,
+            id.vars = &quot;seed&quot;,
+            measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)), seed, variable) %&gt;%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = &quot;free&quot;,
+    labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density() +
+  labs(
+    title = &quot;Subsampled performance plot&quot;,
+    x = &quot;Estimate&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_model_performance-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals-diagnostics-2" class="section level4">
+<h4>Residuals diagnostics</h4>
+<pre class="r"><code>model2_residuals &lt;-
+  model2_specs[, rbindlist(residuals, idcol = &quot;seed&quot;)]
+
+model2_residuals[seed %in% c(1)] %&gt;%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = &quot;Normalized residuals QQ-plot&quot;,
+    # subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Theoretical quantiles&quot;,
+    y = &quot;Sample quantiles&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_model_resid_diag-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model2_residuals[seed %in% c(1:5)] %&gt;%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals density plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Normalized residuals&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_model_resid_diag-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model2_acf &lt;-
+  model2_residuals[, .(residuals = list(.SD)), by = &quot;seed&quot;
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = &quot;correlation&quot;,
+                         plot = FALSE)))]
+
+model2_acf[1:5, rbindlist(acf, idcol = &quot;seed&quot;)] %&gt;%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  scale_fill_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals ACF plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Lag&quot;,
+    y = &quot;ACF&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_model_resid_diag-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-with-ce_mac-as-fixed-effect-and-random-intercept-and-slope-of-ce_mac-on-pid" class="section level3">
 <h3>Model with ce_mac as fixed effect and random intercept and slope of ce_mac on pid</h3>
 <p>Model with <code>ce_mac</code> as fixed effect, <code>pid</code> as random intercept, <code>ce_mac:pid</code> as random slope and <code>log(peak_alpha)</code> as outcome.</p>
-<pre class="r"><code>models &lt;-
-  models %&gt;%
-  mutate(model3 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      method = &quot;ML&quot;, control = lmeControl(maxIter = 100)
-    ))) %&gt;%
-  mutate(model3_tidy = map(model3, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
-  mutate(model3_glance = map(model3, ~ broom.mixed::glance(.)))
-
-models %&gt;%
-  unnest(model3_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model3_tidy_term) %&gt;%
-  mutate(across(model3_tidy_estimate, 
-                list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = model3_tidy_estimate)) +
-  facet_wrap(vars(model3_tidy_term), scales = &quot;free&quot;) +
+<div id="estimates-plot-3" class="section level4">
+<h4>Estimates plot</h4>
+<pre class="r"><code>model3_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %&gt;%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model3_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = model3_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -2231,27 +2307,22 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/mixed_intercept_slope_model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="summary-3" class="section level4">
-<h4>Summary</h4>
-<pre class="r"><code>models %&gt;%
-  unnest(model3_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model3_tidy_term) %&gt;%
-  summarise(across(c(contains(&quot;estimate&quot;)), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %&gt;%
-  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
-               names_to = c(&quot;subsample.estimate&quot;, &quot;statistic&quot;),
-               names_prefix = &quot;model3_&quot;,
-               names_pattern = &quot;(?:tidy_)?(.*)_(.*)$&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Subsample estimate&quot;,
-                                          &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_model_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="estimates-table-3" class="section level4">
+<h4>Estimates table</h4>
+<pre class="r"><code>model3_estimates &lt;-
+  model3_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model3_estimates, id.vars = &quot;term&quot;), term) %&gt;%
+  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">Term</th>
-<th align="left">Subsample estimate</th>
 <th align="left">Statistic</th>
 <th align="right">Value</th>
 </tr>
@@ -2259,108 +2330,154 @@ models %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">2.4229674</td>
+<td align="right">2.16007574</td>
 </tr>
 <tr class="even">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0008796</td>
+<td align="right">0.00006269</td>
 </tr>
 <tr class="odd">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">mean</td>
-<td align="right">-0.3207493</td>
+<td align="right">-0.31146568</td>
 </tr>
 <tr class="even">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">se</td>
-<td align="right">0.0010492</td>
+<td align="right">0.00042721</td>
 </tr>
 <tr class="odd">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">mean</td>
-<td align="right">-0.7934519</td>
+<td align="right">-0.01929355</td>
 </tr>
 <tr class="even">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">se</td>
-<td align="right">0.0027453</td>
+<td align="right">0.00240136</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.2176139</td>
+<td align="right">0.13052945</td>
 </tr>
 <tr class="even">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0011833</td>
-</tr>
-<tr class="odd">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">mean</td>
-<td align="right">0.2099054</td>
-</tr>
-<tr class="even">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">se</td>
-<td align="right">0.0017408</td>
+<td align="right">0.00006326</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.0922737</td>
+<td align="right">0.10637597</td>
 </tr>
 <tr class="even">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0001320</td>
+<td align="right">0.00006326</td>
+</tr>
+<tr class="odd">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">mean</td>
+<td align="right">0.26170344</td>
+</tr>
+<tr class="even">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">se</td>
+<td align="right">0.00087626</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="performance-3" class="section level4">
+<h4>Performance</h4>
+<pre class="r"><code>model3_performance &lt;-
+  model3_specs[, rbindlist(performance, idcol = &quot;seed&quot;)]
+
+setkey(melt(model3_performance,
+            id.vars = &quot;seed&quot;,
+            measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)), seed, variable) %&gt;%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = &quot;free&quot;,
+    labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density() +
+  labs(
+    title = &quot;Subsampled performance plot&quot;,
+    x = &quot;Estimate&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_model_performance-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals-diagnostics-3" class="section level4">
+<h4>Residuals diagnostics</h4>
+<pre class="r"><code>model3_residuals &lt;-
+  model3_specs[, rbindlist(residuals, idcol = &quot;seed&quot;)]
+
+model3_residuals[seed %in% c(1)] %&gt;%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = &quot;Normalized residuals QQ-plot&quot;,
+    # subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Theoretical quantiles&quot;,
+    y = &quot;Sample quantiles&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_model_resid_diag-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model3_residuals[seed %in% c(1:5)] %&gt;%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals density plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Normalized residuals&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_model_resid_diag-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model3_acf &lt;-
+  model3_residuals[, .(residuals = list(.SD)), by = &quot;seed&quot;
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = &quot;correlation&quot;,
+                         plot = FALSE)))]
+
+model3_acf[1:5, rbindlist(acf, idcol = &quot;seed&quot;)] %&gt;%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  scale_fill_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals ACF plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Lag&quot;,
+    y = &quot;ACF&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_model_resid_diag-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-with-ce_mac-as-fixed-effect-random-intercept-and-slope-of-ce_mac-on-pid-and-ar1-process-within-pid" class="section level3">
 <h3>Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and AR1 process within pid</h3>
 <p>Model with <code>ce_mac</code> as fixed effect, <code>pid</code> as random intercept, <code>ce_mac:pid</code> as random slope, AR1 error structure within <code>pid</code> and <code>log(peak_alpha)</code> as outcome.</p>
-<pre class="r"><code>models &lt;-
-  models %&gt;%
-  mutate(model4 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      correlation = corAR1(form = ~ time), method = &quot;ML&quot;,
-      control = lmeControl(maxIter = 100)
-    ))) %&gt;%
-  mutate(model4_tidy = map(model4, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
-  mutate(model4_glance = map(model4, ~ broom.mixed::glance(.)))
-
-models %&gt;%
-  unnest(model4_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model4_tidy_term) %&gt;%
-  mutate(across(model4_tidy_estimate, 
-                list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = model4_tidy_estimate)) +
-  facet_wrap(vars(model4_tidy_term), scales = &quot;free&quot;) +
+<div id="estimates-plot-4" class="section level4">
+<h4>Estimates plot</h4>
+<pre class="r"><code>model4_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %&gt;%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model4_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = model4_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -2369,27 +2486,22 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ar1_model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="summary-4" class="section level4">
-<h4>Summary</h4>
-<pre class="r"><code>models %&gt;%
-  unnest(model4_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model4_tidy_term) %&gt;%
-  summarise(across(c(contains(&quot;estimate&quot;)), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %&gt;%
-  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
-               names_to = c(&quot;subsample.estimate&quot;, &quot;statistic&quot;),
-               names_prefix = &quot;model4_&quot;,
-               names_pattern = &quot;(?:tidy_)?(.*)_(.*)$&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Subsample estimate&quot;,
-                                          &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ar1_model_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="estimates-table-4" class="section level4">
+<h4>Estimates table</h4>
+<pre class="r"><code>model4_estimates &lt;-
+  model4_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model4_estimates, id.vars = &quot;term&quot;), term) %&gt;%
+  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">Term</th>
-<th align="left">Subsample estimate</th>
 <th align="left">Statistic</th>
 <th align="right">Value</th>
 </tr>
@@ -2397,108 +2509,154 @@ models %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">2.4224431</td>
+<td align="right">2.16044654</td>
 </tr>
 <tr class="even">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0008652</td>
+<td align="right">0.00005867</td>
 </tr>
 <tr class="odd">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">mean</td>
-<td align="right">-0.3200987</td>
+<td align="right">-0.31697532</td>
 </tr>
 <tr class="even">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">se</td>
-<td align="right">0.0010336</td>
+<td align="right">0.00040491</td>
 </tr>
 <tr class="odd">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">mean</td>
-<td align="right">-0.7860957</td>
+<td align="right">-0.01131471</td>
 </tr>
 <tr class="even">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">se</td>
-<td align="right">0.0028595</td>
+<td align="right">0.00210430</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.2137544</td>
+<td align="right">0.12854568</td>
 </tr>
 <tr class="even">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0011717</td>
-</tr>
-<tr class="odd">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">mean</td>
-<td align="right">0.2039358</td>
-</tr>
-<tr class="even">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">se</td>
-<td align="right">0.0017263</td>
+<td align="right">0.00005683</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.0928039</td>
+<td align="right">0.10458710</td>
 </tr>
 <tr class="even">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0001287</td>
+<td align="right">0.00006376</td>
+</tr>
+<tr class="odd">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">mean</td>
+<td align="right">0.22827707</td>
+</tr>
+<tr class="even">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">se</td>
+<td align="right">0.00065176</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="performance-4" class="section level4">
+<h4>Performance</h4>
+<pre class="r"><code>model4_performance &lt;-
+  model4_specs[, rbindlist(performance, idcol = &quot;seed&quot;)]
+
+setkey(melt(model4_performance,
+            id.vars = &quot;seed&quot;,
+            measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)), seed, variable) %&gt;%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = &quot;free&quot;,
+    labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density() +
+  labs(
+    title = &quot;Subsampled performance plot&quot;,
+    x = &quot;Estimate&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ar1_model_performance-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals-diagnostics-4" class="section level4">
+<h4>Residuals diagnostics</h4>
+<pre class="r"><code>model4_residuals &lt;-
+  model4_specs[, rbindlist(residuals, idcol = &quot;seed&quot;)]
+
+model4_residuals[seed %in% c(1)] %&gt;%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = &quot;Normalized residuals QQ-plot&quot;,
+    # subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Theoretical quantiles&quot;,
+    y = &quot;Sample quantiles&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ar1_model_resid_diag-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model4_residuals[seed %in% c(1:5)] %&gt;%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals density plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Normalized residuals&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ar1_model_resid_diag-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model4_acf &lt;-
+  model4_residuals[, .(residuals = list(.SD)), by = &quot;seed&quot;
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = &quot;correlation&quot;,
+                         plot = FALSE)))]
+
+model4_acf[1:5, rbindlist(acf, idcol = &quot;seed&quot;)] %&gt;%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  scale_fill_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals ACF plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Lag&quot;,
+    y = &quot;ACF&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ar1_model_resid_diag-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-with-ce_mac-as-fixed-effect-random-intercept-and-slope-of-ce_mac-on-pid-and-continuous-ar1-process-within-pid" class="section level3">
 <h3>Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and continuous AR1 process within pid</h3>
 <p>Model with <code>ce_mac</code> as fixed effect, <code>pid</code> as random intercept, <code>ce_mac:pid</code> as random slope, continuous AR1 error structure within <code>pid</code> and <code>log(peak_alpha)</code> as outcome.</p>
-<pre class="r"><code>models &lt;-
-  models %&gt;%
-  mutate(model5 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      correlation = corCAR1(form = ~ time), method = &quot;ML&quot;,
-      control = lmeControl()
-    ))) %&gt;%
-  mutate(model5_tidy = map(model5, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
-  mutate(model5_glance = map(model5, ~ broom.mixed::glance(.)))
-
-models %&gt;%
-  unnest(model5_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model5_tidy_term) %&gt;%
-  mutate(across(model5_tidy_estimate, 
-                list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = model5_tidy_estimate)) +
-  facet_wrap(vars(model5_tidy_term), scales = &quot;free&quot;) +
+<div id="estimates-plot-5" class="section level4">
+<h4>Estimates plot</h4>
+<pre class="r"><code>model5_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %&gt;%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model5_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = model5_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -2507,27 +2665,22 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/mixed_intercept_slope_car1_model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="summary-5" class="section level4">
-<h4>Summary</h4>
-<pre class="r"><code>models %&gt;%
-  unnest(model5_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model5_tidy_term) %&gt;%
-  summarise(across(c(contains(&quot;estimate&quot;)), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %&gt;%
-  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
-               names_to = c(&quot;subsample.estimate&quot;, &quot;statistic&quot;),
-               names_prefix = &quot;model5_&quot;,
-               names_pattern = &quot;(?:tidy_)?(.*)_(.*)$&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Subsample estimate&quot;,
-                                          &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_car1_model_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="estimates-table-5" class="section level4">
+<h4>Estimates table</h4>
+<pre class="r"><code>model5_estimates &lt;-
+  model5_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model5_estimates, id.vars = &quot;term&quot;), term) %&gt;%
+  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">Term</th>
-<th align="left">Subsample estimate</th>
 <th align="left">Statistic</th>
 <th align="right">Value</th>
 </tr>
@@ -2535,108 +2688,154 @@ models %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">2.4224431</td>
+<td align="right">2.16044654</td>
 </tr>
 <tr class="even">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0008652</td>
+<td align="right">0.00005867</td>
 </tr>
 <tr class="odd">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">mean</td>
-<td align="right">-0.3200986</td>
+<td align="right">-0.31697529</td>
 </tr>
 <tr class="even">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">se</td>
-<td align="right">0.0010336</td>
+<td align="right">0.00040491</td>
 </tr>
 <tr class="odd">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">mean</td>
-<td align="right">-0.7860951</td>
+<td align="right">-0.01132302</td>
 </tr>
 <tr class="even">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">se</td>
-<td align="right">0.0028596</td>
+<td align="right">0.00210427</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.2137542</td>
+<td align="right">0.12854570</td>
 </tr>
 <tr class="even">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0011717</td>
-</tr>
-<tr class="odd">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">mean</td>
-<td align="right">0.2039352</td>
-</tr>
-<tr class="even">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">se</td>
-<td align="right">0.0017263</td>
+<td align="right">0.00005676</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.0928039</td>
+<td align="right">0.10458710</td>
 </tr>
 <tr class="even">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0001287</td>
+<td align="right">0.00006376</td>
+</tr>
+<tr class="odd">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">mean</td>
+<td align="right">0.22827990</td>
+</tr>
+<tr class="even">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">se</td>
+<td align="right">0.00065163</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="performance-5" class="section level4">
+<h4>Performance</h4>
+<pre class="r"><code>model5_performance &lt;-
+  model5_specs[, rbindlist(performance, idcol = &quot;seed&quot;)]
+
+setkey(melt(model5_performance,
+            id.vars = &quot;seed&quot;,
+            measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)), seed, variable) %&gt;%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = &quot;free&quot;,
+    labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density() +
+  labs(
+    title = &quot;Subsampled performance plot&quot;,
+    x = &quot;Estimate&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_car1_model_performance-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals-diagnostics-5" class="section level4">
+<h4>Residuals diagnostics</h4>
+<pre class="r"><code>model5_residuals &lt;-
+  model5_specs[, rbindlist(residuals, idcol = &quot;seed&quot;)]
+
+model5_residuals[seed %in% c(1)] %&gt;%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = &quot;Normalized residuals QQ-plot&quot;,
+    # subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Theoretical quantiles&quot;,
+    y = &quot;Sample quantiles&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_car1_model_resid_diag-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model5_residuals[seed %in% c(1:5)] %&gt;%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals density plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Normalized residuals&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_car1_model_resid_diag-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model5_acf &lt;-
+  model5_residuals[, .(residuals = list(.SD)), by = &quot;seed&quot;
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = &quot;correlation&quot;,
+                         plot = FALSE)))]
+
+model5_acf[1:5, rbindlist(acf, idcol = &quot;seed&quot;)] %&gt;%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  scale_fill_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals ACF plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Lag&quot;,
+    y = &quot;ACF&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_car1_model_resid_diag-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-with-ce_mac-as-fixed-effect-random-intercept-and-slope-of-ce_mac-on-pid-and-ma2-process-within-pid" class="section level3">
 <h3>Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and MA2 process within pid</h3>
 <p>Model with <code>ce_mac</code> as fixed effect, <code>pid</code> as random intercept, <code>ce_mac:pid</code> as random slope, MA2 error structure within <code>pid</code> and <code>log(peak_alpha)</code> as outcome.</p>
-<pre class="r"><code>models &lt;-
-  models %&gt;%
-  mutate(model6 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      correlation = corARMA(form = ~ time, q = 2), method = &quot;ML&quot;,
-      control = lmeControl()
-    ))) %&gt;%
-  mutate(model6_tidy = map(model6, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
-  mutate(model6_glance = map(model6, ~ broom.mixed::glance(.)))
-
-models %&gt;%
-  unnest(model6_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model6_tidy_term) %&gt;%
-  mutate(across(model6_tidy_estimate, 
-                list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = model6_tidy_estimate)) +
-  facet_wrap(vars(model6_tidy_term), scales = &quot;free&quot;) +
+<div id="estimates-plot-6" class="section level4">
+<h4>Estimates plot</h4>
+<pre class="r"><code>model6_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %&gt;%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model6_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = model6_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -2645,27 +2844,22 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ma2_model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="summary-6" class="section level4">
-<h4>Summary</h4>
-<pre class="r"><code>models %&gt;%
-  unnest(model6_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model6_tidy_term) %&gt;%
-  summarise(across(c(contains(&quot;estimate&quot;)), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %&gt;%
-  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
-               names_to = c(&quot;subsample.estimate&quot;, &quot;statistic&quot;),
-               names_prefix = &quot;model6_&quot;,
-               names_pattern = &quot;(?:tidy_)?(.*)_(.*)$&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Subsample estimate&quot;,
-                                          &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ma2_model_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="estimates-table-6" class="section level4">
+<h4>Estimates table</h4>
+<pre class="r"><code>model6_estimates &lt;-
+  model6_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model6_estimates, id.vars = &quot;term&quot;), term) %&gt;%
+  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">Term</th>
-<th align="left">Subsample estimate</th>
 <th align="left">Statistic</th>
 <th align="right">Value</th>
 </tr>
@@ -2673,108 +2867,154 @@ models %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">2.4229145</td>
+<td align="right">2.16033131</td>
 </tr>
 <tr class="even">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0008746</td>
+<td align="right">0.00006009</td>
 </tr>
 <tr class="odd">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">mean</td>
-<td align="right">-0.3206913</td>
+<td align="right">-0.31432702</td>
 </tr>
 <tr class="even">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">se</td>
-<td align="right">0.0010430</td>
+<td align="right">0.00042031</td>
 </tr>
 <tr class="odd">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">mean</td>
-<td align="right">-0.7924601</td>
+<td align="right">-0.01553694</td>
 </tr>
 <tr class="even">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">se</td>
-<td align="right">0.0027409</td>
+<td align="right">0.00220137</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.2170757</td>
+<td align="right">0.12949068</td>
 </tr>
 <tr class="even">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0011750</td>
-</tr>
-<tr class="odd">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">mean</td>
-<td align="right">0.2091783</td>
-</tr>
-<tr class="even">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">se</td>
-<td align="right">0.0017353</td>
+<td align="right">0.00006164</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.0920984</td>
+<td align="right">0.10394174</td>
 </tr>
 <tr class="even">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0001319</td>
+<td align="right">0.00006498</td>
+</tr>
+<tr class="odd">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">mean</td>
+<td align="right">0.24606464</td>
+</tr>
+<tr class="even">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">se</td>
+<td align="right">0.00075169</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="performance-6" class="section level4">
+<h4>Performance</h4>
+<pre class="r"><code>model6_performance &lt;-
+  model6_specs[, rbindlist(performance, idcol = &quot;seed&quot;)]
+
+setkey(melt(model6_performance,
+            id.vars = &quot;seed&quot;,
+            measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)), seed, variable) %&gt;%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = &quot;free&quot;,
+    labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density() +
+  labs(
+    title = &quot;Subsampled performance plot&quot;,
+    x = &quot;Estimate&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ma2_model_performance-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals-diagnostics-6" class="section level4">
+<h4>Residuals diagnostics</h4>
+<pre class="r"><code>model6_residuals &lt;-
+  model6_specs[, rbindlist(residuals, idcol = &quot;seed&quot;)]
+
+model6_residuals[seed %in% c(1)] %&gt;%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = &quot;Normalized residuals QQ-plot&quot;,
+    # subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Theoretical quantiles&quot;,
+    y = &quot;Sample quantiles&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ma2_model_resid_diag-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model6_residuals[seed %in% c(1:5)] %&gt;%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals density plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Normalized residuals&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ma2_model_resid_diag-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model6_acf &lt;-
+  model6_residuals[, .(residuals = list(.SD)), by = &quot;seed&quot;
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = &quot;correlation&quot;,
+                         plot = FALSE)))]
+
+model6_acf[1:5, rbindlist(acf, idcol = &quot;seed&quot;)] %&gt;%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  scale_fill_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals ACF plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Lag&quot;,
+    y = &quot;ACF&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_ma2_model_resid_diag-3.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-with-ce_mac-as-fixed-effect-random-intercept-and-slope-of-ce_mac-on-pid-and-arma11-process-within-pid" class="section level3">
 <h3>Model with ce_mac as fixed effect, random intercept and slope of ce_mac on pid and ARMA1,1 process within pid</h3>
 <p>Model with <code>ce_mac</code> as fixed effect, <code>pid</code> as random intercept, <code>ce_mac:pid</code> as random slope, ARMA1,1 error structure within <code>pid</code> and <code>log(peak_alpha)</code> as outcome.</p>
-<pre class="r"><code>models &lt;-
-  models %&gt;%
-  mutate(model7 = map(data, function(df)
-    lme(
-      log(peak_alpha) ~ ce_mac, data = df, random = ~ ce_mac | pid,
-      correlation = corARMA(form = ~ time, p = 1, q = 1, fixed = TRUE), method = &quot;ML&quot;,
-      control = lmeControl()
-    ))) %&gt;%
-  mutate(model7_tidy = map(model7, 
-                           ~ broom.mixed::tidy(., exponentiate = TRUE))) %&gt;%
-  mutate(model7_glance = map(model7, ~ broom.mixed::glance(.)))
-
-models %&gt;%
-  unnest(model7_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model7_tidy_term) %&gt;%
-  mutate(across(model7_tidy_estimate, 
-                list(mean = mean, median = median))) %&gt;%
-  ggplot(aes(x = model7_tidy_estimate)) +
-  facet_wrap(vars(model7_tidy_term), scales = &quot;free&quot;) +
+<div id="estimates-plot-7" class="section level4">
+<h4>Estimates plot</h4>
+<pre class="r"><code>model7_specs[, rbindlist(tidy)
+  ][, .(estimate, mean = mean(estimate), median = median(estimate)), by = term
+  ] %&gt;%
+  ggplot(aes(x = estimate)) +
+  facet_wrap(vars(term), scales = &quot;free&quot;) +
   geom_histogram(aes(y = ..density..), position = &quot;identity&quot;, bins = 15) +
   geom_density() +
-  geom_vline(aes(xintercept = model7_tidy_estimate_mean),
+  geom_vline(aes(xintercept = mean),
              colour = &quot;red&quot;,
              linetype = &quot;dashed&quot;) +
-  geom_vline(aes(xintercept = model7_tidy_estimate_median),
+  geom_vline(aes(xintercept = median),
              colour = &quot;blue&quot;,
              linetype = &quot;dashed&quot;) +
   labs(
@@ -2783,27 +3023,22 @@ models %&gt;%
     x = &quot;Estimate&quot;,
     y = &quot;Density&quot;
   )</code></pre>
-<p><img src="figure/modelling.Rmd/mixed_intercept_slope_arma11_model-1.png" width="672" style="display: block; margin: auto;" /></p>
-<div id="summary-7" class="section level4">
-<h4>Summary</h4>
-<pre class="r"><code>models %&gt;%
-  unnest(model7_tidy, names_sep = &quot;_&quot;) %&gt;%
-  group_by(model7_tidy_term) %&gt;%
-  summarise(across(c(contains(&quot;estimate&quot;)), 
-                   list(mean = mean,
-                        se = ~ sd(.x) * sqrt(eff_sample_frac)))) %&gt;%
-  pivot_longer(cols = c(everything(), -contains(&quot;term&quot;)),
-               names_to = c(&quot;subsample.estimate&quot;, &quot;statistic&quot;),
-               names_prefix = &quot;model7_&quot;,
-               names_pattern = &quot;(?:tidy_)?(.*)_(.*)$&quot;,
-               values_to = &quot;value&quot;) %&gt;%
-  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Subsample estimate&quot;,
-                                          &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_arma11_model_plot-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="estimates-table-7" class="section level4">
+<h4>Estimates table</h4>
+<pre class="r"><code>model7_estimates &lt;-
+  model7_specs[, rbindlist(tidy)
+    ][, .(mean = mean(estimate),
+          se = sd(estimate) / sqrt(.N)),
+      by = term]
+
+setkey(melt(model7_estimates, id.vars = &quot;term&quot;), term) %&gt;%
+  knitr::kable(digits = 10, col.names = c(&quot;Term&quot;, &quot;Statistic&quot;, &quot;Value&quot;))</code></pre>
 <table>
 <thead>
 <tr class="header">
 <th align="left">Term</th>
-<th align="left">Subsample estimate</th>
 <th align="left">Statistic</th>
 <th align="right">Value</th>
 </tr>
@@ -2811,78 +3046,178 @@ models %&gt;%
 <tbody>
 <tr class="odd">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">2.4229674</td>
+<td align="right">2.16007574</td>
 </tr>
 <tr class="even">
 <td align="left">(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0008796</td>
+<td align="right">0.00006269</td>
 </tr>
 <tr class="odd">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">mean</td>
-<td align="right">-0.3207492</td>
+<td align="right">-0.31146568</td>
 </tr>
 <tr class="even">
-<td align="left">ce_mac</td>
-<td align="left">estimate</td>
+<td align="left">ce_mac_pid_centered</td>
 <td align="left">se</td>
-<td align="right">0.0010492</td>
+<td align="right">0.00042721</td>
 </tr>
 <tr class="odd">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">mean</td>
-<td align="right">-0.7934508</td>
+<td align="right">-0.01929352</td>
 </tr>
 <tr class="even">
-<td align="left">cor_ce_mac.(Intercept)</td>
-<td align="left">estimate</td>
+<td align="left">cor_ce_mac_pid_centered.(Intercept)</td>
 <td align="left">se</td>
-<td align="right">0.0027452</td>
+<td align="right">0.00240137</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.2176135</td>
+<td align="right">0.13052945</td>
 </tr>
 <tr class="even">
 <td align="left">sd_(Intercept)</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0011833</td>
-</tr>
-<tr class="odd">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">mean</td>
-<td align="right">0.2099045</td>
-</tr>
-<tr class="even">
-<td align="left">sd_ce_mac</td>
-<td align="left">estimate</td>
-<td align="left">se</td>
-<td align="right">0.0017408</td>
+<td align="right">0.00006326</td>
 </tr>
 <tr class="odd">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">mean</td>
-<td align="right">0.0922737</td>
+<td align="right">0.10637597</td>
 </tr>
 <tr class="even">
 <td align="left">sd_Observation</td>
-<td align="left">estimate</td>
 <td align="left">se</td>
-<td align="right">0.0001320</td>
+<td align="right">0.00006326</td>
+</tr>
+<tr class="odd">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">mean</td>
+<td align="right">0.26170344</td>
+</tr>
+<tr class="even">
+<td align="left">sd_ce_mac_pid_centered</td>
+<td align="left">se</td>
+<td align="right">0.00087626</td>
 </tr>
 </tbody>
 </table>
+</div>
+<div id="performance-7" class="section level4">
+<h4>Performance</h4>
+<pre class="r"><code>model7_performance &lt;-
+  model7_specs[, rbindlist(performance, idcol = &quot;seed&quot;)]
+
+setkey(melt(model7_performance,
+            id.vars = &quot;seed&quot;,
+            measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)), seed, variable) %&gt;%
+  ggplot(aes(x = value)) +
+  facet_wrap(
+    vars(variable), scales = &quot;free&quot;,
+    labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density() +
+  labs(
+    title = &quot;Subsampled performance plot&quot;,
+    x = &quot;Estimate&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_arma11_model_performance-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals-diagnostics-7" class="section level4">
+<h4>Residuals diagnostics</h4>
+<pre class="r"><code>model7_residuals &lt;-
+  model7_specs[, rbindlist(residuals, idcol = &quot;seed&quot;)]
+
+model7_residuals[seed %in% c(1)] %&gt;%
+  ggplot(aes(sample = normalized)) +
+  geom_qq() +
+  geom_qq_line() +
+  scale_colour_viridis_d() +
+  labs(
+    title = &quot;Normalized residuals QQ-plot&quot;,
+    # subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Theoretical quantiles&quot;,
+    y = &quot;Sample quantiles&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_arma11_model_resid_diag-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model7_residuals[seed %in% c(1:5)] %&gt;%
+  ggplot(aes(x = normalized, group = factor(seed), colour = factor(seed))) +
+  geom_density() +
+  scale_colour_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals density plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Normalized residuals&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_arma11_model_resid_diag-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>model7_acf &lt;-
+  model7_residuals[, .(residuals = list(.SD)), by = &quot;seed&quot;
+    ][, .(seed, acf = map(residuals,
+                   ~ acf(.x[, .(normalized)],
+                         type = &quot;correlation&quot;,
+                         plot = FALSE)))]
+
+model7_acf[1:5, rbindlist(acf, idcol = &quot;seed&quot;)] %&gt;%
+  ggplot(aes(x = lag, y = acf, fill = factor(seed))) +
+  geom_hline(aes(yintercept = 0)) +
+  geom_bar(stat = &quot;identity&quot;, position = &quot;dodge&quot;) +
+  scale_fill_viridis_d() +
+  theme(legend.position = &quot;none&quot;) +
+  labs(
+    title = &quot;Subsampled normalized residuals ACF plot&quot;,
+    subtitle = &quot;Colours indicate different subsample seeds&quot;,
+    x = &quot;Lag&quot;,
+    y = &quot;ACF&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/mixed_intercept_slope_arma11_model_resid_diag-3.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="compare-model-performances" class="section level2">
+<h2>Compare model performances</h2>
+<pre class="r"><code># Compare performances plot
+setkey(melt(rbind(
+  model0_specs,
+  model1_specs,
+  model2_specs,
+  model3_specs,
+  model4_specs,
+  model5_specs,
+  model6_specs,
+  model7_specs,
+  idcol = &quot;model&quot;)[, .(seed,
+                       model,
+                       rbindlist(performance, fill = TRUE))],
+  id.vars = c(&quot;seed&quot;, &quot;model&quot;),
+  measure.vars = c(&quot;AIC&quot;, &quot;RMSE&quot;)),
+  model, seed, variable)[] %&gt;%
+  ggplot(aes(x = value,
+             fill = factor(model,
+                           labels = c(&quot;Null&quot;,
+                                      &quot;Linear&quot;,
+                                      &quot;Mixed intercept&quot;,
+                                      &quot;Mixed intercept/slope&quot;,
+                                      &quot;Mixed intercept/slope AR1&quot;,
+                                      &quot;Mixed intercept/slope CAR1&quot;,
+                                      &quot;Mixed intercept/slope MA2&quot;,
+                                      &quot;Mixed intercept/slope ARMA1,1&quot;)))) +
+  facet_wrap(vars(variable), scales = &quot;free&quot;, ncol = 1,
+  labeller = labeller(variable = c(&quot;RMSE&quot; = &quot;RMSE&quot;, &quot;AIC&quot; = &quot;AIC&quot;))) +
+  stat_density(alpha = 0.5, position = position_identity()) +
+  scale_fill_viridis_d() +
+  labs(
+    title = &quot;Subsampled performance density plot&quot;,
+    fill = &quot;Model&quot;,
+    x = &quot;Value&quot;,
+    y = &quot;Density&quot;
+  )</code></pre>
+<p><img src="figure/modelling.Rmd/performance_comparison-1.png" width="672" style="display: block; margin: auto;" /></p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -2906,32 +3241,29 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] here_1.0.1        rlang_0.4.10      MuMIn_1.43.17     performance_0.7.0
- [5] broom.mixed_0.2.6 nlme_3.1-152      glue_1.4.2        fs_1.5.0         
- [9] forcats_0.5.1     stringr_1.4.0     dplyr_1.0.4       purrr_0.3.4      
-[13] readr_1.4.0       tidyr_1.1.2       tibble_3.0.6      ggplot2_3.3.3    
-[17] tidyverse_1.3.0   conflicted_1.0.4  pacman_0.5.1     
+ [1] data.table_1.13.6 MuMIn_1.43.17     nlme_3.1-152      glue_1.4.2       
+ [5] fs_1.5.0          forcats_0.5.1     stringr_1.4.0     dplyr_1.0.6      
+ [9] purrr_0.3.4       readr_1.4.0       tidyr_1.1.3       tibble_3.1.2     
+[13] ggplot2_3.3.3     tidyverse_1.3.0   conflicted_1.0.4  pacman_0.5.1     
 
 loaded via a namespace (and not attached):
- [1] httr_1.4.2         jsonlite_1.7.2     modelr_0.1.8       assertthat_0.2.1  
- [5] highr_0.8          stats4_4.0.3       cellranger_1.1.0   yaml_2.2.1        
- [9] bayestestR_0.8.2.1 pillar_1.4.7       backports_1.2.1    lattice_0.20-41   
-[13] digest_0.6.27      promises_1.2.0.1   rvest_0.3.6        colorspace_2.0-0  
-[17] htmltools_0.5.1.1  httpuv_1.5.5       Matrix_1.3-2       plyr_1.8.6        
-[21] pkgconfig_2.0.3    broom_0.7.4        haven_2.3.1        scales_1.1.1      
-[25] whisker_0.4        later_1.1.0.1      git2r_0.28.0       farver_2.0.3      
-[29] generics_0.1.0     ellipsis_0.3.1     cachem_1.0.4       withr_2.4.1       
-[33] TMB_1.7.19         cli_2.3.0          magrittr_2.0.1     crayon_1.4.1      
-[37] readxl_1.3.1       memoise_2.0.0      evaluate_0.14      xml2_1.3.2        
-[41] tools_4.0.3        hms_1.0.0          lifecycle_0.2.0    munsell_0.5.0     
-[45] reprex_1.0.0       compiler_4.0.3     grid_4.0.3         rstudioapi_0.13   
-[49] labeling_0.4.2     rmarkdown_2.6      gtable_0.3.0       DBI_1.1.1         
-[53] reshape2_1.4.4     R6_2.5.0           lubridate_1.7.9.2  knitr_1.31        
-[57] fastmap_1.1.0      workflowr_1.6.2    rprojroot_2.0.2    insight_0.13.1    
-[61] stringi_1.5.3      Rcpp_1.0.6         vctrs_0.3.6        dbplyr_2.1.0      
-[65] tidyselect_1.1.0   xfun_0.21          coda_0.19-4       </code></pre>
-</div>
-</div>
+ [1] Rcpp_1.0.6        lattice_0.20-41   lubridate_1.7.10  assertthat_0.2.1 
+ [5] rprojroot_2.0.2   digest_0.6.27     utf8_1.2.1        R6_2.5.0         
+ [9] cellranger_1.1.0  backports_1.2.1   stats4_4.0.3      reprex_2.0.0     
+[13] evaluate_0.14     highr_0.8         httr_1.4.2        pillar_1.6.1     
+[17] rlang_0.4.11      readxl_1.3.1      rstudioapi_0.13   whisker_0.4      
+[21] Matrix_1.3-2      rmarkdown_2.6     labeling_0.4.2    munsell_0.5.0    
+[25] broom_0.7.6       compiler_4.0.3    httpuv_1.5.5      modelr_0.1.8     
+[29] xfun_0.21         pkgconfig_2.0.3   htmltools_0.5.1.1 tidyselect_1.1.0 
+[33] workflowr_1.6.2   viridisLite_0.4.0 fansi_0.4.2       crayon_1.4.1     
+[37] dbplyr_2.1.1      withr_2.4.1       later_1.1.0.1     grid_4.0.3       
+[41] jsonlite_1.7.2    gtable_0.3.0      lifecycle_1.0.0   DBI_1.1.1        
+[45] git2r_0.28.0      magrittr_2.0.1    scales_1.1.1      cli_2.4.0        
+[49] stringi_1.5.3     cachem_1.0.4      farver_2.1.0      promises_1.2.0.1 
+[53] xml2_1.3.2        ellipsis_0.3.2    generics_0.1.0    vctrs_0.3.8      
+[57] tools_4.0.3       hms_1.1.0         fastmap_1.1.0     yaml_2.2.1       
+[61] colorspace_2.0-0  rvest_1.0.0       memoise_2.0.0     knitr_1.31       
+[65] haven_2.4.1      </code></pre>
 </div>
 </div>
 
