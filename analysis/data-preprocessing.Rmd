@@ -17,10 +17,12 @@ editor_options:
 4. Load separate csv file with age data
 5. Combine data sets with age
 6. Mark rejected patients in `one_over_mac`
-7. Calculate modified z-score from `peak_alpha` per patient and mark scores above 3.5
+7. Calculate modified z-score from `peak_alpha` per patient and mark scores above 3.5 as outliers
 8. Mark `ce_mac` values above 1.5 and below 0.5, which is clinically sensible
 9. Calculate range differences of `ce_mac` per patient and mark those below the median
+10. Center `ce_mac` group-wise at the mean
+11. Filter marked observations
 
 ## To do
 
-* Calculate log(ce_mac) and center at mean
+* Nothing at the moment
