@@ -385,6 +385,9 @@ div.tocify {
   <a href="modelling.html">Modelling</a>
 </li>
 <li>
+  <a href="final-model.html">Final model</a>
+</li>
+<li>
   <a href="about.html">About</a>
 </li>
 <li>
@@ -435,7 +438,7 @@ div.tocify {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2021-03-13
+<strong>Last updated:</strong> 2021-05-22
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 2 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
@@ -466,24 +469,26 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree8322be079352fdabcdfac1a1a681da052f080eadtargetblank8322be0a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/8322be079352fdabcdfac1a1a681da052f080ead" target="_blank">8322be0</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtreefcc9481690ec7a5cd8079725133e7f26711aebf5targetblankfcc9481a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/fcc9481690ec7a5cd8079725133e7f26711aebf5" target="_blank">fcc9481</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtree8322be079352fdabcdfac1a1a681da052f080eadtargetblank8322be0a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomPhoenixB1overMACworkflowrtreefcc9481690ec7a5cd8079725133e7f26711aebf5targetblankfcc9481a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
 </p>
 <p>
-The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/8322be079352fdabcdfac1a1a681da052f080ead" target="_blank">8322be0</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+The results in this page were generated with repository version <a href="https://github.com/PhoenixB/1_over_MAC.workflowr/tree/fcc9481690ec7a5cd8079725133e7f26711aebf5" target="_blank">fcc9481</a>. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
 </p>
 <p>
 Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .DS_Store
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
     Ignored:    data/alpha_freq_Sept2020_1.csv
     Ignored:    data/alpha_freq_Sept2020_10.csv
     Ignored:    data/alpha_freq_Sept2020_100.csv
@@ -1560,12 +1565,31 @@ Ignored files:
     Ignored:    data/to_reject_from_analysis_02.10.2020.xlsx
     Ignored:    data/to_reject_from_analysis_17.09.2020.xlsx
     Ignored:    data/to_reject_from_analysis_28.09.2020.xlsx
+    Ignored:    output/.DS_Store
+    Ignored:    output/eff_sample_frac.rds
+    Ignored:    output/model0_specs.rds
+    Ignored:    output/model1_specs.rds
+    Ignored:    output/model2_specs.rds
+    Ignored:    output/model3_specs.rds
+    Ignored:    output/model4_specs.rds
+    Ignored:    output/model5_specs.rds
+    Ignored:    output/model6_specs.rds
+    Ignored:    output/model7_specs.rds
     Ignored:    output/one_over_mac.rds
     Ignored:    output/one_over_mac_filtered.rds
+    Ignored:    output/preprocess_profile.html
+    Ignored:    output/preprocess_profile_files/
+    Ignored:    output/resamples.rds
+
+Untracked files:
+    Untracked:  analysis/final-model.Rmd
+    Untracked:  code/create_resamples.R
 
 Unstaged changes:
-    Modified:   analysis/exploratory-data-analysis.Rmd
+    Modified:   analysis/_site.yml
+    Modified:   analysis/index.Rmd
     Modified:   analysis/modelling.Rmd
+    Modified:   code/create_models.R
 
 </code></pre>
 <p>
@@ -1604,6 +1628,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/PhoenixB/1_over_MAC.workflowr/blob/fcc9481690ec7a5cd8079725133e7f26711aebf5/analysis/data-preprocessing.Rmd" target="_blank">fcc9481</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-05-22
+</td>
+<td>
+Add data preprocessing steps
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/PhoenixB/1_over_MAC.workflowr/31cc9a92d99080a019cb7216c5e9b3f7f813f6d7/docs/data-preprocessing.html" target="_blank">31cc9a9</a>
+</td>
+<td>
+PhoenixB
+</td>
+<td>
+2021-03-13
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1708,15 +1766,17 @@ Add page for data preprocessing
 <li>Load separate csv file with age data</li>
 <li>Combine data sets with age</li>
 <li>Mark rejected patients in <code>one_over_mac</code></li>
-<li>Calculate modified z-score from <code>peak_alpha</code> per patient and mark scores above 3.5</li>
+<li>Calculate modified z-score from <code>peak_alpha</code> per patient and mark scores above 3.5 as outliers</li>
 <li>Mark <code>ce_mac</code> values above 1.5 and below 0.5, which is clinically sensible</li>
 <li>Calculate range differences of <code>ce_mac</code> per patient and mark those below the median</li>
+<li>Center <code>ce_mac</code> group-wise at the mean</li>
+<li>Filter marked observations</li>
 </ol>
 </div>
 <div id="to-do" class="section level2">
 <h2>To do</h2>
 <ul>
-<li>Calculate log(ce_mac) and center at mean</li>
+<li>Nothing at the moment</li>
 </ul>
 </div>
 
