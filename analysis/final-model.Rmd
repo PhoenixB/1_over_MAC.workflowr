@@ -1,0 +1,39 @@
+---
+title: "Final model"
+author: "Pascal Jerney"
+date: "2021-05-19"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, echo=FALSE}
+
+if (!require("pacman", quietly = TRUE)) {
+  install.packages("pacman")
+}
+pacman::p_load("conflicted")
+
+# Resolve function conflicts before loading other packages
+conflict_prefer("select", "dplyr", quiet = TRUE)
+conflict_prefer("filter", "dplyr", quiet = TRUE)
+conflict_prefer("collapse", "dplyr", quiet = TRUE)
+
+pacman::p_load(
+  "tidyverse",
+  "fs",
+  "glue",
+  "nlme",
+  "MuMIn",
+  "data.table"
+)
+
+options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific notation
+
+```
+
+## Introduction
+
+For the final model, we chose the model with `ce_mac` as fixed effect, `pid` as
+random intercept, `ce_mac:pid` as random slope, continuous AR1 error structure
+within `pid` and `log(peak_alpha)` as outcome.

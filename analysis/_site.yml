@@ -11,6 +11,8 @@ navbar:
     href: exploratory-data-analysis.html
   - text: Modelling
     href: modelling.html
+  - text: Final model
+    href: final-model.html
   - text: About
     href: about.html
   - text: License
