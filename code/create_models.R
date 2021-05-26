@@ -27,6 +27,7 @@ if (!require("pacman")) {
 pacman::p_load(
   "conflicted",
   "tidyverse",
+  "modelr",
   "readr",
   "here",
   "glue",
@@ -73,6 +74,20 @@ resamples <-
   read_rds(file = path_wd("output", "resamples", ext = "rds"))
 
 resamples[, resample := map(resample, ~ setkey(.x, pid, time))]
+
+## Load full dataset
+
+one_over_mac_filtered <-
+  read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
+
+## Create counterfactual data grid
+
+new_data <-
+  setDT(
+    data_grid(one_over_mac_filtered,
+              pid = pid,
+              ce_mac_pid_centered = seq(-0.5, 0.5, by = 0.05)
+              ))
 
 ## ---------------------------
 
@@ -155,7 +170,12 @@ model1_specs <-
                              normalized = residuals(.x, type = "normalized"))),
            fitted = map(model,
                         ~ data.table(
-                          fitted = fitted(.x))))
+                          fitted = fitted(.x))),
+           predict = map(model,
+                         ~ bind_cols(new_data,
+                                     data.table(
+                                       predict = predict(.x, newdata = new_data)
+                                     ))))
   ]
 
 tictoc::toc(log = TRUE)
@@ -205,6 +225,11 @@ model2_specs <-
            fitted = map(model,
                         ~ data.table(
                           fitted = fitted(.x, level = 0:1))),
+           predict = map(model,
+                         ~ bind_cols(new_data,
+                                     data.table(
+                                       predict = predict(.x, newdata = new_data)
+                                     ))),
            ranef = map(model,
                         ~ data.table(
                           ranef = ranef(.x))))
@@ -258,6 +283,11 @@ model3_specs <-
            fitted = map(model,
                         ~ data.table(
                           fitted = fitted(.x, level = 0:1))),
+           predict = map(model,
+                         ~ bind_cols(new_data,
+                                     data.table(
+                                       predict = predict(.x, newdata = new_data)
+                                     ))),
            ranef = map(model,
                        ~ data.table(
                          ranef = ranef(.x))))
@@ -313,6 +343,11 @@ model4_specs <-
            fitted = map(model,
                         ~ data.table(
                           fitted = fitted(.x, level = 0:1))),
+           predict = map(model,
+                         ~ bind_cols(new_data,
+                                     data.table(
+                                       predict = predict(.x, newdata = new_data)
+                                     ))),
            ranef = map(model,
                        ~ data.table(
                          ranef = ranef(.x))))
@@ -368,6 +403,11 @@ model5_specs <-
            fitted = map(model,
                         ~ data.table(
                           fitted = fitted(.x, level = 0:1))),
+           predict = map(model,
+                         ~ bind_cols(new_data,
+                                     data.table(
+                                       predict = predict(.x, newdata = new_data)
+                                     ))),
            ranef = map(model,
                        ~ data.table(
                          ranef = ranef(.x))))
@@ -423,6 +463,11 @@ model6_specs <-
            fitted = map(model,
                         ~ data.table(
                           fitted = fitted(.x, level = 0:1))),
+           predict = map(model,
+                         ~ bind_cols(new_data,
+                                     data.table(
+                                       predict = predict(.x, newdata = new_data)
+                                     ))),
            ranef = map(model,
                        ~ data.table(
                          ranef = ranef(.x))))
@@ -479,6 +524,11 @@ model7_specs <-
            fitted = map(model,
                         ~ data.table(
                           fitted = fitted(.x, level = 0:1))),
+           predict = map(model,
+                         ~ bind_cols(new_data,
+                                     data.table(
+                                       predict = predict(.x, newdata = new_data)
+                                     ))),
            ranef = map(model,
                        ~ data.table(
                          ranef = ranef(.x))))

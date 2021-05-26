@@ -25,10 +25,23 @@ pacman::p_load(
   "glue",
   "nlme",
   "MuMIn",
-  "data.table"
+  "data.table",
+  "tidybayes"
 )
 
-options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific notation
+# I prefer to view outputs in non-scientific notation
+options(scipen = 6, digits = 4)
+
+prepender <- function(string, prefix = "PID", sep = ": ") {
+  paste0(prefix, sep, string)
+}
+
+```
+
+```{r load_data, include=FALSE}
+
+one_over_mac_filtered <-
+  read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
 
 ```
 
@@ -37,3 +50,55 @@ options(scipen = 6, digits = 4) # I prefer to view outputs in non-scientific not
 For the final model, we chose the model with `ce_mac` as fixed effect, `pid` as
 random intercept, `ce_mac:pid` as random slope, continuous AR1 error structure
 within `pid` and `log(peak_alpha)` as outcome.
+
+```{r load_mixed_intercept_slope_car1_model, include=FALSE}
+
+model5_specs <-
+  read_rds(file = path_wd("output", "model5_specs", ext = "rds"))
+
+```
+
+## Model predictions
+
+### Population
+
+```{r predictions_population}
+
+setDF(model5_specs[, rbindlist(predict, idcol = "seed")
+][, .(seed, pid, ce_mac_pid_centered,
+      predict = exp(predict))]) %>%
+    as_tibble() %>%
+    group_by(pid, ce_mac_pid_centered) %>%
+    mean_qi(predict, .width = c(0.95)) %>%
+  ggplot(aes(x = ce_mac_pid_centered, y = predict, group = pid)) +
+  geom_path(alpha = 0.25) +
+  labs(title = "Model predictions for population",
+       x = "Within-group centered ceMAC",
+       y = "Predicted peak alpha")
+
+```
+
+### Patient-wise
+
+```{r predictions_pid, fig.height=100, out.width="100%"}
+
+setDF(model5_specs[, rbindlist(predict, idcol = "seed")
+                   ][, .(seed, pid, ce_mac_pid_centered,
+                         predict = exp(predict))]) %>%
+  as_tibble() %>%
+  group_by(pid, ce_mac_pid_centered) %>%
+  mean_qi(predict, .width = c(0.5, 0.8, 0.95)) %>%
+  ggplot(aes(x = ce_mac_pid_centered, y = predict, group = pid)) +
+  geom_point(
+    aes(x = ce_mac_pid_centered, y = peak_alpha),
+    data = one_over_mac_filtered[, slice_sample(.SD, n = 100), by = pid],
+    size = 0.5, alpha = 0.25) +
+  tidybayes::geom_lineribbon(aes(ymin = .lower, ymax = .upper), alpha = 0.5) +
+  facet_wrap(vars(pid), ncol = 4, scales = "fixed",
+             labeller = as_labeller(prepender)) +
+  labs(title = "Model predictions per patient",
+       x = "Within-group centered ceMAC",
+       y = "Predicted peak alpha",
+       fill = "Confidence interval")
+
+```
