@@ -80,7 +80,7 @@ setDF(model5_specs[, rbindlist(predict, idcol = "seed")
 
 ### Patient-wise
 
-```{r predictions_pid, fig.height=100, out.width="100%"}
+```{r predictions_pid, fig.height=200, out.width="100%"}
 
 setDF(model5_specs[, rbindlist(predict, idcol = "seed")
                    ][, .(seed, pid, ce_mac_pid_centered,
@@ -93,12 +93,14 @@ setDF(model5_specs[, rbindlist(predict, idcol = "seed")
     aes(x = ce_mac_pid_centered, y = peak_alpha),
     data = one_over_mac_filtered[, slice_sample(.SD, n = 100), by = pid],
     size = 0.5, alpha = 0.25) +
-  tidybayes::geom_lineribbon(aes(ymin = .lower, ymax = .upper), alpha = 0.5) +
-  facet_wrap(vars(pid), ncol = 4, scales = "fixed",
+  tidybayes::geom_lineribbon(aes(ymin = .lower, ymax = .upper), alpha = 0.5,
+                             size = 0.5) +
+  facet_wrap(vars(pid), ncol = 3, scales = "fixed",
              labeller = as_labeller(prepender)) +
   labs(title = "Model predictions per patient",
        x = "Within-group centered ceMAC",
        y = "Predicted peak alpha",
-       fill = "Confidence interval")
+       fill = "Confidence interval") +
+  theme(legend.position="top")
 
 ```
