@@ -231,8 +231,7 @@ model2_specs <-
                                        predict = predict(.x, newdata = new_data)
                                      ))),
            ranef = map(model,
-                        ~ data.table(
-                          ranef = ranef(.x))))
+                       ~ setDT(ranef(.x), keep.rownames = "pid")))
   ]
 
 tictoc::toc(log = TRUE)
@@ -289,8 +288,7 @@ model3_specs <-
                                        predict = predict(.x, newdata = new_data)
                                      ))),
            ranef = map(model,
-                       ~ data.table(
-                         ranef = ranef(.x))))
+                       ~ setDT(ranef(.x), keep.rownames = "pid")))
   ]
 
 tictoc::toc(log = TRUE)
@@ -349,8 +347,7 @@ model4_specs <-
                                        predict = predict(.x, newdata = new_data)
                                      ))),
            ranef = map(model,
-                       ~ data.table(
-                         ranef = ranef(.x))))
+                       ~ setDT(ranef(.x), keep.rownames = "pid")))
   ]
 
 tictoc::toc(log = TRUE)
@@ -409,8 +406,7 @@ model5_specs <-
                                        predict = predict(.x, newdata = new_data)
                                      ))),
            ranef = map(model,
-                       ~ data.table(
-                         ranef = ranef(.x))))
+                       ~ setDT(ranef(.x), keep.rownames = "pid")))
   ]
 
 tictoc::toc(log = TRUE)
@@ -469,8 +465,7 @@ model6_specs <-
                                        predict = predict(.x, newdata = new_data)
                                      ))),
            ranef = map(model,
-                       ~ data.table(
-                         ranef = ranef(.x))))
+                       ~ setDT(ranef(.x), keep.rownames = "pid")))
   ]
 
 tictoc::toc(log = TRUE)
@@ -530,8 +525,7 @@ model7_specs <-
                                        predict = predict(.x, newdata = new_data)
                                      ))),
            ranef = map(model,
-                       ~ data.table(
-                         ranef = ranef(.x))))
+                       ~ setDT(ranef(.x), keep.rownames = "pid")))
   ]
 
 tictoc::toc(log = TRUE)

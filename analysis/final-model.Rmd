@@ -43,6 +43,9 @@ prepender <- function(string, prefix = "PID", sep = ": ") {
 one_over_mac_filtered <-
   read_rds(file = path_wd("output", "one_over_mac_filtered", ext = "rds"))
 
+resamples <-
+  read_rds(file = path_wd("output", "resamples", ext = "rds"))
+
 ```
 
 ## Introduction
@@ -64,6 +67,20 @@ model5_specs <-
 
 ```{r predictions_population}
 
+# unique(resamples[, rbindlist(resample, idcol = "seed")][, .(pid, ce_mac_pid_mean)], by = c("pid"))
+
+setDF(model5_specs[, rbindlist(predict, idcol = "seed")
+][unique(resamples[, rbindlist(resample, idcol = "seed")][, .(pid, ce_mac_pid_mean)], by = c("pid")), on = "pid"][, .(seed, pid, ce_mac = ce_mac_pid_centered + ce_mac_pid_mean, predict = exp(predict))]) %>%
+    as_tibble() %>%
+    group_by(pid, ce_mac) %>%
+    mean_qi(predict, .width = c(0.95)) %>%
+    ggplot(aes(x = ce_mac, y = predict, group = pid)) +
+    geom_path(alpha = 0.25) +
+    labs(title = "Model predictions for population",
+         subtitle = "Original scale",
+         x = "ceMAC",
+         y = "Predicted peak alpha")
+
 setDF(model5_specs[, rbindlist(predict, idcol = "seed")
 ][, .(seed, pid, ce_mac_pid_centered,
       predict = exp(predict))]) %>%
@@ -73,6 +90,7 @@ setDF(model5_specs[, rbindlist(predict, idcol = "seed")
   ggplot(aes(x = ce_mac_pid_centered, y = predict, group = pid)) +
   geom_path(alpha = 0.25) +
   labs(title = "Model predictions for population",
+       subtitle = "Centered scale",
        x = "Within-group centered ceMAC",
        y = "Predicted peak alpha")
 
